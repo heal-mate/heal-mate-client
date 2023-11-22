@@ -1,3 +1,10 @@
+import { Header, Navbar } from "../components/layout";
+
 export default function Main() {
-  return <>메인</>;
+  return (
+    <>
+      <Header />
+      <Navbar />
+    </>
+  );
 }
