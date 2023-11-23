@@ -8,7 +8,7 @@ export const useMatching = (id: string) => {
     queryFn: () => {
       // TODO: GET /api/match?id={id}
       // TODO: api 연결 완료 시 아래 임시 리턴문 삭제
-      return null;
+      return "WAITING";
     },
   });
 

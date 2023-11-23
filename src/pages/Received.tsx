@@ -1,3 +1,9 @@
+import Card from "@/components/Card";
+
 export default function Received() {
-  return <>받은 리스트</>;
+  return (
+    <>
+      <Card type="RECEIVED" />
+    </>
+  );
 }

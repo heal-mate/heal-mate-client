@@ -48,7 +48,7 @@ const StyledNav = styled.nav`
     align-items: center;
     justify-content: space-around;
     width: 85%;
-    max-width: ${({ theme }) => theme.size.maxWidth};
+    max-width: ${({ theme }) => `${theme.size.maxWidth}px`};
     margin: auto;
   }
 `;

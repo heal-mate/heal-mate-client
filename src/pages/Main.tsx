@@ -1,10 +1,9 @@
-import { styled } from "styled-components";
+import Card from "@/components/Card";
 
 export default function Main() {
-  return <StyledContent>메인</StyledContent>;
+  return (
+    <>
+      <Card type="SENT" />
+    </>
+  );
 }
-
-const StyledContent = styled.div`
-  background-color: pink;
-  height: 1000px;
-`;
