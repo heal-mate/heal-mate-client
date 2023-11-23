@@ -3,10 +3,19 @@ const colors = {
   point: "#35a29f",
 };
 
+const size = {
+  maxWidth: 768,
+};
+
+export const constants = {
+  size,
+};
+
 export const defaultTheme = {
   colors,
 };
 
 export const theme = {
+  ...constants,
   ...defaultTheme,
 };
