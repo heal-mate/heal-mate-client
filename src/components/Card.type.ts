@@ -42,3 +42,10 @@ export const locations = [
 ] as const;
 
 export type Location = (typeof locations)[number];
+
+export type CardType = "RECEIVED" | "SENT";
+
+export type CardItemProps = Pick<
+  User,
+  "id" | "nickName" | "profileImageSrc" | "condition" | "introduction"
+> & { type: CardType };

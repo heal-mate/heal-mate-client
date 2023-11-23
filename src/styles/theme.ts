@@ -1,6 +1,12 @@
-export default {
+const colors = {
   // ${({ theme })} => theme.colors.컬러이름};
-  colors: {
-    point: "#35a29f",
-  },
+  point: "#35a29f",
+};
+
+export const defaultTheme = {
+  colors,
+};
+
+export const theme = {
+  ...defaultTheme,
 };
