@@ -1,10 +1,10 @@
-import { Header, Navbar } from "../components/layout";
+import { styled } from "styled-components";
 
 export default function Main() {
-  return (
-    <>
-      <Header />
-      <Navbar />
-    </>
-  );
+  return <StyledContent>메인</StyledContent>;
 }
+
+const StyledContent = styled.div`
+  background-color: pink;
+  height: 1000px;
+`;
