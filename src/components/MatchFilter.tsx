@@ -88,12 +88,11 @@ export default function MatchFilter() {
     location: null,
   });
 
-  const handleChangeWeight = (ranges: number | number[], id: number) => {
-    if (typeof ranges === "number" || !showType) return;
+  const handleChangeWeight = (ranges: [number, number], id: number) => {
     const [min, max] = ranges;
 
     const changedItem = {
-      ...showType,
+      ...showType!,
       min,
       max,
     };
@@ -107,13 +106,10 @@ export default function MatchFilter() {
     setList(newList);
   };
 
-  const handleChangeYears = (ranges: number | number[]) => {
-    if (typeof ranges === "number" || !showType) return;
-    const [min, max] = ranges;
-
+  const handleChangeYears = (ranges: [number, number]) => {
     const newFilters = {
       ...filters,
-      fitnessYears: [min, max] as [number, number],
+      fitnessYears: ranges,
     };
     console.log(newFilters);
     setFilters(newFilters);
@@ -141,6 +137,11 @@ export default function MatchFilter() {
     }
   };
 
+  // 뒤로 가기
+  const onClose = () => {};
+
+  // 필터 적용하기
+  const onApply = () => {};
   return (
     <Container>
       <Header>

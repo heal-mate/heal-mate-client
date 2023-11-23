@@ -7,7 +7,7 @@ export type RangeinputProps = {
   type: string;
   marks: Record<string | number, React.ReactNode | MarkObj>;
   suffix: string;
-  handleChange: (ranges: number | number[]) => void;
+  handleChange: (ranges: [number, number]) => void;
   min: number;
   max: number;
 };
@@ -35,7 +35,7 @@ export default function Rangeinput({
           marks={marks}
           step={5}
           dots={false}
-          onChange={handleChange}
+          onChange={handleChange as (ranges: number | number[]) => void}
           value={[min, max]}
           defaultValue={[min, max]}
         />

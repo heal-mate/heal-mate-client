@@ -8,7 +8,7 @@ export default function RadioButton({ text }: RadioButtonProps) {
   return (
     <>
       <Label htmlFor={text}>
-        <Input id={text} name="gender" />
+        <Input type="radio" id={text} name="gender" />
         <p>{text}</p>
       </Label>
     </>
@@ -21,7 +21,7 @@ const Label = styled.label`
   align-items: center;
 `;
 
-const Input = styled.input.attrs({ type: "radio" })`
+const Input = styled.input`
   appearance: none;
   border: 2px solid black;
   border-radius: 10px;
