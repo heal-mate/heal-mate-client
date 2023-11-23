@@ -39,7 +39,7 @@ const StyledInner = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 768px;
+  max-width: ${({ theme }) => theme.size.maxWidth};
 `;
 
 const StyledLogo = styled.h1`
