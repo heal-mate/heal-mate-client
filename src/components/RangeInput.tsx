@@ -25,7 +25,7 @@ export default function Rangeinput({
       <StyledInfo>
         <p>{type}</p>
         <div>
-          {!min && !max ? (
+          {min === 0 && max === 300 ? (
             "상관없음"
           ) : (
             <>
@@ -39,11 +39,12 @@ export default function Rangeinput({
         <Slider
           range
           marks={marks}
+          max={300}
           step={5}
           dots={false}
           onChange={handleChange as (ranges: number | number[]) => void}
           value={[min, max]}
-          defaultValue={[min, max]}
+          defaultValue={[0, 100]}
         />
       </StyledRange>
     </StyledContainer>
@@ -68,7 +69,7 @@ const StyledInfo = styled.div`
 
   & > div {
     font-size: 15px;
-    color: #2851e8;
+    color: ${({ theme }) => theme.colors.point};
   }
 `;
 
@@ -80,7 +81,7 @@ const StyledRange = styled.div`
     border: none;
     background-color: #faf9f6;
     opacity: 1;
-    border: 2px solid #2851e8;
+    border: 2px solid ${({ theme }) => theme.colors.point};
     box-shadow: 1px 2px 3px 0px rgba(0, 0, 0, 0.5);
   }
 
@@ -107,7 +108,7 @@ const StyledRange = styled.div`
   }
   .rc-slider-track {
     height: 14px;
-    background-color: #2851e8;
+    background-color: ${({ theme }) => theme.colors.point};
   }
 
   .rc-slider-step {

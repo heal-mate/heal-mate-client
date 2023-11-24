@@ -60,7 +60,7 @@ const StyledInfo = styled.div`
 
   & > div {
     font-size: 15px;
-    color: #2851e8;
+    color: ${({ theme }) => theme.colors.point};
   }
 `;
 

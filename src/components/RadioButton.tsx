@@ -45,8 +45,8 @@ const StyledInput = styled.input`
   height: 20px;
 
   &:checked {
-    border: 2px solid #2851e8;
-    background-color: #2851e8;
+    border: 2px solid ${({ theme }) => theme.colors.point};
+    background-color: ${({ theme }) => theme.colors.point};
   }
   &::after {
     position: absolute;
@@ -60,6 +60,6 @@ const StyledInput = styled.input`
     border: 2px solid black;
     border-radius: 10px;
     border: 2px solid white;
-    background-color: #2851e8;
+    background-color: ${({ theme }) => theme.colors.point};
   } */
 `;

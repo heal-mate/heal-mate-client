@@ -60,7 +60,7 @@ const StyledInfo = styled.div`
 
   & > div {
     font-size: 15px;
-    color: #2851e8;
+    color: ${({ theme }) => theme.colors.point};
   }
 `;
 
@@ -79,12 +79,12 @@ const StyledLocation = styled.div<{ $isChecked: boolean | null }>`
   ${(props) =>
     props.$isChecked
       ? css`
-          background-color: #2851e8;
+          background-color: ${({ theme }) => theme.colors.point};
           color: white;
         `
       : css`
           background-color: white;
-          color: #2851e8;
+          color: ${({ theme }) => theme.colors.point};
         `}
   cursor: pointer;
 `;

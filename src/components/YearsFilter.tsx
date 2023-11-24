@@ -44,7 +44,7 @@ export default function YearsFilter({
       <StyledInfo>
         <p>경력</p>
         <div>
-          {!minYears && !maxYears ? (
+          {minYears === 0 && maxYears === 5 ? (
             "상관없음"
           ) : (
             <>
@@ -61,7 +61,7 @@ export default function YearsFilter({
           step={0.25}
           dots={false}
           value={[minYears, maxYears]}
-          defaultValue={[minYears, maxYears]}
+          defaultValue={[1, 5]}
           onChange={handleChangeYears as (range: number | number[]) => void}
         />
       </StyledRange>
@@ -87,7 +87,7 @@ const StyledInfo = styled.div`
 
   & > div {
     font-size: 15px;
-    color: #2851e8;
+    color: ${({ theme }) => theme.colors.point};
   }
 `;
 
@@ -99,7 +99,7 @@ const StyledRange = styled.div`
     border: none;
     background-color: #faf9f6;
     opacity: 1;
-    border: 2px solid #2851e8;
+    border: 2px solid ${({ theme }) => theme.colors.point};
     box-shadow: 1px 2px 3px 0px rgba(0, 0, 0, 0.5);
   }
 
@@ -126,7 +126,7 @@ const StyledRange = styled.div`
   }
   .rc-slider-track {
     height: 14px;
-    background-color: #2851e8;
+    background-color: ${({ theme }) => theme.colors.point};
   }
 
   .rc-slider-step {

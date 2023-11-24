@@ -19,7 +19,7 @@ const excersiseList = [
     value: "benchPress",
     isChecked: true,
     min: 0,
-    max: 10,
+    max: 100,
   },
   {
     id: 1,
@@ -27,7 +27,7 @@ const excersiseList = [
     value: "squat",
     isChecked: false,
     min: 0,
-    max: 10,
+    max: 100,
   },
   {
     id: 2,
@@ -35,7 +35,7 @@ const excersiseList = [
     value: "deadLift",
     isChecked: false,
     min: 0,
-    max: 10,
+    max: 100,
   },
 ];
 
@@ -76,7 +76,7 @@ export default function MatchFilter() {
     setFilters((prevFilters) => {
       return {
         ...prevFilters,
-        [newExerciseList[id].value]: min === 0 && max === 0 ? null : ranges,
+        [newExerciseList[id].value]: min === 0 && max === 300 ? null : ranges,
       };
     });
   };
@@ -86,7 +86,7 @@ export default function MatchFilter() {
 
     const newFilters = {
       ...filters,
-      fitnessYears: minYears === 0 && maxYears === 0 ? null : ranges,
+      fitnessYears: minYears === 0 && maxYears === 5 ? null : ranges,
     };
     setFilters(newFilters);
   };
@@ -180,7 +180,7 @@ export default function MatchFilter() {
       />
       <YearsFilter
         minYears={filters.fitnessYears !== null ? filters.fitnessYears[0] : 0}
-        maxYears={filters.fitnessYears !== null ? filters.fitnessYears[1] : 0}
+        maxYears={filters.fitnessYears !== null ? filters.fitnessYears[1] : 5}
         handleChangeYears={handleChangeYears}
       />
       <GenderFilter

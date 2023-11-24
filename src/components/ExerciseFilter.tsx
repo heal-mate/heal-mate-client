@@ -5,10 +5,12 @@ import { ExerciseType } from "@/components/MatchFilter.type";
 
 const weightMarks = {
   0: "0kg",
-  25: "25kg",
   50: "50kg",
-  75: "75kg",
   100: "100kg",
+  150: "150kg",
+  200: "200kg",
+  250: "250kg",
+  300: "300kg이상",
 };
 
 export type ExerciseFilterProps = {
@@ -75,9 +77,10 @@ const StyledExerciseButton = styled.div<{ $isChecked: boolean }>`
 `;
 
 const enableBox = css`
-  color: #2851e8;
+  /* color: ${({ theme }) => theme.colors.point}; */
+  color: ${({ theme }) => theme.colors.point};
   background-color: #ffffff;
-  border-bottom: 4px solid #2851e8;
+  border-bottom: 4px solid ${({ theme }) => theme.colors.point};
   box-shadow: 2px 10px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 const disableBox = css`
