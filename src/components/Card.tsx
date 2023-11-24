@@ -71,33 +71,33 @@ function CardButtons(props: { id: string; type: CardType }) {
       ) : isError ? (
         error!.message
       ) : matchStatus === null ? (
-        <StyledButton variant="contained" onClick={() => requestMatch()}>
+        <StyledButton $variant="contained" onClick={() => requestMatch()}>
           요청하기
         </StyledButton>
       ) : matchStatus === "WAITING" && type === "SENT" ? (
         <>
-          <StyledButton variant="outlined" onClick={() => cancelMatch()}>
+          <StyledButton $variant="outlined" onClick={() => cancelMatch()}>
             취소
           </StyledButton>
-          <StyledButton variant="contained" disabled>
+          <StyledButton $variant="contained" disabled>
             수락대기중
           </StyledButton>
         </>
       ) : matchStatus === "WAITING" && type === "RECEIVED" ? (
         <>
-          <StyledButton variant="outlined" onClick={() => acceptMatch()}>
+          <StyledButton $variant="outlined" onClick={() => acceptMatch()}>
             수락
           </StyledButton>
-          <StyledButton variant="contained" onClick={() => rejectMatch()}>
+          <StyledButton $variant="contained" onClick={() => rejectMatch()}>
             거절
           </StyledButton>
         </>
       ) : matchStatus === "REJECTED" ? (
-        <StyledButton variant="contained" disabled>
+        <StyledButton $variant="contained" disabled>
           거절된 요청
         </StyledButton>
       ) : matchStatus === "ACCEPTED" ? (
-        <StyledButton variant="contained" disabled>
+        <StyledButton $variant="contained" disabled>
           성사된 요청
         </StyledButton>
       ) : null}
@@ -166,9 +166,9 @@ const StyledTag = styled.p`
   border: 1px solid #121212;
 `;
 
-const StyledButton = styled.button<{ variant: "outlined" | "contained" }>`
+const StyledButton = styled.button<{ $variant: "outlined" | "contained" }>`
   ${(props) =>
-    props.variant === "outlined"
+    props.$variant === "outlined"
       ? css`
           background-color: #ffffff;
           border: 1px solid #2b2b2b;
