@@ -1,27 +1,43 @@
 import { styled } from "styled-components";
+import { GenderType } from "@/components/MatchFilter.type";
 
 export type RadioButtonProps = {
   text: string;
+  genderType: GenderType;
+  handleChange: (genderType: GenderType) => void;
 };
 
-export default function RadioButton({ text }: RadioButtonProps) {
+export default function RadioButton({
+  text,
+  genderType,
+  handleChange,
+}: RadioButtonProps) {
   return (
-    <>
-      <Label htmlFor={text}>
-        <Input type="radio" id={text} name="gender" />
-        <p>{text}</p>
-      </Label>
-    </>
+    <StyledLabel htmlFor={text}>
+      <StyledInput
+        type="radio"
+        id={text}
+        name="gender"
+        onChange={() => handleChange(genderType)}
+        defaultChecked={!genderType ? true : false}
+      />
+      <p>{text}</p>
+    </StyledLabel>
   );
 }
 
-const Label = styled.label`
+const StyledLabel = styled.label`
   flex: 1;
   display: flex;
   align-items: center;
+
+  & > p {
+    margin-left: 4px;
+  }
 `;
 
-const Input = styled.input`
+const StyledInput = styled.input`
+  /* position: relative;
   appearance: none;
   border: 2px solid black;
   border-radius: 10px;
@@ -32,4 +48,18 @@ const Input = styled.input`
     border: 2px solid #2851e8;
     background-color: #2851e8;
   }
+  &::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    content: "";
+    display: block;
+    width: 15px;
+    height: 15px;
+    border: 2px solid black;
+    border-radius: 10px;
+    border: 2px solid white;
+    background-color: #2851e8;
+  } */
 `;

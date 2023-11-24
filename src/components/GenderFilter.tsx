@@ -1,29 +1,70 @@
 import { styled } from "styled-components";
-import RadioButton from "./RadioButton";
+import { GenderType } from "@/components/MatchFilter.type";
+import RadioButton from "@/components/RadioButton";
 
-export default function RadioInput() {
+export type RadioInputProps = {
+  handleChange: (genderType: GenderType) => void;
+  genderType: GenderType;
+};
+
+export default function GenderFilter({
+  handleChange,
+  genderType,
+}: RadioInputProps) {
   return (
-    <Container>
-      <p>성별</p>
-      <FlexDiv>
-        <RadioButton text="남자" />
-        <RadioButton text="여자" />
-        <RadioButton text="상관없음" />
-      </FlexDiv>
-    </Container>
+    <StyledContainer>
+      <StyledInfo>
+        <p>성별</p>
+        <div>
+          {!genderType && "상관없음"}
+          {genderType === "MALE" && "남자만"}
+          {genderType === "FEMALE" && "여자만"}
+        </div>
+      </StyledInfo>
+      <StyledSettings>
+        <RadioButton
+          text="남자"
+          genderType="MALE"
+          handleChange={handleChange}
+        />
+        <RadioButton
+          text="여자"
+          genderType="FEMALE"
+          handleChange={handleChange}
+        />
+        <RadioButton
+          text="상관없음"
+          genderType={null}
+          handleChange={handleChange}
+        />
+      </StyledSettings>
+    </StyledContainer>
   );
 }
 
-const Container = styled.div`
-  width: "100%";
-  margin-bottom: 30px;
+const StyledContainer = styled.div`
+  width: 100%;
+  height: 100px;
+`;
+
+const StyledInfo = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 10px;
+
   & > p {
     font-size: 22px;
-    margin-bottom: 10px;
+  }
+
+  & > div {
+    font-size: 15px;
+    color: #2851e8;
   }
 `;
 
-const FlexDiv = styled.div`
+const StyledSettings = styled.div`
   display: flex;
-  align-items: center;
+  width: 100%;
 `;

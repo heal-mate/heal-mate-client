@@ -1,36 +1,54 @@
+import { styled } from "styled-components";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { styled } from "styled-components";
-import { MarkObj } from "rc-slider/lib/Marks";
 
-export type RangeinputProps = {
-  type: string;
-  marks: Record<string | number, React.ReactNode | MarkObj>;
-  suffix: string;
-  handleChange: (ranges: [number, number]) => void;
-  min: number;
-  max: number;
+const careerMarks = {
+  0: "0",
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
 };
 
-export default function Rangeinput({
-  type,
-  marks,
-  suffix,
-  handleChange,
-  min,
-  max,
-}: RangeinputProps) {
+function parseYears(year: number): string {
+  let years = Math.floor(year);
+  let months = ((year % 1) / 0.25) * 3;
+
+  let duration = "";
+
+  if (years > 0) {
+    duration += years + (years === 1 ? "년 " : "년 ");
+  }
+
+  if (months > 0 || (years === 0 && months === 0)) {
+    duration += months + "개월";
+  }
+
+  return duration.trim();
+}
+
+export type YearsFilterProps = {
+  minYears: number;
+  maxYears: number;
+  handleChangeYears: (ranges: [number, number]) => void;
+};
+
+export default function YearsFilter({
+  minYears,
+  maxYears,
+  handleChangeYears,
+}: YearsFilterProps) {
   return (
     <StyledContainer>
       <StyledInfo>
-        <p>{type}</p>
+        <p>경력</p>
         <div>
-          {!min && !max ? (
+          {!minYears && !maxYears ? (
             "상관없음"
           ) : (
             <>
-              {min}~{max}
-              {suffix}
+              {parseYears(minYears)}~{parseYears(maxYears)}
             </>
           )}
         </div>
@@ -38,12 +56,13 @@ export default function Rangeinput({
       <StyledRange>
         <Slider
           range
-          marks={marks}
-          step={5}
+          max={5}
+          marks={careerMarks}
+          step={0.25}
           dots={false}
-          onChange={handleChange as (ranges: number | number[]) => void}
-          value={[min, max]}
-          defaultValue={[min, max]}
+          value={[minYears, maxYears]}
+          defaultValue={[minYears, maxYears]}
+          onChange={handleChangeYears as (range: number | number[]) => void}
         />
       </StyledRange>
     </StyledContainer>
