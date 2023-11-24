@@ -20,11 +20,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "@/components/*": ["components/*"]
+      "@/*": ["src/*"]
     }
   },
-  "include": ["src", "mock/CardMockData.ts", "src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src", "mock/CardMockData.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
