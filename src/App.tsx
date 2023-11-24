@@ -3,7 +3,6 @@ import Main from "./pages/Main";
 import Received from "./pages/Received";
 import Mypage from "./pages/Mypage";
 import Layout from "./components/layout/Layout";
-import MatchFilter from "./components/MatchFilter";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
@@ -27,7 +26,7 @@ const router = createBrowserRouter([
       },
       {
         path: path.tab2,
-        element: <MatchFilter />,
+        element: <Mypage />,
       },
     ],
   },
