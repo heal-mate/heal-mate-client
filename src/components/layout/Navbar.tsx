@@ -35,7 +35,7 @@ export default function Navbar() {
 const StyledNav = styled.nav`
   border-top: 0.0625rem solid #f2f2f2;
   position: fixed;
-  z-index: 999;
+  z-index: 10;
   width: 100%;
   height: 65px;
   left: 0;
