@@ -139,11 +139,6 @@ export default function MatchFilter() {
   // 필터 적용하기
   return (
     <Container>
-      {/* <Header>
-        <h2>filters</h2>
-        <CloseButton />
-        <button>APPLY</button>
-      </Header> */}
       <FilterTypes>
         {list &&
           list.map((item, index) => {
