@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { checkNicknameDuplicate } from "@/api/fakeApi.ts";
 import RadioButton from "@/components/RadioButton";
 import { GenderType } from "@/components/MatchFilter.type";
 
@@ -21,13 +20,7 @@ export default function UserInfoSetup() {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    handleCheckNickname();
-  };
-
-  const handleCheckNickname = () => {
-    checkNicknameDuplicate(userInfos.nickname)
-      .then(setErrorMessage)
-      .catch(console.error);
+    navigate("/");
   };
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +38,7 @@ export default function UserInfoSetup() {
     }));
   };
 
-  const { nickname, email, gender } = userInfos;
+  const { nickname, email } = userInfos;
   return (
     <StyledContainer>
       <SectionsWrapper>
