@@ -5,6 +5,7 @@ const colors = {
 
 const size = {
   maxWidth: 768,
+  headerHeight: 55,
 };
 
 export const constants = {
