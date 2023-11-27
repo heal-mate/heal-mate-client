@@ -18,5 +18,5 @@ export default function Layout() {
 const StyledMain = styled.main`
   width: 100%;
   max-width: ${({ theme }) => `${theme.size.maxWidth}px`};
-  margin: 3.5rem auto 65px;
+  margin: ${({ theme }) => theme.size.headerHeight}px auto 65px;
 `;
