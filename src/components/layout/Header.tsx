@@ -8,6 +8,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import logo from "../../assets/images/logo.png";
 import { ALERT_MOCK_DATA } from "../../../mock/AlertMockData";
 import { Alert } from "../Alert.type";
+import scrollBlock from "@/utils/scrollBlock";
 
 export default function Header() {
   const { data: alerts } = ALERT_MOCK_DATA;
@@ -19,11 +20,7 @@ export default function Header() {
 
   //alert창 띄었을 때 외부화면 스크롤 막기
   useEffect(() => {
-    if (isShowAlert) {
-      document.body.style.overflowY = "hidden";
-    } else {
-      document.body.style.overflowY = "auto";
-    }
+    scrollBlock(isShowAlert);
   }, [isShowAlert]);
 
   return (
@@ -50,7 +47,7 @@ function AlertBox(props: { isShowAlert: boolean; handleClick: () => void }) {
   // TODO: 알람 메시지 리스트 data fetch
   const { data: alerts, isError, isLoading, error } = ALERT_MOCK_DATA;
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const alertRef = useRef<HTMLDivElement>(null);
+  const alertRef = useRef<HTMLUListElement>(null);
   const { isShowAlert, handleClick } = props;
 
   //alert items 삭제모드 전환
@@ -66,7 +63,7 @@ function AlertBox(props: { isShowAlert: boolean; handleClick: () => void }) {
   }, [isShowAlert]);
 
   return (
-    <StyledAlert $isShowAlert={isShowAlert} ref={alertRef}>
+    <StyledAlert $isShowAlert={isShowAlert}>
       <StyledAlertHeader>
         <StyledAlertInner>
           <div>
@@ -76,7 +73,7 @@ function AlertBox(props: { isShowAlert: boolean; handleClick: () => void }) {
           <span onClick={handleEdit}>{isEdit ? "완료" : "편집"}</span>
         </StyledAlertInner>
       </StyledAlertHeader>
-      <ul>
+      <ul ref={alertRef}>
         {isLoading ? (
           <p>loading...</p>
         ) : isError ? (
@@ -141,7 +138,7 @@ const StyledHeader = styled.header`
   left: 0;
   z-index: 10;
   width: 100%;
-  height: 3.5rem;
+  height: ${({ theme }) => theme.size.headerHeight}px;
   background-color: #fff;
 `;
 const StyledInner = styled.div`
@@ -210,11 +207,12 @@ const StyledAlert = styled.div<{ $isShowAlert: boolean }>`
   z-index: 999;
   background-color: #fff;
   transition: right 0.2s ease-in-out;
-  overflow-y: auto;
   ul {
-    width: 85%;
+    width: 100%;
+    height: calc(100% - 3.5rem);
     max-width: ${({ theme }) => `${theme.size.maxWidth}px`};
     margin: 0 auto;
+    overflow-y: auto;
   }
   ${(props) =>
     props.$isShowAlert &&
@@ -227,7 +225,7 @@ const StyledAlert = styled.div<{ $isShowAlert: boolean }>`
 const StyledAlertHeader = styled.div`
   border-bottom: 0.0625rem solid #f2f2f2;
   width: 100%;
-  height: 3.5rem;
+  height: ${({ theme }) => theme.size.headerHeight}px;
   background-color: #fff;
   position: sticky;
   top: 0;
@@ -271,6 +269,8 @@ const StyledList = styled.li<{ $isRead: boolean }>`
   border-bottom: 0.0625rem solid #f2f2f2;
   cursor: pointer;
   position: relative;
+  width: 85%;
+  margin: 0 auto;
   &:hover {
     svg {
       fill: ${({ theme }) => theme.colors.point};

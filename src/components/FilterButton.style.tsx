@@ -7,6 +7,11 @@ export const StyledButtonBox = styled.section`
   justify-content: flex-start;
   gap: 8px;
   padding: 8px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 export const StyledButton = styled.button`
   appearance: none;

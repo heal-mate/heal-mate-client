@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { styled, css } from "styled-components";
-import { MdClose } from "react-icons/md";
 import { FaDumbbell } from "react-icons/fa";
 import Rangeinput from "./RangeInput";
 import { Condition, locations } from "./MathFilter.type";
@@ -137,18 +136,14 @@ export default function MatchFilter() {
     }
   };
 
-  // 뒤로 가기
-  const onClose = () => {};
-
   // 필터 적용하기
-  const onApply = () => {};
   return (
     <Container>
-      <Header>
+      {/* <Header>
         <h2>filters</h2>
         <CloseButton />
         <button>APPLY</button>
-      </Header>
+      </Header> */}
       <FilterTypes>
         {list &&
           list.map((item, index) => {
@@ -206,51 +201,6 @@ const Container = styled.div`
   padding: 0 8px;
 `;
 
-const Header = styled.div`
-  margin-bottom: 10px;
-  position: relative;
-
-  & > h2 {
-    width: 100%;
-    text-align: center;
-    text-transform: uppercase;
-    padding: 16px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #1f1f1f;
-    box-sizing: border-box;
-  }
-
-  & button {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 70px;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 10px;
-    border: none;
-    border-radius: 17px;
-    outline: none;
-    background-color: transparent;
-    cursor: pointer;
-  }
-`;
-
-const CloseButton = styled(MdClose)`
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  border-radius: 100%;
-  font-size: 22px;
-  font-weight: bold;
-  padding: 5px;
-  cursor: pointer;
-`;
-
 const FilterTypes = styled.div`
   display: flex;
   gap: 5px;
@@ -287,8 +237,6 @@ const Box = styled.div<{ $isChecked: boolean }>`
 const DumbbellIcon = styled(FaDumbbell)`
   font-size: 20px;
 `;
-
-const RadioGroup = styled.div``;
 
 const Locations = styled.div`
   & > p {

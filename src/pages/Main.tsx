@@ -1,5 +1,6 @@
 import Card from "@/components/Card";
 import { StyledButtonBox, StyledButton } from "@/components/FilterButton.style";
+import MatchFilterButton from "@/components/MatchFilterButton";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiCircleCheck } from "react-icons/ci";
 import { CiNoWaitingSign } from "react-icons/ci";
@@ -9,6 +10,8 @@ export default function Main() {
   return (
     <>
       <StyledButtonBox>
+        {/* 메이트 조건 설정 */}
+        <MatchFilterButton />
         <StyledButton>
           <AiOutlineLoading3Quarters />
           요청대기

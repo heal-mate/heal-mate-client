@@ -1,4 +1,3 @@
-import MatchFilter from "@/components/MatchFilter";
 export default function Mypage() {
-  return <MatchFilter />;
+  return <>마이페이지</>;
 }
