@@ -16,7 +16,9 @@ export default function UserInfoSetup() {
     email: "",
     gender: null,
   });
-  const [errorMessage, setErrorMessage] = useState<string>();
+
+  //TODO : setErrorMessage 임시로 삭제함
+  const [errorMessage] = useState<string>();
   const navigate = useNavigate();
 
   const handleSubmit = () => {

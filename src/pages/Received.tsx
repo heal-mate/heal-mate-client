@@ -1,4 +1,5 @@
-import Card from "@/components/Card";
+import { StyledCardsContainer } from "@/components/Cards.styles";
+import CardsReceived from "@/components/CardsReceived";
 import { StyledButtonBox, StyledButton } from "@/components/FilterButton.style";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiCircleCheck } from "react-icons/ci";
@@ -21,7 +22,9 @@ export default function Received() {
           매칭완료
         </StyledButton>
       </StyledButtonBox>
-      <Card type="RECEIVED" />
+      <StyledCardsContainer>
+        <CardsReceived />
+      </StyledCardsContainer>
     </>
   );
 }

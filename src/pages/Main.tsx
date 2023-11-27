@@ -1,4 +1,7 @@
-import Card from "@/components/Card";
+import CardsSent from "@/components/CardsSent";
+import { MOCK_LOGIN_USER } from "../../mock/UserData";
+import CardsRecommend from "@/components/CardsRecommend";
+import { StyledCardsContainer } from "@/components/Cards.styles";
 import { StyledButtonBox, StyledButton } from "@/components/FilterButton.style";
 import MatchFilterButton from "@/components/MatchFilterButton";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -7,6 +10,8 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import { TbProgress } from "react-icons/tb";
 
 export default function Main() {
+  const { conditionExpect } = MOCK_LOGIN_USER;
+
   return (
     <>
       <StyledButtonBox>
@@ -29,7 +34,10 @@ export default function Main() {
           매칭완료
         </StyledButton>
       </StyledButtonBox>
-      <Card type="SENT" />
+      <StyledCardsContainer>
+        <CardsRecommend conditionExpect={conditionExpect} />
+        <CardsSent />
+      </StyledCardsContainer>
     </>
   );
 }
