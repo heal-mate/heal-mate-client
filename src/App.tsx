@@ -3,12 +3,18 @@ import Main from "./pages/Main";
 import Received from "./pages/Received";
 import Mypage from "./pages/Mypage";
 import Layout from "./components/layout/Layout";
+import Login from "./pages/Login";
+import UserInfoSetup from "./pages/UserInfoSetup";
+import MatchFilter from "./components/MatchFilter";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
   root: "/",
   tab1: "/recieved",
   tab2: "/mypage",
+  login: "/login",
+  setup: "/setup",
+  matchFilter: "/filter",
 };
 
 const router = createBrowserRouter([
@@ -29,6 +35,18 @@ const router = createBrowserRouter([
         element: <Mypage />,
       },
     ],
+  },
+  {
+    path: path.login,
+    element: <Login />,
+  },
+  {
+    path: path.setup,
+    element: <UserInfoSetup />,
+  },
+  {
+    path: path.matchFilter,
+    element: <MatchFilter />,
   },
 ]);
 
