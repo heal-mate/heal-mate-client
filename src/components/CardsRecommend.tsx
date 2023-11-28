@@ -1,14 +1,8 @@
-import { User } from "@/service/apis/match.type";
 import Cards from "./Cards";
 import { useMatchesRecommend } from "./Cards.hooks";
 
-export default function CardsRecommend({
-  conditionExpect,
-}: {
-  conditionExpect: User["conditionExpect"];
-}) {
-  const { matchesRecommend, requestMatch, ...rest } =
-    useMatchesRecommend(conditionExpect);
+export default function CardsRecommend() {
+  const { matchesRecommend, requestMatch, ...rest } = useMatchesRecommend();
 
   return (
     <>
@@ -19,7 +13,7 @@ export default function CardsRecommend({
             {
               text: "요청하기",
               theme: "outlined",
-              onClickCallback: async () => requestMatch(e.id),
+              onClickCallback: async () => requestMatch({ userId: e._id }),
             },
           ],
         }))}

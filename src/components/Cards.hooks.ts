@@ -1,17 +1,23 @@
 import { useMutation, useQuery } from "react-query";
-import { Condition, User } from "@/service/apis/match.type";
+import { User } from "@/service/apis/user.type";
 import { queryClient, queryKeys } from "@/service/store/reactQuery";
-import { MOCK_USERS } from "dev@/UserData";
+import {
+  fetchAcceptMatch,
+  fetchCancelMatch,
+  fetchGetMatchesReceived,
+  fetchGetMatchesSent,
+  fetchRejectMatch,
+  fetchRequestMatch,
+} from "@/service/apis/match";
+import { fetchGetUser, fetchGetUserRecommend } from "@/service/apis/user";
+import { Match } from "@/service/apis/match.type";
 
-export const useMatchesRecommend = (conditionExpect: Condition<"RANGE">) => {
+type MatchCardProps = (User & Match & { userId: string; matchId: string })[];
+
+export const useMatchesRecommend = () => {
   const { data: matchesRecommend, ...rest } = useQuery<User[], Error>({
     queryKey: [queryKeys.matchesRecommend],
-    queryFn: async () => {
-      // TODO: 추천 유저 GET api 연결
-      // return getUsersMatchRecommend(conditionExpect);
-      console.log(conditionExpect);
-      return Promise.resolve(MOCK_USERS);
-    },
+    queryFn: fetchGetUserRecommend,
   });
 
   const invalidateMatchQuery = () =>
@@ -20,10 +26,7 @@ export const useMatchesRecommend = (conditionExpect: Condition<"RANGE">) => {
     });
 
   const requestMatch = useMutation({
-    mutationFn: async (userId: string) => {
-      // TODO: 매칭 요청(생성) api 호출
-      console.log(`request match, ${userId}`);
-    },
+    mutationFn: fetchRequestMatch,
     onSuccess: invalidateMatchQuery,
   }).mutate;
 
@@ -31,11 +34,19 @@ export const useMatchesRecommend = (conditionExpect: Condition<"RANGE">) => {
 };
 
 export const useMatchesSent = () => {
-  const { data: matchesSent, ...rest } = useQuery<User[], Error>({
+  const { data: matchesSent, ...rest } = useQuery<MatchCardProps, Error>({
     queryKey: [queryKeys.matchesSent],
     queryFn: async () => {
-      // TODO: 내가 보낸 요청 GET api 연결
-      return Promise.resolve(MOCK_USERS);
+      const matches = await fetchGetMatchesSent();
+
+      const results = await Promise.all(
+        matches.map(async (match) => {
+          const user = await fetchGetUser({ userId: match.receiverId });
+          return { ...user, userId: user._id, ...match, matchId: match._id };
+        }),
+      );
+
+      return results;
     },
   });
 
@@ -45,10 +56,7 @@ export const useMatchesSent = () => {
     });
 
   const cancelMatch = useMutation({
-    mutationFn: async (userId: string) => {
-      // TODO: 매칭 취소 api 호출
-      console.log(`cancel match ${userId}`);
-    },
+    mutationFn: fetchCancelMatch,
     onSuccess: invalidateMatchQuery,
   }).mutate;
 
@@ -56,11 +64,19 @@ export const useMatchesSent = () => {
 };
 
 export const useMatchesReceived = () => {
-  const { data: matchesReceived, ...rest } = useQuery<User[], Error>({
+  const { data: matchesReceived, ...rest } = useQuery<MatchCardProps, Error>({
     queryKey: [queryKeys.matchesReceived],
     queryFn: async () => {
-      // TODO: 내가 받은 요청 GET api 연결
-      return Promise.resolve(MOCK_USERS);
+      const matches = await fetchGetMatchesReceived();
+
+      const results = await Promise.all(
+        matches.map(async (match) => {
+          const user = await fetchGetUser({ userId: match.senderId });
+          return { ...user, userId: user._id, ...match, matchId: match._id };
+        }),
+      );
+
+      return results;
     },
   });
 
@@ -70,18 +86,12 @@ export const useMatchesReceived = () => {
     });
 
   const acceptMatch = useMutation({
-    mutationFn: async (userId: string) => {
-      // TODO: 매칭 수락 api 호출
-      console.log(`accept match ${userId}`);
-    },
+    mutationFn: fetchAcceptMatch,
     onSuccess: invalidateMatchQuery,
   }).mutate;
 
   const rejectMatch = useMutation({
-    mutationFn: async (userId: string) => {
-      // TODO: 매칭 거절 api 호출
-      console.log(`reject match ${userId}`);
-    },
+    mutationFn: fetchRejectMatch,
     onSuccess: invalidateMatchQuery,
   }).mutate;
 

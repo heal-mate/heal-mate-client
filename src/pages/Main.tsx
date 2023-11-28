@@ -1,5 +1,4 @@
 import CardsSent from "@/components/CardsSent";
-import { MOCK_LOGIN_USER } from "../../mock/UserData";
 import CardsRecommend from "@/components/CardsRecommend";
 import { StyledCardsContainer } from "@/components/Cards.styles";
 import { StyledButtonBox, StyledButton } from "@/components/FilterButton.style";
@@ -10,8 +9,6 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import { TbProgress } from "react-icons/tb";
 
 export default function Main() {
-  const { conditionExpect } = MOCK_LOGIN_USER;
-
   return (
     <>
       <StyledButtonBox>
@@ -35,7 +32,7 @@ export default function Main() {
         </StyledButton>
       </StyledButtonBox>
       <StyledCardsContainer>
-        <CardsRecommend conditionExpect={conditionExpect} />
+        <CardsRecommend />
         <CardsSent />
       </StyledCardsContainer>
     </>

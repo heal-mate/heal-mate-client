@@ -13,7 +13,7 @@ export default function CardsSent() {
             {
               text: "취소하기",
               theme: "outlined",
-              onClickCallback: async () => cancelMatch(e.id),
+              onClickCallback: async () => cancelMatch({ matchId: e.matchId }),
             },
             {
               text: "요청응답대기",
