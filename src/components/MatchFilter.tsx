@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { styled } from "styled-components";
-import { MdClose } from "react-icons/md";
 import {
   ExerciseType,
   FilterStatus,
@@ -158,20 +157,8 @@ export default function MatchFilter() {
     });
   };
 
-  // 뒤로 가기
-  const onClose = () => {};
-
-  // 필터 적용하기
-  const onApply = () => {
-    alert(`${JSON.stringify(filters)}`);
-  };
   return (
     <StyledContainer>
-      <StyledHeader>
-        <h2>filters</h2>
-        <StyledCloseButton onClick={onClose} />
-        <button onClick={onApply}>APPLY</button>
-      </StyledHeader>
       <MatchFilterExercise
         exerciseList={exerciseList}
         showType={showType}
@@ -202,48 +189,4 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 8px;
-`;
-
-const StyledHeader = styled.div`
-  margin-bottom: 10px;
-  position: relative;
-
-  & > h2 {
-    width: 100%;
-    text-align: center;
-    text-transform: uppercase;
-    padding: 16px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #1f1f1f;
-  }
-
-  & > button {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 70px;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 10px;
-    border: none;
-    border-radius: 17px;
-    outline: none;
-    background-color: transparent;
-    cursor: pointer;
-  }
-`;
-
-const StyledCloseButton = styled(MdClose)`
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  border-radius: 100%;
-  font-size: 32px;
-  font-weight: bold;
-  padding: 5px;
-  cursor: pointer;
 `;
