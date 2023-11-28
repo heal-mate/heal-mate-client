@@ -13,19 +13,19 @@ const weightMarks = {
   300: "300kg이상",
 };
 
-export type ExerciseFilterProps = {
+export type MatchFilterExerciseProps = {
   exerciseList: ExerciseType[];
   showType: ExerciseType | null;
   handleSelectType: (item: ExerciseType, index: number) => void;
   handleChangeWeight: (ranges: [number, number], id: number) => void;
 };
 
-export default function ExerciseFilter({
+export default function MatchFilterExercise({
   exerciseList,
   showType,
   handleChangeWeight,
   handleSelectType,
-}: ExerciseFilterProps) {
+}: MatchFilterExerciseProps) {
   return (
     <>
       <StyledContainer>

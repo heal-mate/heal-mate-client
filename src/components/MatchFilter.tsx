@@ -7,10 +7,10 @@ import {
   GenderType,
   Location,
 } from "@/components/MatchFilter.type";
-import GenderFilter from "@/components/GenderFilter";
-import YearsFilter from "@/components/YearsFilter";
-import LocationsFilter from "@/components/LocationsFilter";
-import ExerciseFilter from "@/components/ExerciseFilter";
+import MatchFilterExercise from "@/components/MatchFilterExercise";
+import MatchFilterYears from "@/components/MatchFilterYears";
+import MatchFilterGender from "@/components/MatchFilterGender";
+import MatchFilterLocations from "@/components/MatchFilterLocations";
 
 const excersiseList = [
   {
@@ -172,22 +172,22 @@ export default function MatchFilter() {
         <StyledCloseButton onClick={onClose} />
         <button onClick={onApply}>APPLY</button>
       </StyledHeader>
-      <ExerciseFilter
+      <MatchFilterExercise
         exerciseList={exerciseList}
         showType={showType}
         handleChangeWeight={handleChangeWeight}
         handleSelectType={handleSelectType}
       />
-      <YearsFilter
+      <MatchFilterYears
         minYears={filters.fitnessYears !== null ? filters.fitnessYears[0] : 0}
         maxYears={filters.fitnessYears !== null ? filters.fitnessYears[1] : 5}
         handleChangeYears={handleChangeYears}
       />
-      <GenderFilter
+      <MatchFilterGender
         handleChange={handleChangeGender}
         genderType={filters.gender}
       />
-      <LocationsFilter
+      <MatchFilterLocations
         handleSelectLocation={handleSelectLocation}
         locationList={filters.location}
       />

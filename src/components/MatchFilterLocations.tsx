@@ -12,15 +12,15 @@ const locations = [
   "개포",
 ] as Location[];
 
-export type LocationsFilterProps = {
+export type MatchFilterLocationsProps = {
   handleSelectLocation: (location: Location) => void;
   locationList: Location[] | null;
 };
 
-export default function LocationsFilter({
+export default function MatchFilterLocations({
   handleSelectLocation,
   locationList,
-}: LocationsFilterProps) {
+}: MatchFilterLocationsProps) {
   return (
     <StyledContainer>
       <StyledInfo>

@@ -2,15 +2,15 @@ import { styled } from "styled-components";
 import { GenderType } from "@/components/MatchFilter.type";
 import RadioButton from "@/components/RadioButton";
 
-export type RadioInputProps = {
+export type MatchFilterGenderProps = {
   handleChange: (genderType: GenderType) => void;
   genderType: GenderType;
 };
 
-export default function GenderFilter({
+export default function MatchFilterGender({
   handleChange,
   genderType,
-}: RadioInputProps) {
+}: MatchFilterGenderProps) {
   return (
     <StyledContainer>
       <StyledInfo>

@@ -28,17 +28,17 @@ function parseYears(year: number): string {
   return duration.trim();
 }
 
-export type YearsFilterProps = {
+export type MatchFilterYearsProps = {
   minYears: number;
   maxYears: number;
   handleChangeYears: (ranges: [number, number]) => void;
 };
 
-export default function YearsFilter({
+export default function MatchFilterYears({
   minYears,
   maxYears,
   handleChangeYears,
-}: YearsFilterProps) {
+}: MatchFilterYearsProps) {
   return (
     <StyledContainer>
       <StyledInfo>
