@@ -1,3 +1,5 @@
+import UserDetail from "@/components/UserDetail";
+
 export default function Mypage() {
-  return <>마이페이지</>;
+  return <UserDetail />;
 }
