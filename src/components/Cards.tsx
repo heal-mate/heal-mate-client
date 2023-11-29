@@ -1,33 +1,48 @@
-import { Fragment } from "react";
-import { useMatching } from "./Card.hooks";
-import { CardItemProps, CardType } from "./Card.type";
-import { CARD_MOCK_DATA } from "../../mock/CardMockData";
+import { Fragment, useState } from "react";
 import styled, { css } from "styled-components";
+import { User } from "@/service/apis/match.type";
 
-export default function Card({ type }: { type: CardType }) {
-  // TODO: 추천 or 카드 리스트 data fetch
-  const { data: cards, isError, isLoading, error } = CARD_MOCK_DATA;
+type ButtonProps = {
+  text: string;
+  theme: ButtonTheme;
+  disabled?: true;
+  onClickCallback: () => Promise<void> | null;
+};
+
+type MatchUserInfoProps = Pick<
+  User,
+  "id" | "nickName" | "profileImageSrc" | "condition" | "introduction"
+> & { buttons: ButtonProps[] };
+
+export type CardProps = {
+  isLoading: boolean;
+  isError: boolean;
+  error: Error | null;
+  matchUserInfos: MatchUserInfoProps[] | undefined;
+};
+
+export default function Cards(props: CardProps) {
+  const { matchUserInfos, isLoading, isError, error } = props;
 
   return (
-    <StyledContainer>
+    <>
       {isLoading ? (
         <p>loading...</p>
       ) : isError ? (
         <p>Error: {error!.message}</p>
       ) : (
-        cards!.map((card, i) => (
+        matchUserInfos!.map((matchUserInfo, i) => (
           <Fragment key={"CardItem" + i}>
-            <CardItem {...card} type={type} />
+            <CardItem {...matchUserInfo} />
           </Fragment>
         ))
       )}
-    </StyledContainer>
+    </>
   );
 }
 
-function CardItem(props: CardItemProps) {
-  const { id, nickName, profileImageSrc, introduction, condition, type } =
-    props;
+export function CardItem(props: MatchUserInfoProps) {
+  const { nickName, profileImageSrc, introduction, condition, buttons } = props;
   const { location, benchPress, squat, deadLift, gender, fitnessYears } =
     condition;
 
@@ -46,70 +61,42 @@ function CardItem(props: CardItemProps) {
         <StyledTag>S {squat}</StyledTag>
         <StyledTag>D {deadLift}</StyledTag>
       </StyledTagContainer>
-      <CardButtons id={id} type={type} />
+      <CardButtons buttons={buttons} />
     </StyledCardItemContainer>
   );
 }
 
-function CardButtons(props: { id: string; type: CardType }) {
-  const { id, type } = props;
-  const {
-    matchStatus,
-    isLoading,
-    isError,
-    error,
-    requestMatch,
-    cancelMatch,
-    acceptMatch,
-    rejectMatch,
-  } = useMatching(id);
+type ButtonTheme = "outlined" | "contained";
+
+function CardButtons({ buttons }: { buttons: ButtonProps[] }) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = async (callback: ButtonProps["onClickCallback"]) => {
+    setIsLoading(true);
+    await callback();
+    setIsLoading(false);
+  };
 
   return (
     <StyledHorizenContainer>
-      {isLoading ? (
-        "loading..."
-      ) : isError ? (
-        error!.message
-      ) : matchStatus === null ? (
-        <StyledButton $variant="contained" onClick={() => requestMatch()}>
-          요청하기
-        </StyledButton>
-      ) : matchStatus === "WAITING" && type === "SENT" ? (
-        <>
-          <StyledButton $variant="outlined" onClick={() => cancelMatch()}>
-            취소
-          </StyledButton>
-          <StyledButton $variant="contained" disabled>
-            수락대기중
-          </StyledButton>
-        </>
-      ) : matchStatus === "WAITING" && type === "RECEIVED" ? (
-        <>
-          <StyledButton $variant="outlined" onClick={() => acceptMatch()}>
-            수락
-          </StyledButton>
-          <StyledButton $variant="contained" onClick={() => rejectMatch()}>
-            거절
-          </StyledButton>
-        </>
-      ) : matchStatus === "REJECTED" ? (
-        <StyledButton $variant="contained" disabled>
-          거절된 요청
-        </StyledButton>
-      ) : matchStatus === "ACCEPTED" ? (
-        <StyledButton $variant="contained" disabled>
-          성사된 요청
-        </StyledButton>
-      ) : null}
+      {buttons.map(({ text, theme, disabled, onClickCallback }, i) => (
+        <Fragment key={"CardButton" + i}>
+          {isLoading ? (
+            "loading..."
+          ) : (
+            <StyledButton
+              $variant={theme}
+              onClick={() => handleClick(onClickCallback)}
+              disabled={disabled}
+            >
+              {text}
+            </StyledButton>
+          )}
+        </Fragment>
+      ))}
     </StyledHorizenContainer>
   );
 }
-
-const StyledContainer = styled.section`
-  background-color: #f2f2f2;
-  padding: 8px;
-  color: #2b2b2b;
-`;
 
 const StyledCardItemContainer = styled.div`
   background-color: #ffffff;
@@ -166,7 +153,7 @@ const StyledTag = styled.p`
   border: 1px solid #121212;
 `;
 
-const StyledButton = styled.button<{ $variant: "outlined" | "contained" }>`
+const StyledButton = styled.button<{ $variant: ButtonTheme }>`
   ${(props) =>
     props.$variant === "outlined"
       ? css`

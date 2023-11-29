@@ -22,9 +22,10 @@
 
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "dev@/*": ["mock/*"]
     }
   },
-  "include": ["src", "mock/CardMockData.ts"],
+  "include": ["src", "mock"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
