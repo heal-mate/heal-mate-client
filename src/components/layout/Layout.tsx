@@ -16,10 +16,7 @@ export default function Layout() {
 }
 
 const StyledMain = styled.main`
-  width: 85%;
+  width: 100%;
   max-width: ${({ theme }) => `${theme.size.maxWidth}px`};
-  margin-top: 3.5rem;
-  margin-bottom: 65px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: ${({ theme }) => theme.size.headerHeight}px auto 65px;
 `;
