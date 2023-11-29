@@ -13,7 +13,9 @@ export default function CardsRecommend() {
             {
               text: "요청하기",
               theme: "outlined",
-              onClickCallback: async () => requestMatch({ userId: e._id }),
+              onClickCallback: async () => {
+                requestMatch({ userId: e._id });
+              },
             },
           ],
         }))}

@@ -17,14 +17,16 @@ export default function CardsReceived() {
                   {
                     text: "수락하기",
                     theme: "outlined",
-                    onClickCallback: async () =>
-                      acceptMatch({ matchId: e.matchId }),
+                    onClickCallback: async () => {
+                      acceptMatch({ matchId: e.matchId });
+                    },
                   },
                   {
                     text: "거절하기",
                     theme: "contained",
-                    onClickCallback: async () =>
-                      rejectMatch({ matchId: e.matchId }),
+                    onClickCallback: async () => {
+                      rejectMatch({ matchId: e.matchId });
+                    },
                   },
                 ]
               : e.status === matchStatusDict.accepted
