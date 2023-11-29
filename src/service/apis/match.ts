@@ -17,18 +17,14 @@ export const fetchGetMatchesSent = async () => {
   return res.data;
 };
 
-export const fetchRequestMatch = async ({ userId }: { userId: string }) => {
+export const fetchRequestMatch = async ({ userId }: { userId: string }) =>
   instance.post(`/request`, { userId });
-};
 
-export const fetchCancelMatch = async ({ matchId }: { matchId: string }) => {
+export const fetchCancelMatch = async ({ matchId }: { matchId: string }) =>
   instance.delete(`/cancel/${matchId}`);
-};
 
-export const fetchAcceptMatch = async ({ matchId }: { matchId: string }) => {
+export const fetchAcceptMatch = async ({ matchId }: { matchId: string }) =>
   instance.patch(`/accept/${matchId}`);
-};
 
-export const fetchRejectMatch = async ({ matchId }: { matchId: string }) => {
+export const fetchRejectMatch = async ({ matchId }: { matchId: string }) =>
   instance.patch(`/reject/${matchId}`);
-};
