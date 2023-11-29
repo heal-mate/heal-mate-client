@@ -4,6 +4,7 @@ import { GoHome } from "react-icons/go";
 import { LuUser } from "react-icons/lu";
 import { path } from "../../App";
 import { MdMailOutline } from "react-icons/md";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
 
 export default function Navbar() {
   return (
@@ -23,6 +24,12 @@ export default function Navbar() {
         </StyledList>
         <StyledList>
           <NavLink to={path.tab2}>
+            <IoChatboxEllipsesOutline size="24" />
+            <span>헬프톡</span>
+          </NavLink>
+        </StyledList>
+        <StyledList>
+          <NavLink to={path.tab3}>
             <LuUser size="24" />
             <span>마이페이지</span>
           </NavLink>

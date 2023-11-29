@@ -4,6 +4,7 @@ import Received from "./pages/Received";
 import Mypage from "./pages/Mypage";
 import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
+import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
 import MatchFilter from "./components/MatchFilter";
 
@@ -11,7 +12,8 @@ import MatchFilter from "./components/MatchFilter";
 export const path = {
   root: "/",
   tab1: "/recieved",
-  tab2: "/mypage",
+  tab2: "/chat",
+  tab3: "/mypage",
   login: "/login",
   setup: "/setup",
   matchFilter: "/filter",
@@ -32,6 +34,10 @@ const router = createBrowserRouter([
       },
       {
         path: path.tab2,
+        element: <Chat />,
+      },
+      {
+        path: path.tab3,
         element: <Mypage />,
       },
     ],

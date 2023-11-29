@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "65659e11761c1f7710de084e"
+  },
+  "receiverId": {
+    "$oid": "65654d023948df4dfd0cf108"
+  },
+  "senderId": {
+    "$oid": "6564aabc5235915edc6b3510"
+  },
+  "status": "ACCEPTED",
+  "receiverDeleteAt": null,
+  "senderDeleteAt": null,
+  "updatedAt": {
+    "$date": "2023-11-28T14:26:52.400Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6565efefb73cf45ffc08f57f"
+  },
+  "receiverId": {
+    "$oid": "65654d023948df4dfd0cf108"
+  },
+  "senderId": {
+    "$oid": "65654d023948df4dfd0cf108"
+  },
+  "status": "WAITING",
+  "receiverDeleteAt": null,
+  "senderDeleteAt": null,
+  "updatedAt": {
+    "$date": "2023-11-28T14:26:25.308Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6565f7ae4c2cf18de70828d7"
+  },
+  "receiverId": {
+    "$oid": "65654f303948df4dfd0cf109"
+  },
+  "senderId": {
+    "$oid": "65654d023948df4dfd0cf108"
+  },
+  "status": "WAITING",
+  "receiverDeleteAt": null,
+  "senderDeleteAt": null,
+  "updatedAt": {
+    "$date": "2023-11-28T14:22:38.270Z"
+  },
+  "__v": 0
+}]

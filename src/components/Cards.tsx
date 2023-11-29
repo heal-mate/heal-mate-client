@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import styled, { css } from "styled-components";
-import { User } from "@/service/apis/match.type";
+import { User } from "@/service/apis/user.type";
 
 type ButtonProps = {
   text: string;
@@ -11,7 +11,7 @@ type ButtonProps = {
 
 type MatchUserInfoProps = Pick<
   User,
-  "id" | "nickName" | "profileImageSrc" | "condition" | "introduction"
+  "nickName" | "profileImageSrc" | "condition" | "introduction"
 > & { buttons: ButtonProps[] };
 
 export type CardProps = {
