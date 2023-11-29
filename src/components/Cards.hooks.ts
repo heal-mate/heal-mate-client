@@ -28,7 +28,7 @@ export const useMatchesRecommend = () => {
   const requestMatch = useMutation({
     mutationFn: fetchRequestMatch,
     onSuccess: invalidateMatchQuery,
-  }).mutate;
+  }).mutateAsync;
 
   return { matchesRecommend, requestMatch, ...rest };
 };
@@ -58,7 +58,7 @@ export const useMatchesSent = () => {
   const cancelMatch = useMutation({
     mutationFn: fetchCancelMatch,
     onSuccess: invalidateMatchQuery,
-  }).mutate;
+  }).mutateAsync;
 
   return { matchesSent, cancelMatch, ...rest };
 };
@@ -88,12 +88,12 @@ export const useMatchesReceived = () => {
   const acceptMatch = useMutation({
     mutationFn: fetchAcceptMatch,
     onSuccess: invalidateMatchQuery,
-  }).mutate;
+  }).mutateAsync;
 
   const rejectMatch = useMutation({
     mutationFn: fetchRejectMatch,
     onSuccess: invalidateMatchQuery,
-  }).mutate;
+  }).mutateAsync;
 
   return { matchesReceived, acceptMatch, rejectMatch, ...rest };
 };
