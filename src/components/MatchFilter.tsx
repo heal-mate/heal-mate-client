@@ -1,18 +1,24 @@
 import { useState } from "react";
-import { styled, css } from "styled-components";
-import { FaDumbbell } from "react-icons/fa";
-import Rangeinput from "./RangeInput";
-import { Condition, locations } from "./MathFilter.type";
-import RadioInput from "./RadioInput";
+import { styled } from "styled-components";
+import {
+  ExerciseType,
+  FilterStatus,
+  GenderType,
+  Location,
+} from "@/components/MatchFilter.type";
+import MatchFilterExercise from "@/components/MatchFilterExercise";
+import MatchFilterYears from "@/components/MatchFilterYears";
+import MatchFilterGender from "@/components/MatchFilterGender";
+import MatchFilterLocations from "@/components/MatchFilterLocations";
 
-const excersiseType = [
+const excersiseList = [
   {
     id: 0,
     name: "벤치프레스",
     value: "benchPress",
     isChecked: true,
     min: 0,
-    max: 15,
+    max: 100,
   },
   {
     id: 1,
@@ -20,7 +26,7 @@ const excersiseType = [
     value: "squat",
     isChecked: false,
     min: 0,
-    max: 15,
+    max: 100,
   },
   {
     id: 2,
@@ -28,57 +34,19 @@ const excersiseType = [
     value: "deadLift",
     isChecked: false,
     min: 0,
-    max: 15,
-  },
-  {
-    id: 3,
-    name: "추가1",
-    isChecked: false,
-    min: 0,
-    max: 0,
-  },
-  {
-    id: 4,
-    name: "추가2",
-    isChecked: false,
-    min: 0,
-    max: 0,
+    max: 100,
   },
 ];
 
-const weightMarks = {
-  0: "0kg",
-  25: "25kg",
-  50: "50kg",
-  75: "75kg",
-  100: "100kg",
-};
-
-const careerMarks = {
-  0: "1",
-  25: "2",
-  50: "5",
-  75: "8",
-  100: "10",
-};
-
-type ExerciseType = {
-  id: number;
-  name: string;
-  isChecked: boolean;
-  min: number;
-  max: number;
-};
-
 export default function MatchFilter() {
   // 렌더링할 타입에 배열.
-  const [list, setList] = useState(excersiseType);
+  const [exerciseList, setExerciseList] = useState(excersiseList);
 
   const [showType, setShowType] = useState<ExerciseType | null>(
-    excersiseType[0],
+    excersiseList[0],
   );
 
-  const [filters, setFilters] = useState<Condition<"RANGE">>({
+  const [filters, setFilters] = useState<FilterStatus>({
     benchPress: null,
     deadLift: null,
     fitnessYears: null,
@@ -96,161 +64,129 @@ export default function MatchFilter() {
       max,
     };
 
-    const newList = list.map((e) => ({ ...e }));
+    const newExerciseList = exerciseList.map((e) => ({ ...e }));
 
     setShowType(changedItem);
 
-    newList[id] = changedItem;
+    newExerciseList[id] = changedItem;
 
-    setList(newList);
+    setExerciseList(newExerciseList);
+
+    setFilters((prevFilters) => {
+      return {
+        ...prevFilters,
+        [newExerciseList[id].value]: min === 0 && max === 300 ? null : ranges,
+      };
+    });
   };
 
   const handleChangeYears = (ranges: [number, number]) => {
+    const [minYears, maxYears] = ranges;
+
     const newFilters = {
       ...filters,
-      fitnessYears: ranges,
+      fitnessYears: minYears === 0 && maxYears === 5 ? null : ranges,
     };
-    console.log(newFilters);
     setFilters(newFilters);
   };
 
   // 클릭한 요소의 isChecked 속성 토글 함수.
   const handleSelectType = (item: ExerciseType, index: number) => {
     // 새로운 list를 만든다.
-    const newList = list.map((e) => ({ ...e }));
+    const newExerciseList = exerciseList.map((e) => ({ ...e }));
     // item의 isChecked가 false 일때 토글한다.그리고 show.
     if (!item.isChecked) {
-      newList[index].isChecked = !newList[index].isChecked;
+      newExerciseList[index].isChecked = !newExerciseList[index].isChecked;
       // 클릭한 아이템을 보여준다.
       setShowType({ ...item, isChecked: !item.isChecked });
-      setList(newList);
+      setExerciseList(newExerciseList);
+      setFilters((prevFilters) => {
+        const { value, min, max } = newExerciseList[index];
+        return {
+          ...prevFilters,
+          [value]: [min, max],
+        };
+      });
     } else if (showType !== item) {
       // 만약 show 와 아이템이 다르다면.. 오직 show만
       setShowType(item);
     } else {
       // 같다면 ..해당 아이템 토글하고 다른 체크된 아이템 show.
-      newList[index].isChecked = !newList[index].isChecked;
-      const findIndex = newList.findIndex((e) => e.isChecked);
-      setShowType(findIndex === -1 ? null : newList[findIndex]);
-      setList(newList);
+      newExerciseList[index].isChecked = !newExerciseList[index].isChecked;
+      const findIndex = newExerciseList.findIndex((e) => e.isChecked);
+      setShowType(findIndex === -1 ? null : newExerciseList[findIndex]);
+      setExerciseList(newExerciseList);
+      setFilters((prevFilters) => {
+        return {
+          ...prevFilters,
+          [newExerciseList[index].value]: null,
+        };
+      });
     }
   };
 
-  // 필터 적용하기
-  return (
-    <Container>
-      <FilterTypes>
-        {list &&
-          list.map((item, index) => {
-            return (
-              <>
-                <Box
-                  key={index}
-                  $isChecked={item.isChecked}
-                  onClick={() => handleSelectType(item, index)}
-                >
-                  <DumbbellIcon />
-                  {item.name}
-                </Box>
-              </>
-            );
-          })}
-      </FilterTypes>
-      <FilterRange>
-        {showType && (
-          <Rangeinput
-            type={showType.name}
-            marks={weightMarks}
-            suffix="kg"
-            handleChange={(e) => handleChangeWeight(e, showType.id)}
-            min={showType.min}
-            max={showType.max}
-          />
-        )}
-        <Rangeinput
-          type={"경력"}
-          marks={careerMarks}
-          suffix="년"
-          handleChange={handleChangeYears}
-          min={filters.fitnessYears ? filters.fitnessYears[0] : 0}
-          max={filters.fitnessYears ? filters.fitnessYears[1] : 10}
-        />
-        <RadioInput />
+  const handleChangeGender = (genderType: GenderType) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      gender: genderType,
+    }));
+  };
 
-        <Locations>
-          <p>지역</p>
-          <div>
-            {locations.map((location) => (
-              <Location>{location}</Location>
-            ))}
-          </div>
-        </Locations>
-      </FilterRange>
-    </Container>
+  const handleSelectLocation = (locationName: Location) => {
+    // TODO: setFilters 함수를 사용해 location에 인자로 받은 locationName을 배열에 넣어야한다.
+
+    setFilters((prevFilters) => {
+      // location 배열이 null이 아니라면 기존 배열을 사용, null이면 빈 배열로 시작
+      const currentLocations = prevFilters.location || [];
+
+      // locationName이 이미 존재하면 제거, 그렇지 않으면 추가
+      const updatedLocations = currentLocations.includes(locationName)
+        ? currentLocations.filter((location) => location !== locationName)
+        : [...currentLocations, locationName];
+
+      // location 배열의 길이가 3이상 이면 추가하지 않는다.
+      if (updatedLocations.length > 3) {
+        alert("지역은 3곳 이상 선택 할 수 없습니다.");
+        return prevFilters;
+      }
+
+      return {
+        ...prevFilters,
+        location: updatedLocations.length > 0 ? updatedLocations : null,
+      };
+    });
+  };
+
+  return (
+    <StyledContainer>
+      <MatchFilterExercise
+        exerciseList={exerciseList}
+        showType={showType}
+        handleChangeWeight={handleChangeWeight}
+        handleSelectType={handleSelectType}
+      />
+      <MatchFilterYears
+        minYears={filters.fitnessYears !== null ? filters.fitnessYears[0] : 0}
+        maxYears={filters.fitnessYears !== null ? filters.fitnessYears[1] : 5}
+        handleChangeYears={handleChangeYears}
+      />
+      <MatchFilterGender
+        handleChange={handleChangeGender}
+        genderType={filters.gender}
+      />
+      <MatchFilterLocations
+        handleSelectLocation={handleSelectLocation}
+        locationList={filters.location}
+      />
+      <pre style={{ whiteSpace: "pre-wrap" }}>
+        <code>{JSON.stringify(filters)}</code>
+      </pre>
+    </StyledContainer>
   );
 }
 
-const Container = styled.div`
+const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 8px;
-`;
-
-const FilterTypes = styled.div`
-  display: flex;
-  gap: 5px;
-`;
-const FilterRange = styled.div`
-  padding: 12px;
-`;
-
-const enableBox = css`
-  color: #2851e8;
-  background-color: #ffffff;
-  border-bottom: 4px solid #2851e8;
-  box-shadow: 2px 10px 10px 0px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-`;
-const disableBox = css`
-  background-color: #faf9f6;
-  color: #b5b4b3;
-`;
-
-const Box = styled.div<{ $isChecked: boolean }>`
-  margin-bottom: 10px;
-  width: 100px;
-  height: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  cursor: pointer;
-  ${({ $isChecked }) => ($isChecked ? enableBox : disableBox)};
-`;
-
-const DumbbellIcon = styled(FaDumbbell)`
-  font-size: 20px;
-`;
-
-const Locations = styled.div`
-  & > p {
-    font-size: 22px;
-    margin-bottom: 10px;
-  }
-
-  & > div {
-    display: inline-flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-`;
-const Location = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 10px;
-  border: 1px solid black;
-  border-radius: 4px;
-  cursor: pointer;
 `;
