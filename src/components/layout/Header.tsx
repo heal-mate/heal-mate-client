@@ -33,7 +33,7 @@ export default function Header() {
             </a>
           </StyledLogo>
           <StyledBell onClick={handleClick} $isOn={alerts?.length === 0}>
-            <GoBell size="24" />
+            <StyledGoBell />
           </StyledBell>
         </StyledInner>
       </StyledHeader>
@@ -67,7 +67,7 @@ function AlertBox(props: { isShowAlert: boolean; handleClick: () => void }) {
       <StyledAlertHeader>
         <StyledAlertInner>
           <div>
-            <IoIosArrowBack size="20" onClick={handleClick} />
+            <StyledIoIosArrowBack onClick={handleClick} />
             <StyledTitle>알림</StyledTitle>
           </div>
           <span onClick={handleEdit}>{isEdit ? "완료" : "편집"}</span>
@@ -111,7 +111,7 @@ function AlertItem(
       <section onClick={handleMessageClick}>
         <div className="noti-header">
           <b>알림</b>
-          {isEdit && <IoClose size="20" color="#737373" />}
+          {isEdit && <StyledIoClose />}
         </div>
         <div>
           {type === "SENT" && status === "REJECTED" && (
@@ -323,4 +323,17 @@ const StyledList = styled.li<{ $isRead: boolean }>`
     color: #737373;
     font-size: 0.65rem;
   }
+`;
+
+const StyledGoBell = styled(GoBell)`
+  font-size: 24px;
+`;
+
+const StyledIoIosArrowBack = styled(IoIosArrowBack)`
+  font-size: 20px;
+`;
+
+const StyledIoClose = styled(IoClose)`
+  font-size: 20px;
+  color: #737373;
 `;
