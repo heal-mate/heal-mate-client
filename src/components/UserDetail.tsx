@@ -1,69 +1,45 @@
 import { styled } from "styled-components";
 import { MdArrowBack } from "react-icons/md";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { ReactNode, useEffect, useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import {
+  FITNESS_YEARS_MARKS,
+  LOCATIONS,
+  MAX_FITNESS_YEARS,
+  MAX_WEIGHT,
+  WEIGHT_MARKS,
+} from "@/config/constants";
+import { MarkObj } from "rc-slider/lib/Marks";
+import { fetchGetUserMine, fetchUpdateMe } from "@/service/apis/user";
+import { User } from "@/service/apis/user.type";
 
-export type UserType = {
-  nickName: string | null;
-  introduction: string | null;
-  profileImageSrc: string | null;
-  benchPress: number | null;
-  squat: number | null;
-  deadLift: number | null;
-  fitnessYears: number | null;
-  gender: string | null;
-  location: string | null;
-};
-
-export type UserDetailProps = {
-  user: UserType;
-  type?: "Normal" | "Edit";
-};
 export default function UserDetail() {
-  const [user, setUser] = useState<UserType>({
-    nickName: null,
-    introduction: null,
-    profileImageSrc: null,
-    benchPress: null,
-    squat: null,
-    deadLift: null,
-    fitnessYears: null,
-    gender: null,
-    location: null,
-  });
-
+  const [user, setUser] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
 
-  const {
-    nickName,
-    introduction,
-    profileImageSrc,
-    benchPress,
-    deadLift,
-    squat,
-    fitnessYears,
-    location,
-  } = user;
-
   useEffect(() => {
-    axios("../../mock/user.json")
-      .then((res) => setUser(res.data.user))
-      .catch(console.error);
+    fetchGetUserMine().then(setUser).catch(console.error);
   }, []);
 
-  const handleChangeRange = (ranges: number | number[], target: string) => {
+  const handleChangeRange = (value: number | number[], target: string) => {
     setUser((prevState) => {
+      if (!prevState) return null;
+
       return {
         ...prevState,
-        [target]: ranges,
+        condition: {
+          ...prevState.condition,
+          [target]: value,
+        },
       };
     });
   };
 
   const handleChangeIntroduction = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser((prevState) => {
+      if (!prevState) return null;
+
       return {
         ...prevState,
         introduction: e.target.value,
@@ -73,6 +49,8 @@ export default function UserDetail() {
 
   const handleChangeLocation = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setUser((prevState) => {
+      if (!prevState) return null;
+
       return {
         ...prevState,
         location: e.target.value,
@@ -81,12 +59,13 @@ export default function UserDetail() {
   };
 
   const onSaveUser = () => {
-    // TODO: 수정한 내용을 업데이트 API에 요청
-    console.log(user);
+    if (!user) return null;
+
+    fetchUpdateMe(user);
   };
 
   const handleToggleEditMode = () => {
-    setEditMode(!editMode);
+    setEditMode((editMode) => !editMode);
   };
 
   const handleSave = () => {
@@ -98,6 +77,9 @@ export default function UserDetail() {
   };
 
   if (!user) return <div>loading</div>;
+
+  const { nickName, introduction, profileImageSrc, condition } = user;
+  const { benchPress, deadLift, fitnessYears, location, squat } = condition;
 
   return (
     <StyledContainer>
@@ -118,39 +100,56 @@ export default function UserDetail() {
         {editMode ? (
           <input
             type="text"
-            value={introduction!}
+            value={introduction}
             onChange={(e) => handleChangeIntroduction(e)}
           />
         ) : (
           <p>{introduction}</p>
         )}
       </StyledProfile>
+
       <Rangeinput
-        type={editMode}
+        isEditable={editMode}
         title="벤치프레스"
         name="benchPress"
-        value={benchPress ?? 300}
+        suffix="kg"
+        step={5}
+        max={MAX_WEIGHT}
+        marks={WEIGHT_MARKS}
+        value={benchPress ?? MAX_WEIGHT}
         handleChange={handleChangeRange}
       />
       <Rangeinput
-        type={editMode}
+        isEditable={editMode}
         title="데드리프트"
         name="deadLift"
-        value={deadLift ?? 300}
+        suffix="kg"
+        step={5}
+        max={MAX_WEIGHT}
+        marks={WEIGHT_MARKS}
+        value={deadLift ?? MAX_WEIGHT}
         handleChange={handleChangeRange}
       />
       <Rangeinput
-        type={editMode}
+        isEditable={editMode}
         title="스쿼트"
         name="squat"
-        value={squat ?? 300}
+        suffix="kg"
+        step={5}
+        max={MAX_WEIGHT}
+        marks={WEIGHT_MARKS}
+        value={squat ?? MAX_WEIGHT}
         handleChange={handleChangeRange}
       />
       <Rangeinput
-        type={editMode}
+        isEditable={editMode}
         title="경력"
         name="fitnessYears"
-        value={fitnessYears ?? 5}
+        suffix="년"
+        step={1}
+        max={MAX_FITNESS_YEARS}
+        marks={FITNESS_YEARS_MARKS}
+        value={fitnessYears ?? MAX_FITNESS_YEARS}
         handleChange={handleChangeRange}
       />
       <StyledLocationsDiv>
@@ -158,14 +157,11 @@ export default function UserDetail() {
 
         {editMode ? (
           <select onChange={handleChangeLocation}>
-            <option value="잠실">잠실</option>
-            <option value="송파">송파</option>
-            <option value="성수">성수</option>
-            <option value="삼성">삼성</option>
-            <option value="청담">청담</option>
-            <option value="역삼">역삼</option>
-            <option value="대치">대치</option>
-            <option value="개포">개포</option>
+            {LOCATIONS.map((location, index) => (
+              <option key={"location" + index} value={location}>
+                {location}
+              </option>
+            ))}
           </select>
         ) : (
           <div>{location}</div>
@@ -176,70 +172,55 @@ export default function UserDetail() {
 }
 
 type RangeinputProps = {
-  type: boolean;
+  isEditable: boolean;
   title: string;
   name: string;
+  suffix: string;
+  step: number;
+  max: number;
+  marks: Record<string | number, ReactNode | MarkObj>;
   value: number;
   handleChange: (value: number | number[], target: string) => void;
 };
 
-const weightMarks = {
-  0: "0kg",
-  50: "50kg",
-  100: "100kg",
-  150: "150kg",
-  200: "200kg",
-  250: "250kg",
-  300: "300kg이상",
-};
-
-const careerMarks = {
-  0: "0",
-  1: "1",
-  2: "2",
-  3: "3",
-  4: "4",
-  5: "5years 이상",
-};
-
-const MAX_WEIGHT = 300;
-const MAX_FITNESS_YEARS = 5;
-
 function Rangeinput({
-  type,
+  isEditable,
   title,
   name,
+  suffix,
+  step,
+  max,
+  marks,
   value,
   handleChange,
 }: RangeinputProps) {
-  const i = title === "경력";
-
   return (
     <StyledRangeinputContainer>
       <StyledInfo>
         <p>{title}</p>
         <div>
-          {value === 300 ? (
+          {value === max ? (
             "상관없음"
           ) : (
             <>
               {value}
-              {i ? "년" : "kg"}
-              {}
+              {suffix}
             </>
           )}
         </div>
       </StyledInfo>
       <StyledRange>
         <Slider
-          marks={i ? careerMarks : weightMarks}
-          max={i ? MAX_FITNESS_YEARS : MAX_WEIGHT}
-          step={i ? 1 : 5}
+          marks={marks}
+          max={max}
+          step={step}
           dots={false}
           defaultValue={value}
           value={value}
-          onChange={(value) => handleChange(value, name)}
-          disabled={!type}
+          onChange={(range) => {
+            handleChange(range, name);
+          }}
+          disabled={!isEditable}
         />
       </StyledRange>
     </StyledRangeinputContainer>
