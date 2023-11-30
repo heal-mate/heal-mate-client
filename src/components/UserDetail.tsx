@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { MdArrowBack } from "react-icons/md";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import {
@@ -12,15 +12,41 @@ import {
 } from "@/config/constants";
 import { MarkObj } from "rc-slider/lib/Marks";
 import { fetchGetUserMine, fetchUpdateMe } from "@/service/apis/user";
-import { User } from "@/service/apis/user.type";
+import { Location, User } from "@/service/apis/user.type";
+import { uploadImage } from "@/service/apis/uploadImage";
 
 export default function UserDetail() {
   const [user, setUser] = useState<User | null>(null);
+  const initialUser = useRef<User | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const profileImgRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    fetchGetUserMine().then(setUser).catch(console.error);
+    fetchGetUserMine()
+      .then((userData) => {
+        setUser(userData);
+        initialUser.current = userData;
+      })
+      .catch(console.error);
   }, []);
+
+  const handleClickImage = () => {
+    profileImgRef.current?.click();
+  };
+
+  const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    const fileInput = e.target.files[0];
+    const url = URL.createObjectURL(fileInput);
+    setUser((prevState) => {
+      return {
+        ...prevState!,
+        profileImageSrc: url,
+      };
+    });
+  };
 
   const handleChangeRange = (value: number | number[], target: string) => {
     setUser((prevState) => {
@@ -42,6 +68,9 @@ export default function UserDetail() {
 
       return {
         ...prevState,
+        condition: {
+          ...prevState.condition,
+        },
         introduction: e.target.value,
       };
     });
@@ -53,15 +82,35 @@ export default function UserDetail() {
 
       return {
         ...prevState,
-        location: e.target.value,
+        condition: {
+          ...prevState.condition,
+          location: e.target.value as Location,
+        },
       };
     });
   };
 
-  const onSaveUser = () => {
-    if (!user) return null;
+  const onSaveUser = async () => {
+    if (!user || !initialUser.current) return;
 
-    fetchUpdateMe(user);
+    // user 상태와 initialUser 상태 비교.
+    const isChanged =
+      JSON.stringify(user) !== JSON.stringify(initialUser.current);
+    if (!isChanged) return; // 변경사항이 없으면 함수 종료
+
+    let imgUrl = user.profileImageSrc;
+
+    // 이미지 url이 변경되었을 때만 업로드 API를 요청한다.
+    if (user.profileImageSrc !== initialUser.current.profileImageSrc) {
+      const res = await fetch(user.profileImageSrc);
+      const blob = await res.blob();
+      imgUrl = await uploadImage(blob);
+    }
+
+    await fetchUpdateMe({
+      ...user,
+      profileImageSrc: imgUrl,
+    });
   };
 
   const handleToggleEditMode = () => {
@@ -94,7 +143,17 @@ export default function UserDetail() {
       </StyledHeader>
       <StyledProfile>
         <StyledImage>
-          <img src={profileImageSrc ?? ""} alt="" />
+          <img src={profileImageSrc ?? ""} alt="" onClick={handleClickImage} />
+          {editMode && (
+            <StyledFileInput>
+              <input
+                ref={profileImgRef}
+                type="file"
+                onChange={handleChangeImage}
+                title="test"
+              />
+            </StyledFileInput>
+          )}
         </StyledImage>
         <h3>{nickName}</h3>
         {editMode ? (
@@ -156,7 +215,7 @@ export default function UserDetail() {
         <p>지역</p>
 
         {editMode ? (
-          <select onChange={handleChangeLocation}>
+          <select onChange={handleChangeLocation} defaultValue={location}>
             {LOCATIONS.map((location, index) => (
               <option key={"location" + index} value={location}>
                 {location}
@@ -290,6 +349,10 @@ const StyledProfile = styled.div`
     border-bottom: 1px solid #333;
     margin-bottom: 20px;
   }
+`;
+
+const StyledFileInput = styled.div`
+  color: black;
 `;
 
 const StyledImage = styled.div`
