@@ -1,132 +1,142 @@
-[{
-  "_id": {
-    "$oid": "6564aabc5235915edc6b3510"
+[
+  {
+    "_id": {
+      "$oid": "6564aabc5235915edc6b3510"
+    },
+    "email": "user1@user.com",
+    "tel": "01012341234",
+    "nickName": "제이팍",
+    "profileImageSrc": "https://picsum.photos/300/300",
+    "introduction": "안녕하세요 박재범입니다. 원소주 많이 사랑해주세요.",
+    "condition": {
+      "benchPress": 100,
+      "squat": 150,
+      "deadLift": 200,
+      "fitnessYears": 8,
+      "gender": "MALE",
+      "location": "잠실"
+    },
+    "conditionExpect": {
+      "benchPress": [100, 110],
+      "squat": null,
+      "deadLift": null,
+      "location": null,
+      "fitnessYears": null,
+      "gender": "MALE"
+    },
+    "matchIds": [],
+    "matchExceptUserIds": []
   },
-  "email": "user1@user.com",
-  "tel": "01012341234",
-  "nickName": "제이팍",
-  "profileImageSrc": "https://picsum.photos/300/300",
-  "introduction": "안녕하세요 박재범입니다. 원소주 많이 사랑해주세요.",
-  "condition": {
-    "benchPress": 100,
-    "squat": 150,
-    "deadLift": 200,
-    "fitnessYears": 8,
-    "gender": "MALE",
-    "location": "잠실"
+  {
+    "_id": {
+      "$oid": "65654d023948df4dfd0cf108"
+    },
+    "email": "user2@user.com",
+    "tel": "01023452345",
+    "nickName": "로니콜먼",
+    "profileImageSrc": "https://picsum.photos/300/300",
+    "introduction": "강남사는 22살 남 헬린이입니당 뿌잉뿌잉",
+    "condition": {
+      "benchPress": 110,
+      "squat": 160,
+      "deadLift": 200,
+      "fitnessYears": 12,
+      "gender": "MALE",
+      "location": "강남"
+    },
+    "conditionExpect": {
+      "benchPress": [110, 180],
+      "squat": null,
+      "deadLift": null,
+      "location": null,
+      "fitnessYears": null,
+      "gender": "MALE"
+    },
+    "matchIds": [],
+    "matchExceptUserIds": []
   },
-  "conditionExpect": {
-    "benchPress": [
-      100,
-      110
-    ],
-    "squat": null,
-    "deadLift": null,
-    "location": null,
-    "fitnessYears": null,
-    "gender": "MALE"
+  {
+    "_id": {
+      "$oid": "65654f303948df4dfd0cf109"
+    },
+    "email": "user3@user.com",
+    "tel": "01034563456",
+    "nickName": "김종국",
+    "profileImageSrc": "https://picsum.photos/300/300",
+    "introduction": "조용히 헬스만 하실 분 괌",
+    "condition": {
+      "benchPress": 40,
+      "squat": 60,
+      "deadLift": 110,
+      "fitnessYears": 2,
+      "gender": "FEMALE",
+      "location": "강남"
+    },
+    "conditionExpect": {
+      "benchPress": null,
+      "squat": [50, 70],
+      "deadLift": [100, 120],
+      "location": null,
+      "fitnessYears": [1, 100],
+      "gender": null
+    },
+    "matchIds": [],
+    "matchExceptUserIds": []
   },
-  "matchIds": []
-},
-{
-  "_id": {
-    "$oid": "65654d023948df4dfd0cf108"
+  {
+    "_id": {
+      "$oid": "656550843948df4dfd0cf10a"
+    },
+    "email": "user4@user.com",
+    "tel": "01045674567",
+    "nickName": "아이유",
+    "profileImageSrc": "https://picsum.photos/300/300",
+    "introduction": "화이팅화이팅",
+    "condition": {
+      "benchPress": 40,
+      "squat": 60,
+      "deadLift": 110,
+      "fitnessYears": 2,
+      "gender": "FEMALE",
+      "location": "강남"
+    },
+    "conditionExpect": {
+      "benchPress": null,
+      "squat": [50, 70],
+      "deadLift": [100, 120],
+      "location": null,
+      "fitnessYears": [1, 100],
+      "gender": null
+    },
+    "matchIds": [],
+    "matchExceptUserIds": []
   },
-  "email": "user2@user.com",
-  "tel": "01023452345",
-  "nickName": "로니콜먼",
-  "profileImageSrc": "https://picsum.photos/300/300",
-  "introduction": "강남사는 22살 남 헬린이입니당 뿌잉뿌잉",
-  "condition": {
-    "benchPress": 110,
-    "squat": 160,
-    "deadLift": 200,
-    "fitnessYears": 12,
-    "gender": "MALE",
-    "location": "강남"
-  },
-  "conditionExpect": {
-    "benchPress": [
-      110,
-      180
-    ],
-    "squat": null,
-    "deadLift": null,
-    "location": null,
-    "fitnessYears": null,
-    "gender": "MALE"
-  },
-  "matchIds": []
-},
-{
-  "_id": {
-    "$oid": "65654f303948df4dfd0cf109"
-  },
-  "email": "user3@user.com",
-  "tel": "01034563456",
-  "nickName": "김종국",
-  "profileImageSrc": "https://picsum.photos/300/300",
-  "introduction": "조용히 헬스만 하실 분 괌",
-  "condition": {
-    "benchPress": 40,
-    "squat": 60,
-    "deadLift": 110,
-    "fitnessYears": 2,
-    "gender": "FEMALE",
-    "location": "강남"
-  },
-  "conditionExpect": {
-    "benchPress": null,
-    "squat": [
-      50,
-      70
-    ],
-    "deadLift": [
-      100,
-      120
-    ],
-    "location": null,
-    "fitnessYears": [
-      1,
-      100
-    ],
-    "gender": null
-  },
-  "matchIds": []
-},
-{
-  "_id": {
-    "$oid": "656550843948df4dfd0cf10a"
-  },
-  "email": "user4@user.com",
-  "tel": "01045674567",
-  "nickName": "아이유",
-  "profileImageSrc": "https://picsum.photos/300/300",
-  "introduction": "화이팅화이팅",
-  "condition": {
-    "benchPress": 40,
-    "squat": 60,
-    "deadLift": 110,
-    "fitnessYears": 2,
-    "gender": "FEMALE",
-    "location": "강남"
-  },
-  "conditionExpect": {
-    "benchPress": null,
-    "squat": [
-      50,
-      70
-    ],
-    "deadLift": [
-      100,
-      120
-    ],
-    "location": null,
-    "fitnessYears": [
-      1,
-      100
-    ],
-    "gender": null
-  },
-  "matchIds": []
-}]
+  {
+    "_id": {
+      "$oid": "656827bab211f4ba2b5bd7a8"
+    },
+    "email": "user10@user.com",
+    "tel": "01012341299",
+    "nickName": "제이팍의 짝",
+    "profileImageSrc": "https://picsum.photos/300/300",
+    "introduction": "안녕하세요 박재범의짝입니다. 원소주 많이 사랑해주세요.",
+    "condition": {
+      "benchPress": 100,
+      "squat": 150,
+      "deadLift": 200,
+      "fitnessYears": 8,
+      "gender": "MALE",
+      "location": "잠실"
+    },
+    "conditionExpect": {
+      "benchPress": [100, 110],
+      "squat": null,
+      "deadLift": null,
+      "location": null,
+      "fitnessYears": null,
+      "gender": "MALE"
+    },
+    "matchIds": [],
+    "matchExceptUserIds": []
+  }
+]
