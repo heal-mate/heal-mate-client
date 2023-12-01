@@ -9,7 +9,7 @@ import {
   fetchRejectMatch,
   fetchRequestMatch,
 } from "@/service/apis/match";
-import { fetchGetUser, fetchGetUserRecommend } from "@/service/apis/user";
+import { fetchGetUser, fetchGetUsersRecommend } from "@/service/apis/user";
 import { Match } from "@/service/apis/match.type";
 
 type MatchCardProps = (User & Match & { userId: string; matchId: string })[];
@@ -17,14 +17,17 @@ type MatchCardProps = (User & Match & { userId: string; matchId: string })[];
 export const useMatchesRecommend = () => {
   const { data: matchesRecommend, ...rest } = useQuery<User[], Error>({
     queryKey: [queryKeys.matchesRecommend],
-    queryFn: fetchGetUserRecommend,
+    queryFn: fetchGetUsersRecommend,
   });
 
-  const invalidateMatchQuery = () =>
+  const invalidateMatchQuery = () => {
     queryClient.invalidateQueries({
       queryKey: [queryKeys.matchesRecommend],
     });
-
+    queryClient.invalidateQueries({
+      queryKey: [queryKeys.matchesSent],
+    });
+  };
   const requestMatch = useMutation({
     mutationFn: fetchRequestMatch,
     onSuccess: invalidateMatchQuery,
@@ -50,10 +53,14 @@ export const useMatchesSent = () => {
     },
   });
 
-  const invalidateMatchQuery = () =>
+  const invalidateMatchQuery = () => {
     queryClient.invalidateQueries({
       queryKey: [queryKeys.matchesRecommend],
     });
+    queryClient.invalidateQueries({
+      queryKey: [queryKeys.matchesSent],
+    });
+  };
 
   const cancelMatch = useMutation({
     mutationFn: fetchCancelMatch,
