@@ -20,11 +20,14 @@ export const useMatchesRecommend = () => {
     queryFn: fetchGetUserRecommend,
   });
 
-  const invalidateMatchQuery = () =>
+  const invalidateMatchQuery = () => {
     queryClient.invalidateQueries({
       queryKey: [queryKeys.matchesRecommend],
     });
-
+    queryClient.invalidateQueries({
+      queryKey: [queryKeys.matchesSent],
+    });
+  };
   const requestMatch = useMutation({
     mutationFn: fetchRequestMatch,
     onSuccess: invalidateMatchQuery,
@@ -50,10 +53,14 @@ export const useMatchesSent = () => {
     },
   });
 
-  const invalidateMatchQuery = () =>
+  const invalidateMatchQuery = () => {
     queryClient.invalidateQueries({
       queryKey: [queryKeys.matchesRecommend],
     });
+    queryClient.invalidateQueries({
+      queryKey: [queryKeys.matchesSent],
+    });
+  };
 
   const cancelMatch = useMutation({
     mutationFn: fetchCancelMatch,
