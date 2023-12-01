@@ -1,5 +1,6 @@
 import axios from "axios";
 import { User } from "./user.type";
+import { FilterStatus } from "@/components/MatchFilter.type";
 
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/users`,
@@ -15,6 +16,12 @@ export const fetchGetUsersRecommend = async () => {
   const res = await instance.get<User[]>(`/recommend`);
 
   return res.data;
+};
+
+export const changeUserConditionExpect = async (
+  conditionExpect: FilterStatus,
+) => {
+  return instance.patch("/conditionExpect", conditionExpect);
 };
 
 export const fetchGetUserMine = async () => {
