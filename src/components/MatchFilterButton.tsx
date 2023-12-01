@@ -8,6 +8,7 @@ import scrollBlock from "@/utils/scrollBlock";
 import { FilterStatus } from "./MatchFilter.type";
 import { changeUserConditionExpect } from "@/service/apis/user";
 import Swal from "sweetalert2";
+import { queryClient, queryKeys } from "@/service/store/reactQuery";
 
 export default function MatchFilterButton() {
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
@@ -39,9 +40,10 @@ export default function MatchFilterButton() {
       showDenyButton: true,
       denyButtonText: "취소",
       confirmButtonText: "확인",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        changeUserConditionExpect(filters);
+        await changeUserConditionExpect(filters);
+        queryClient.invalidateQueries({ queryKey: queryKeys.matchesRecommend });
         setIsShowFilter((prev) => !prev);
       }
     });

@@ -12,7 +12,7 @@ import { useGetAlertsAll } from "../Alert.hooks";
 import { AxiosResponse } from "axios";
 
 // const MOCK_USER_ID = "6564aabc5235915edc6b3510"; //제이팍
-const MOCK_USER_ID = "65654d023948df4dfd0cf108"; //로니콜먼
+const MOCK_USER_ID = "6564aabc5235915edc6b3510"; //로니콜먼
 
 export default function Header() {
   const { alertsList } = useGetAlertsAll();
