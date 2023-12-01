@@ -11,8 +11,20 @@ export const fetchGetUser = async ({ userId }: { userId: string }) => {
   return res.data;
 };
 
-export const fetchGetUserRecommend = async () => {
+export const fetchGetUsersRecommend = async () => {
   const res = await instance.get<User[]>(`/recommend`);
+
+  return res.data;
+};
+
+export const fetchGetUserMine = async () => {
+  const res = await instance.get<User>(`/mine`);
+
+  return res.data;
+};
+
+export const fetchUpdateMe = async (userDetail: User) => {
+  const res = await instance.patch(`/mine`, userDetail);
 
   return res.data;
 };
