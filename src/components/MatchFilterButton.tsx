@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { styled, css } from "styled-components";
-import { StyledButton } from "@/components/FilterButton.style";
+import { StyledButton } from "@/components/FilterButtons.styles";
 import { PiSlidersHorizontalLight } from "react-icons/pi";
 import { IoIosArrowBack } from "react-icons/io";
 import MatchFilter from "./MatchFilter";
@@ -57,7 +57,7 @@ export default function MatchFilterButton() {
         <StyledMatchFilterHeader>
           <StyledMatchFilterInner>
             <div>
-              <IoIosArrowBack size="20" onClick={handleClick} />
+              <StyledIoIosArrowBack onClick={handleClick} />
               <StyledTitle>메이트 조건 설정</StyledTitle>
             </div>
             <span onClick={changeMatchFilter}>완료</span>
@@ -127,4 +127,8 @@ const StyledTitle = styled.h2`
   font-weight: bold;
   color: #323232;
   cursor: default;
+`;
+
+const StyledIoIosArrowBack = styled(IoIosArrowBack)`
+  font-size: 20px;
 `;

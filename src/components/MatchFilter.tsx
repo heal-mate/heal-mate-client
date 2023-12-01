@@ -34,7 +34,7 @@ export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
 
   useEffect(() => {
     handleChangeFilters(filters);
-  }, [filters]);
+  }, [filters, handleChangeFilters]);
 
   const handleChangeWeight = (ranges: [number, number], id: number) => {
     const [min, max] = ranges;
