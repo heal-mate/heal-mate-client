@@ -1,4 +1,5 @@
-import MatchFilter from "@/components/MatchFilter";
+import UserDetail from "@/components/UserDetail";
+
 export default function Mypage() {
-  return <MatchFilter />;
+  return <UserDetail />;
 }

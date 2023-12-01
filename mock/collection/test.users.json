@@ -24,7 +24,8 @@
       "fitnessYears": null,
       "gender": "MALE"
     },
-    "matchIds": []
+    "matchIds": [],
+    "matchExceptUserIds": []
   },
   {
     "_id": {
@@ -51,7 +52,8 @@
       "fitnessYears": null,
       "gender": "MALE"
     },
-    "matchIds": []
+    "matchIds": [],
+    "matchExceptUserIds": []
   },
   {
     "_id": {
@@ -78,7 +80,8 @@
       "fitnessYears": [1, 100],
       "gender": null
     },
-    "matchIds": []
+    "matchIds": [],
+    "matchExceptUserIds": []
   },
   {
     "_id": {
@@ -105,6 +108,35 @@
       "fitnessYears": [1, 100],
       "gender": null
     },
-    "matchIds": []
+    "matchIds": [],
+    "matchExceptUserIds": []
+  },
+  {
+    "_id": {
+      "$oid": "656827bab211f4ba2b5bd7a8"
+    },
+    "email": "user10@user.com",
+    "tel": "01012341299",
+    "nickName": "제이팍의 짝",
+    "profileImageSrc": "https://picsum.photos/300/300",
+    "introduction": "안녕하세요 박재범의짝입니다. 원소주 많이 사랑해주세요.",
+    "condition": {
+      "benchPress": 100,
+      "squat": 150,
+      "deadLift": 200,
+      "fitnessYears": 8,
+      "gender": "MALE",
+      "location": "잠실"
+    },
+    "conditionExpect": {
+      "benchPress": [100, 110],
+      "squat": null,
+      "deadLift": null,
+      "location": null,
+      "fitnessYears": null,
+      "gender": "MALE"
+    },
+    "matchIds": [],
+    "matchExceptUserIds": []
   }
 ]
