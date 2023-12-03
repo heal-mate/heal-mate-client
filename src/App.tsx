@@ -7,6 +7,9 @@ import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
 import MatchFilter from "./components/MatchFilter";
+import { useEffect } from "react";
+import { getFirebaseToken } from "./service/store/firebase";
+import { sendToken } from "./service/apis/webpush";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
@@ -57,5 +60,8 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
+  useEffect(() => {
+    getFirebaseToken().then((e) => sendToken(e));
+  }, []);
   return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
 }
