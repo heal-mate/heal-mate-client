@@ -6,7 +6,9 @@ import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
-import MatchFilter from "./components/MatchFilter";
+import { LoadingSpinnerAtom } from "./recoils/loadingSpinnerAtom";
+import { useRecoilValue } from "recoil";
+import LoadingSpinnerPotal from "./potals/LoadingSpinnerPotal";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
@@ -16,7 +18,6 @@ export const path = {
   tab3: "/mypage",
   login: "/login",
   setup: "/setup",
-  matchFilter: "/filter",
 };
 
 const router = createBrowserRouter([
@@ -50,12 +51,15 @@ const router = createBrowserRouter([
     path: path.setup,
     element: <UserInfoSetup />,
   },
-  {
-    path: path.matchFilter,
-    element: <MatchFilter />,
-  },
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+  const loadingSpinner = useRecoilValue(LoadingSpinnerAtom);
+
+  return (
+    <>
+      <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
+      {loadingSpinner && <LoadingSpinnerPotal />}
+    </>
+  );
 }

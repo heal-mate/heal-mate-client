@@ -6,13 +6,16 @@ import { QueryClientProvider } from "react-query";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme.ts";
 import { queryClient } from "./service/store/reactQuery.ts";
+import { RecoilRoot } from "recoil";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <GlobalStyle />
-        <App />
+        <RecoilRoot>
+          <GlobalStyle />
+          <App />
+        </RecoilRoot>
       </QueryClientProvider>
     </ThemeProvider>
   </React.StrictMode>,
