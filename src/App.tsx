@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
 import MatchFilter from "./components/MatchFilter";
+import Register from "./pages/Register";
+// import { FilterStatus } from "./components/MatchFilter.type";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
@@ -15,6 +17,7 @@ export const path = {
   tab2: "/chat",
   tab3: "/mypage",
   login: "/login",
+  register: "/register",
   setup: "/setup",
   matchFilter: "/filter",
 };
@@ -47,12 +50,22 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: path.register,
+    element: <Register />,
+  },
+  {
     path: path.setup,
     element: <UserInfoSetup />,
   },
   {
     path: path.matchFilter,
-    element: <MatchFilter />,
+    element: (
+      <MatchFilter
+        handleChangeFilters={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
+    ),
   },
 ]);
 

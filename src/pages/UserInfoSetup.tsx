@@ -1,28 +1,48 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import RadioButton from "@/components/RadioButton";
 import { GenderType } from "@/components/MatchFilter.type";
+import { fetchRegisterUser } from "@/service/apis/user";
+import { useNavigate } from "react-router-dom";
 
 type UserInfoType = {
-  nickname: string;
+  nickName: string;
   email: string;
   gender: GenderType;
+  tel: string;
+  password: string;
 };
 
 export default function UserInfoSetup() {
   const [userInfos, setUserInfors] = useState<UserInfoType>({
-    nickname: "",
+    nickName: "",
     email: "",
     gender: null,
+    tel: "",
+    password: "",
   });
 
   //TODO : setErrorMessage 임시로 삭제함
-  const [errorMessage] = useState<string>();
+  const [errorMessage, setErrorMessage] = useState<string>();
   const navigate = useNavigate();
 
+  // 필수값 체크
+  const inputValueCheck = () => {
+    const items = Object.entries(userInfos).filter((item) => item[1] === "");
+    return items.length !== 0 ? true : false;
+  };
+
   const handleSubmit = () => {
-    navigate("/");
+    const msg = inputValueCheck();
+    if (msg) return alert("필수 입력 사항을 모두 입력해주세요.");
+
+    fetchRegisterUser(userInfos)
+      .then((res) => {
+        localStorage.setItem("user", JSON.stringify(res));
+        alert("회원가입 되었습니다. 로그인 해주세요.");
+        navigate("/login");
+      })
+      .catch((err) => setErrorMessage(err.response.data));
   };
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,35 +60,56 @@ export default function UserInfoSetup() {
     }));
   };
 
-  const { nickname, email } = userInfos;
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const email = JSON.parse(user).email;
+      setUserInfors((prev) => ({ ...prev, email }));
+    }
+  }, []);
+
+  const { nickName, email, tel, password } = userInfos;
+
   return (
     <StyledContainer>
       <SectionsWrapper>
         <StyledSection>
-          <p>닉네임 설정</p>
+          <p>이메일</p>
+          <input type="text" name="email" value={email} disabled />
+        </StyledSection>
+        <StyledSection>
+          <p>*비밀번호 설정</p>
           <input
-            type="text"
-            name="nickname"
-            value={nickname}
+            type="password"
+            name="password"
+            value={password}
             onChange={handleChangeInput}
             required
           />
-          {errorMessage && <div>{errorMessage}</div>}
         </StyledSection>
-
         <StyledSection>
-          <p>이메일 설정</p>
+          <p>*닉네임 설정</p>
           <input
             type="text"
-            name="email"
-            value={email}
+            name="nickName"
+            value={nickName}
             onChange={handleChangeInput}
+            required
           />
-          {errorMessage && <div>{errorMessage}</div>}
         </StyledSection>
 
         <StyledSection>
-          <p>성별 설정</p>
+          <p>*전화번호 설정</p>
+          <input
+            type="text"
+            name="tel"
+            value={tel}
+            onChange={handleChangeInput}
+          />
+        </StyledSection>
+
+        <StyledSection>
+          <p>*성별 설정</p>
           <StyledButtonGroup>
             <RadioButton
               text="남자"
@@ -82,7 +123,9 @@ export default function UserInfoSetup() {
             />
           </StyledButtonGroup>
         </StyledSection>
-        <button onClick={handleSubmit}>설정 저장</button>
+        {/* <button onClick={handleSubmit}>설정 저장</button> */}
+        <button onClick={handleSubmit}>회원가입</button>
+        {errorMessage && <StyledErrorSpan>{errorMessage}</StyledErrorSpan>}
       </SectionsWrapper>
     </StyledContainer>
   );
@@ -129,7 +172,7 @@ const SectionsWrapper = styled.div`
 const StyledSection = styled.div`
   margin-bottom: 20px;
   & > p {
-    font-size: 22px;
+    font-size: 16px;
     margin-bottom: 10px;
   }
 
@@ -146,4 +189,11 @@ const StyledSection = styled.div`
 
 const StyledButtonGroup = styled.div`
   display: flex;
+`;
+
+const StyledErrorSpan = styled.span`
+  color: red;
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
 `;
