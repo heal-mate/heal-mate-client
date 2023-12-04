@@ -14,8 +14,11 @@ import { MarkObj } from "rc-slider/lib/Marks";
 import { fetchGetUserMine, fetchUpdateMe } from "@/service/apis/user";
 import { Location, User } from "@/service/apis/user.type";
 import { uploadImage } from "@/service/apis/uploadImage";
+import { useSetRecoilState } from "recoil";
+import { LoadingSpinnerAtom } from "@/recoils/loadingSpinnerAtom";
 
 export default function UserDetail() {
+  const setLoadingSpinner = useSetRecoilState(LoadingSpinnerAtom);
   const [user, setUser] = useState<User | null>(null);
   const initialUser = useRef<User | null>(null);
   const [editMode, setEditMode] = useState(false);
@@ -91,26 +94,27 @@ export default function UserDetail() {
   };
 
   const onSaveUser = async () => {
+    setLoadingSpinner(true);
     if (!user || !initialUser.current) return;
-
     // user 상태와 initialUser 상태 비교.
     const isChanged =
       JSON.stringify(user) !== JSON.stringify(initialUser.current);
-    if (!isChanged) return; // 변경사항이 없으면 함수 종료
-
+    if (!isChanged) {
+      setLoadingSpinner(false);
+      return;
+    } // 변경사항이 없으면 함수 종료
     let imgUrl = user.profileImageSrc;
-
     // 이미지 url이 변경되었을 때만 업로드 API를 요청한다.
     if (user.profileImageSrc !== initialUser.current.profileImageSrc) {
       const res = await fetch(user.profileImageSrc);
       const blob = await res.blob();
       imgUrl = await uploadImage(blob);
     }
-
     await fetchUpdateMe({
       ...user,
       profileImageSrc: imgUrl,
     });
+    setLoadingSpinner(false);
   };
 
   const handleToggleEditMode = () => {
@@ -118,8 +122,8 @@ export default function UserDetail() {
   };
 
   const handleSave = () => {
-    handleToggleEditMode();
     onSaveUser();
+    handleToggleEditMode();
   };
   const handleEdit = () => {
     handleToggleEditMode();
@@ -133,7 +137,7 @@ export default function UserDetail() {
   return (
     <StyledContainer>
       <StyledHeader>
-        <StyledArrowBackIcon />
+        <StyledArrowBackIcon onClick={() => {}} />
         <h2>마이페이지</h2>
         {editMode ? (
           <button onClick={handleSave}>저장</button>
