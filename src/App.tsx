@@ -6,6 +6,8 @@ import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
+import Register from "./pages/Register";
+import PrivateRoute from "./components/PrivateRoute";
 import { LoadingSpinnerAtom } from "./recoils/loadingSpinnerAtom";
 import { useRecoilValue } from "recoil";
 import LoadingSpinnerPotal from "./potals/LoadingSpinnerPotal";
@@ -17,35 +19,46 @@ export const path = {
   tab2: "/chat",
   tab3: "/mypage",
   login: "/login",
+  register: "/register",
   setup: "/setup",
 };
 
 const router = createBrowserRouter([
   {
     path: path.root,
-    element: <Layout />,
+    element: <PrivateRoute />,
     children: [
       {
-        path: path.root,
-        element: <Main />,
-      },
-      {
-        path: path.tab1,
-        element: <Received />,
-      },
-      {
-        path: path.tab2,
-        element: <Chat />,
-      },
-      {
-        path: path.tab3,
-        element: <Mypage />,
+        path: "/",
+        element: <Layout />,
+        children: [
+          {
+            path: path.root,
+            element: <Main />,
+          },
+          {
+            path: path.tab1,
+            element: <Received />,
+          },
+          {
+            path: path.tab2,
+            element: <Chat />,
+          },
+          {
+            path: path.tab3,
+            element: <Mypage />,
+          },
+        ],
       },
     ],
   },
   {
     path: path.login,
     element: <Login />,
+  },
+  {
+    path: path.register,
+    element: <Register />,
   },
   {
     path: path.setup,

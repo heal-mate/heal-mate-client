@@ -121,8 +121,8 @@ export default function UserDetail() {
     setEditMode((editMode) => !editMode);
   };
 
-  const handleSave = () => {
-    onSaveUser();
+  const handleSave = async () => {
+    await onSaveUser();
     handleToggleEditMode();
   };
   const handleEdit = () => {

@@ -2,31 +2,37 @@ import { useRef, useState } from "react";
 import { styled } from "styled-components";
 import logo from "@/assets/images/logo-removebg.png";
 import { useNavigate } from "react-router-dom";
-import { fetchLoginUser } from "@/service/apis/user";
-import { useSetRecoilState } from "recoil";
-import { userState } from "@/recoil/atoms/userState";
+import { fetchGetAuthCode, fetchCheckAuthCode } from "@/service/apis/user";
 
-export default function Login() {
-  const setUser = useSetRecoilState(userState);
+export default function Register() {
   const navigate = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const authCodeRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>("");
 
-  const handleClick = () => {
-    const email = emailRef.current?.value;
-    const password = passwordRef.current?.value;
+  const nextStep = () => {
+    navigate("/setup", { state: emailRef.current!.value });
+  };
 
-    if (email && password) {
-      fetchLoginUser({ email, password })
-        .then((res) => {
-          setUser(res);
-          alert("로그인 되었습니다.");
-          navigate("/");
+  const handleClickAuth = () => {
+    if (emailRef.current) {
+      fetchGetAuthCode(emailRef.current.value)
+        .then(() => alert("이메일이 발송되었습니다. 5분안에 인증해주세요."))
+        .catch((err) => setError(err.response.data));
+    }
+  };
+
+  const handleCheckAuth = () => {
+    if (authCodeRef.current && emailRef.current) {
+      fetchCheckAuthCode({
+        email: emailRef.current.value,
+        authCode: authCodeRef.current.value,
+      })
+        .then(() => {
+          alert("인증되었습니다.");
+          nextStep();
         })
         .catch((err) => setError(err.response.data));
-    } else {
-      alert("필수 사항을 입력해주세요.");
     }
   };
 
@@ -40,14 +46,21 @@ export default function Login() {
           placeholder="이메일 주소를 입력해주세요"
           ref={emailRef}
         />
-        <StyledInput
-          type="password"
-          id="password"
-          placeholder="비밀번호를 입력해주세요"
-          ref={passwordRef}
+        <StyledButton onClick={handleClickAuth}>인증메일 받기</StyledButton>
+        {/* <StyledInput
+          type="text"
+          id="phone-number"
+          placeholder="휴대폰 번호를 입력해주세요(- 없이)"
         />
-        <StyledButton onClick={handleClick}>로그인</StyledButton>
-        <StyledSpan onClick={() => navigate("/register")}>회원가입</StyledSpan>
+        <StyledButton>인증문자 받기</StyledButton> */}
+        <StyledInput
+          type="text"
+          id="authCode"
+          placeholder="인증문자를 입력해주세요"
+          ref={authCodeRef}
+        />
+        <StyledButton onClick={handleCheckAuth}>인증하기</StyledButton>
+
         <StyledErrorSpan>{error}</StyledErrorSpan>
       </StyledLayout>
     </StyledContainer>
@@ -106,6 +119,10 @@ const StyledButton = styled.button`
   &:hover {
     background-color: #26403f;
   }
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
 `;
 
 const StyledErrorSpan = styled.span`
@@ -113,16 +130,4 @@ const StyledErrorSpan = styled.span`
   font-size: 12px;
   text-align: center;
   font-weight: bold;
-`;
-
-const StyledSpan = styled.span`
-  color: #35a29f;
-  font-size: 10px;
-  border: 1px solid #35a29f;
-  display: inline-block;
-  width: fit-content;
-  border-radius: 50px;
-  padding: 7px 10px;
-  cursor: pointer;
-  margin-left: 4px;
 `;
