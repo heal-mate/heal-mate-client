@@ -11,14 +11,7 @@ export default function Register() {
   const [error, setError] = useState<string>("");
 
   const nextStep = () => {
-    navigate("/setup");
-  };
-
-  const saveEmail = () => {
-    const info = {
-      email: emailRef.current!.value,
-    };
-    localStorage.setItem("user", JSON.stringify(info));
+    navigate("/setup", { state: emailRef.current!.value });
   };
 
   const handleClickAuth = () => {
@@ -37,7 +30,6 @@ export default function Register() {
       })
         .then(() => {
           alert("인증되었습니다.");
-          saveEmail(); //localstorage에 email저장
           nextStep();
         })
         .catch((err) => setError(err.response.data));
