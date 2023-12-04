@@ -8,6 +8,7 @@ import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
 import MatchFilter from "./components/MatchFilter";
 import Register from "./pages/Register";
+import PrivateRoute from "./components/PrivateRoute";
 // import { FilterStatus } from "./components/MatchFilter.type";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -25,23 +26,29 @@ export const path = {
 const router = createBrowserRouter([
   {
     path: path.root,
-    element: <Layout />,
+    element: <PrivateRoute />,
     children: [
       {
-        path: path.root,
-        element: <Main />,
-      },
-      {
-        path: path.tab1,
-        element: <Received />,
-      },
-      {
-        path: path.tab2,
-        element: <Chat />,
-      },
-      {
-        path: path.tab3,
-        element: <Mypage />,
+        path: "/",
+        element: <Layout />,
+        children: [
+          {
+            path: path.root,
+            element: <Main />,
+          },
+          {
+            path: path.tab1,
+            element: <Received />,
+          },
+          {
+            path: path.tab2,
+            element: <Chat />,
+          },
+          {
+            path: path.tab3,
+            element: <Mypage />,
+          },
+        ],
       },
     ],
   },
