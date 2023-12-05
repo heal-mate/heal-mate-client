@@ -1,14 +1,16 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { styled } from "styled-components";
 import logo from "@/assets/images/logo-removebg.png";
-import { useNavigate } from "react-router-dom";
-import { fetchLoginUser } from "@/service/apis/user";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { fetchLoginUser, fetchKaKaoLoginUser } from "@/service/apis/user";
 import { useSetRecoilState } from "recoil";
 import { userState } from "@/recoil/atoms/userState";
+import KaKaoLoginButton from "../assets/images/kakao_login_medium_narrow.png";
 
 export default function Login() {
   const setUser = useSetRecoilState(userState);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>("");
@@ -30,6 +32,28 @@ export default function Login() {
     }
   };
 
+  // kakao login screen
+  const handleKaKaoLogin = () => {
+    location.assign(
+      "https://kauth.kakao.com/oauth/authorize?" +
+        "client_id=" +
+        import.meta.env.VITE_REST_API_KEY +
+        "&response_type=" +
+        "code" +
+        "&redirect_uri=" +
+        import.meta.env.VITE_REDIRECT_URI,
+    );
+  };
+
+  useEffect(() => {
+    const code = searchParams.get("code");
+    if (code) {
+      fetchKaKaoLoginUser(code)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
+  }, [searchParams]);
+
   return (
     <StyledContainer>
       <img src={logo} alt="main logo" />
@@ -47,6 +71,9 @@ export default function Login() {
           ref={passwordRef}
         />
         <StyledButton onClick={handleClick}>로그인</StyledButton>
+        <StyledKaKaoBtn onClick={handleKaKaoLogin}>
+          <img src={KaKaoLoginButton} alt="kakao-login-btn" />
+        </StyledKaKaoBtn>
         <StyledSpan onClick={() => navigate("/register")}>회원가입</StyledSpan>
         <StyledErrorSpan>{error}</StyledErrorSpan>
       </StyledLayout>
@@ -79,6 +106,20 @@ const StyledLayout = styled.div`
   border-radius: 20px;
 `;
 
+const StyledKaKaoBtn = styled.button`
+  width: 100%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  img {
+    width: 100%;
+  }
+  @media (min-width: 400px) {
+    width: 50%;
+  }
+`;
+
 const StyledInput = styled.input`
   padding: 20px 40px;
   border-radius: 50px;
@@ -102,7 +143,6 @@ const StyledButton = styled.button`
   border: none;
   outline: none;
   cursor: pointer;
-
   &:hover {
     background-color: #26403f;
   }
@@ -118,11 +158,11 @@ const StyledErrorSpan = styled.span`
 const StyledSpan = styled.span`
   color: #35a29f;
   font-size: 10px;
-  border: 1px solid #35a29f;
   display: inline-block;
   width: fit-content;
   border-radius: 50px;
   padding: 7px 10px;
   cursor: pointer;
   margin-left: 4px;
+  border-bottom: 1px solid #35a29f;
 `;
