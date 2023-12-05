@@ -6,17 +6,25 @@ import { GoBell } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
 import { IoIosArrowBack } from "react-icons/io";
 import logo from "../../assets/images/logo.png";
-import { ALERT_MOCK_DATA } from "../../../mock/AlertMockData";
-import { Alert } from "../Alert.type";
+import { Alert } from "@/service/apis/alert.type";
 import scrollBlock from "@/utils/scrollBlock";
+import { useGetAlertsAll } from "../Alert.hooks";
+import { AxiosResponse } from "axios";
+
+// const MOCK_USER_ID = "6564aabc5235915edc6b3510"; //제이팍
+const MOCK_USER_ID = "6564aabc5235915edc6b3510"; //로니콜먼
 
 export default function Header() {
-  const { data: alerts } = ALERT_MOCK_DATA;
+  const { alertsList } = useGetAlertsAll();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
 
   const handleClick = () => {
     setIsShowAlert((prev) => !prev);
   };
+
+  // 아직 안읽은 알람이 있는지 확인
+  const hasUnreadAlerts = alertsList?.filter((alert) => alert.isRead === false)
+    .length as number;
 
   //alert창 띄었을 때 외부화면 스크롤 막기
   useEffect(() => {
@@ -32,8 +40,11 @@ export default function Header() {
               <img src={logo} alt="logo" />
             </a>
           </StyledLogo>
-          <StyledBell onClick={handleClick} $isOn={alerts?.length === 0}>
-            <GoBell size="24" />
+          <StyledBell
+            onClick={handleClick}
+            $isOn={hasUnreadAlerts > 0 ? true : false}
+          >
+            <StyledGoBell />
           </StyledBell>
         </StyledInner>
       </StyledHeader>
@@ -45,15 +56,12 @@ export default function Header() {
 
 function AlertBox(props: { isShowAlert: boolean; handleClick: () => void }) {
   // TODO: 알람 메시지 리스트 data fetch
-  const { data: alerts, isError, isLoading, error } = ALERT_MOCK_DATA;
+  const { alertsList: data, readAlert, removeAlert } = useGetAlertsAll();
+  const [alertsList, setAlertsList] = useState<Alert[]>();
+  const removedAlertsIds = useRef<string[]>([]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const alertRef = useRef<HTMLUListElement>(null);
   const { isShowAlert, handleClick } = props;
-
-  //alert items 삭제모드 전환
-  const handleEdit = () => {
-    setIsEdit((prev) => !prev);
-  };
 
   //alert창 띄울 때 scroll 맨 위로 이동시키기
   useEffect(() => {
@@ -62,48 +70,87 @@ function AlertBox(props: { isShowAlert: boolean; handleClick: () => void }) {
     }
   }, [isShowAlert]);
 
+  // 알람 리스트 초기 세팅
+  useEffect(() => {
+    setAlertsList(data);
+  }, [data]);
+
+  // alert items 삭제하기
+  const handleRemove = (alertId: string) => {
+    setAlertsList((list) => list?.filter((item) => item._id !== alertId));
+    removedAlertsIds.current.push(alertId);
+  };
+
+  //알람 편집모드 시작
+  const handleEdit = () => {
+    if (alertsList?.length === 0) return; //편집할 알람이 없으면 편집모드작동X
+
+    setIsEdit(true);
+  };
+
+  //편집된 알람 실제 삭제
+  const fetchRemove = async () => {
+    await removeAlert({ alertIds: removedAlertsIds.current });
+    setIsEdit(false);
+  };
+
   return (
     <StyledAlert $isShowAlert={isShowAlert}>
       <StyledAlertHeader>
         <StyledAlertInner>
           <div>
-            <IoIosArrowBack size="20" onClick={handleClick} />
+            <StyledIoIosArrowBack onClick={handleClick} />
             <StyledTitle>알림</StyledTitle>
           </div>
-          <span onClick={handleEdit}>{isEdit ? "완료" : "편집"}</span>
+          {isEdit && <span onClick={fetchRemove}>완료</span>}
+          {!isEdit && <span onClick={handleEdit}>편집</span>}
         </StyledAlertInner>
       </StyledAlertHeader>
+      {alertsList?.length === 0 && "받은 알림이 없습니다."}
       <ul ref={alertRef}>
-        {isLoading ? (
-          <p>loading...</p>
-        ) : isError ? (
-          <p>Error: {error!.message}</p>
-        ) : (
-          alerts!.map((alert) => (
-            <AlertItem
-              key={alert.id}
-              {...alert}
-              isEdit={isEdit}
-              handleClick={handleClick}
-            />
-          ))
-        )}
+        {alertsList?.map((alert) => (
+          <AlertItem
+            key={alert._id}
+            {...alert}
+            isEdit={isEdit}
+            handleClick={handleClick}
+            handleRemove={() => handleRemove(alert._id)}
+            readAlert={async () => await readAlert({ alertId: alert._id })}
+          />
+        ))}
       </ul>
     </StyledAlert>
   );
 }
 
 function AlertItem(
-  props: Alert & { isEdit: boolean; handleClick: () => void },
+  props: Alert & {
+    isEdit: boolean;
+    handleClick: () => void;
+    handleRemove: () => void;
+    readAlert: () => Promise<AxiosResponse<void>>;
+  },
 ) {
   const navigate = useNavigate();
-  const { type, nickName, status, isRead, isEdit, handleClick } = props;
+  const {
+    senderId,
+    receiverId,
+    status,
+    createdAt,
+    isRead,
+    isEdit,
+    handleClick,
+    handleRemove,
+    readAlert,
+  } = props;
 
-  //메시지 클릭시 화면 전환
+  //알람 클릭시 화면 전환
   const handleMessageClick = () => {
     if (isEdit) return;
+
+    readAlert(); //알람 읽기
     handleClick(); //알람 모달 화면 사라지게 하기
-    navigate(type === "SENT" ? path.root : path.tab1);
+    navigate(MOCK_USER_ID === senderId._id ? path.root : path.tab1);
   };
 
   return (
@@ -111,21 +158,29 @@ function AlertItem(
       <section onClick={handleMessageClick}>
         <div className="noti-header">
           <b>알림</b>
-          {isEdit && <IoClose size="20" color="#737373" />}
+          {isEdit && <StyledIoClose onClick={handleRemove} />}
         </div>
         <div>
-          {type === "SENT" && status === "REJECTED" && (
-            <h4>{nickName}님이 요청을 거절하였습니다.</h4>
+          {MOCK_USER_ID === senderId._id && status === "REJECTED" && (
+            <h4>{receiverId.nickName}님이 요청을 거절하였습니다.</h4>
           )}
-          {type === "SENT" && status === "ACCEPTED" && (
-            <h4>{nickName}님이 요청을 수락하였습니다.</h4>
+          {MOCK_USER_ID === senderId._id && status === "ACCEPTED" && (
+            <h4>{receiverId.nickName}님이 요청을 수락하였습니다.</h4>
           )}
-          {type === "RECEIVED" && status === "WAITING" && (
-            <h4>{nickName}님이 메이트 요청을 보냈습니다.</h4>
+          {MOCK_USER_ID === receiverId._id && status === "WAITING" && (
+            <h4>{senderId.nickName}님이 메이트 요청을 보냈습니다.</h4>
           )}
         </div>
-        {/* createdAt 활용 */}
-        <span>31분 전</span>
+        <span>
+          {new Intl.DateTimeFormat("ko-Kr", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            weekday: "narrow",
+            hour: "numeric",
+            minute: "numeric",
+          }).format(new Date(createdAt))}
+        </span>
       </section>
     </StyledList>
   );
@@ -190,10 +245,12 @@ const StyledBell = styled.section<{ $isOn: boolean }>`
     height: 0.375rem;
     border-radius: 50%;
     background-color: #ff3131;
+    display: none;
+
     ${(props) =>
       props.$isOn &&
       css`
-        display: none;
+        display: block;
       `}
   }
 `;
@@ -323,4 +380,17 @@ const StyledList = styled.li<{ $isRead: boolean }>`
     color: #737373;
     font-size: 0.65rem;
   }
+`;
+
+const StyledGoBell = styled(GoBell)`
+  font-size: 24px;
+`;
+
+const StyledIoIosArrowBack = styled(IoIosArrowBack)`
+  font-size: 20px;
+`;
+
+const StyledIoClose = styled(IoClose)`
+  font-size: 20px;
+  color: #737373;
 `;

@@ -12,25 +12,25 @@ export default function Navbar() {
       <ul>
         <StyledList>
           <NavLink to={path.root}>
-            <GoHome size="24" />
+            <StyledGoHome />
             <span>홈</span>
           </NavLink>
         </StyledList>
         <StyledList>
           <NavLink to={path.tab1}>
-            <MdMailOutline size="24" />
+            <StyledMdMailOutline />
             <span>받은 요청</span>
           </NavLink>
         </StyledList>
         <StyledList>
           <NavLink to={path.tab2}>
-            <IoChatboxEllipsesOutline size="24" />
+            <StyledIoChatboxEllipsesOutline />
             <span>헬프톡</span>
           </NavLink>
         </StyledList>
         <StyledList>
           <NavLink to={path.tab3}>
-            <LuUser size="24" />
+            <StyledLuUser />
             <span>마이페이지</span>
           </NavLink>
         </StyledList>
@@ -82,4 +82,19 @@ const StyledList = styled.li`
       }
     }
   }
+`;
+
+const StyledGoHome = styled(GoHome)`
+  font-size: 24px;
+`;
+
+const StyledMdMailOutline = styled(MdMailOutline)`
+  font-size: 24px;
+`;
+
+const StyledIoChatboxEllipsesOutline = styled(IoChatboxEllipsesOutline)`
+  font-size: 24px;
+`;
+const StyledLuUser = styled(LuUser)`
+  font-size: 24px;
 `;

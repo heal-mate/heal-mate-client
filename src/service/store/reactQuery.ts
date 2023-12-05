@@ -7,4 +7,5 @@ export const queryKeys = {
   matchesSent: "MATCHES_SENT",
   matchesReceived: "MATCHES_RECEIVED",
   matchStatus: "MATCH_STATUS",
+  alerts: "ALERTS",
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import {
   ExerciseType,
@@ -10,40 +10,17 @@ import MatchFilterExercise from "@/components/MatchFilterExercise";
 import MatchFilterYears from "@/components/MatchFilterYears";
 import MatchFilterGender from "@/components/MatchFilterGender";
 import MatchFilterLocations from "@/components/MatchFilterLocations";
+import { EXERCISE_LIST } from "@/config/constants";
 
-const excersiseList = [
-  {
-    id: 0,
-    name: "벤치프레스",
-    value: "benchPress",
-    isChecked: true,
-    min: 0,
-    max: 100,
-  },
-  {
-    id: 1,
-    name: "스쿼트",
-    value: "squat",
-    isChecked: false,
-    min: 0,
-    max: 100,
-  },
-  {
-    id: 2,
-    name: "데드리프트",
-    value: "deadLift",
-    isChecked: false,
-    min: 0,
-    max: 100,
-  },
-];
-
-export default function MatchFilter() {
+export type MatchFilterProps = {
+  handleChangeFilters: (filters: FilterStatus) => void;
+};
+export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
   // 렌더링할 타입에 배열.
-  const [exerciseList, setExerciseList] = useState(excersiseList);
+  const [exerciseList, setExerciseList] = useState(EXERCISE_LIST);
 
   const [showType, setShowType] = useState<ExerciseType | null>(
-    excersiseList[0],
+    EXERCISE_LIST[0],
   );
 
   const [filters, setFilters] = useState<FilterStatus>({
@@ -54,6 +31,10 @@ export default function MatchFilter() {
     gender: null,
     location: null,
   });
+
+  useEffect(() => {
+    handleChangeFilters(filters);
+  }, [filters, handleChangeFilters]);
 
   const handleChangeWeight = (ranges: [number, number], id: number) => {
     const [min, max] = ranges;

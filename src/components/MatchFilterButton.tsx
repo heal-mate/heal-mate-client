@@ -1,14 +1,25 @@
 import { useState, useEffect } from "react";
 import { styled, css } from "styled-components";
-import { StyledButton } from "@/components/FilterButton.style";
+import { StyledButton } from "@/components/FilterButtons.styles";
 import { PiSlidersHorizontalLight } from "react-icons/pi";
 import { IoIosArrowBack } from "react-icons/io";
 import MatchFilter from "./MatchFilter";
 import scrollBlock from "@/utils/scrollBlock";
+import { FilterStatus } from "./MatchFilter.type";
+import { changeUserConditionExpect } from "@/service/apis/user";
+import Swal from "sweetalert2";
+import { queryClient, queryKeys } from "@/service/store/reactQuery";
 
 export default function MatchFilterButton() {
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
-
+  const [filters, setFilters] = useState<FilterStatus>({
+    benchPress: null,
+    deadLift: null,
+    fitnessYears: null,
+    squat: null,
+    gender: null,
+    location: null,
+  });
   const handleClick = () => {
     setIsShowFilter((prev) => !prev);
   };
@@ -17,6 +28,26 @@ export default function MatchFilterButton() {
   useEffect(() => {
     scrollBlock(isShowFilter);
   }, [isShowFilter]);
+
+  const handleChangeFilters = (filters: FilterStatus) => {
+    setFilters(filters);
+  };
+
+  // API 요청하는 함수
+  const changeMatchFilter = () => {
+    Swal.fire({
+      title: "설정을 저장 하시겠습니까?",
+      showDenyButton: true,
+      denyButtonText: "취소",
+      confirmButtonText: "확인",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await changeUserConditionExpect(filters);
+        queryClient.invalidateQueries({ queryKey: queryKeys.matchesRecommend });
+        setIsShowFilter((prev) => !prev);
+      }
+    });
+  };
 
   return (
     <>
@@ -28,13 +59,13 @@ export default function MatchFilterButton() {
         <StyledMatchFilterHeader>
           <StyledMatchFilterInner>
             <div>
-              <IoIosArrowBack size="20" onClick={handleClick} />
+              <StyledIoIosArrowBack onClick={handleClick} />
               <StyledTitle>메이트 조건 설정</StyledTitle>
             </div>
-            <span>완료</span>
+            <span onClick={changeMatchFilter}>완료</span>
           </StyledMatchFilterInner>
         </StyledMatchFilterHeader>
-        <MatchFilter />
+        <MatchFilter handleChangeFilters={handleChangeFilters} />
       </StyledMatchFilter>
     </>
   );
@@ -98,4 +129,8 @@ const StyledTitle = styled.h2`
   font-weight: bold;
   color: #323232;
   cursor: default;
+`;
+
+const StyledIoIosArrowBack = styled(IoIosArrowBack)`
+  font-size: 20px;
 `;

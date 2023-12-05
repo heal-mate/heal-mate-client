@@ -1,0 +1,13 @@
+{
+  "user": {
+    "nickName": "user1",
+    "introduction": "강남사는 22살 남 헬린이입니당 뿌잉뿌잉",
+    "profileImageSrc": "../mock/image/ronnie.png",
+    "benchPress": 100,
+    "squat": 150,
+    "deadLift": null,
+    "fitnessYears": 2,
+    "gender": "MALE",
+    "location": "잠실"
+  }
+}
