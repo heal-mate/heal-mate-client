@@ -4,8 +4,8 @@ import { FilterStatus, GenderType } from "@/components/MatchFilter.type";
 
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/users`,
+  withCredentials: true,
 });
-
 export const fetchGetUser = async ({ userId }: { userId: string }) => {
   const res = await instance.get<User>(`/detail/${userId}`);
 
