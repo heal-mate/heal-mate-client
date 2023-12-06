@@ -1,20 +1,9 @@
+import { LOCATIONS, LOCATION_TYPE } from "@/config/constants";
 import { css, styled } from "styled-components";
-import { Location } from "@/components/MatchFilter.type";
-
-const locations = [
-  "잠실",
-  "송파",
-  "성수",
-  "삼성",
-  "청담",
-  "역삼",
-  "대치",
-  "개포",
-] as Location[];
 
 export type MatchFilterLocationsProps = {
-  handleSelectLocation: (location: Location) => void;
-  locationList: Location[] | null;
+  handleSelectLocation: (location: LOCATION_TYPE) => void;
+  locationList: LOCATION_TYPE[] | null;
 };
 
 export default function MatchFilterLocations({
@@ -28,7 +17,7 @@ export default function MatchFilterLocations({
         <div>{!locationList ? "상관없음" : `${locationList.toString()}`}</div>
       </StyledInfo>
       <StyledLocationsContainer>
-        {locations.map((location, index) => (
+        {LOCATIONS.map((location, index) => (
           <StyledLocation
             key={index}
             onClick={() => handleSelectLocation(location)}
