@@ -2,10 +2,11 @@ import axios from "axios";
 import { User } from "./user.type";
 import { FilterStatus } from "@/components/MatchFilter.type";
 
+axios.defaults.withCredentials = true;
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/users`,
+  withCredentials: true,
 });
-
 export const fetchGetUser = async ({ userId }: { userId: string }) => {
   const res = await instance.get<User>(`/detail/${userId}`);
 
@@ -80,4 +81,9 @@ export const fetchSendWebPushToken = (token: string) => {
       token,
     },
   );
+};
+
+export const fetchKaKaoLoginUser = async (code: string) => {
+  const res = await instance.get(`/kakaoLogin/${code}`);
+  return res;
 };

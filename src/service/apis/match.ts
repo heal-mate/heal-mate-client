@@ -1,8 +1,10 @@
 import axios from "axios";
 import { Match } from "./match.type";
 
+axios.defaults.withCredentials = true;
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/matches`,
+  withCredentials: true,
 });
 
 export const fetchGetMatchesReceived = async () => {
