@@ -18,7 +18,7 @@ export default function UserInfoSetup() {
   const [userInfos, setUserInfors] = useState<UserInfoType>({
     nickName: "",
     email: "",
-    gender: null,
+    gender: "MALE",
     tel: "",
     password: "",
     location: LOCATIONS[0],
@@ -117,11 +117,13 @@ export default function UserInfoSetup() {
             <RadioButton
               text="남자"
               genderType="MALE"
+              defaultValue={userInfos.gender}
               handleChange={handleChangeGender}
             />
             <RadioButton
               text="여자"
               genderType="FEMALE"
+              defaultValue={userInfos.gender}
               handleChange={handleChangeGender}
             />
           </StyledButtonGroup>
