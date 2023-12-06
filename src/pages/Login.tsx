@@ -6,7 +6,6 @@ import { fetchLoginUser, fetchKaKaoLoginUser } from "@/service/apis/user";
 import KaKaoLoginButton from "../assets/images/kakao_login_medium_narrow.png";
 
 export default function Login() {
-  // const setUser = useSetRecoilState(userState);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const emailRef = useRef<HTMLInputElement>(null);
@@ -20,7 +19,6 @@ export default function Login() {
     if (email && password) {
       fetchLoginUser({ email, password })
         .then((res) => {
-          // setUser(res);
           localStorage.setItem("user", JSON.stringify(res));
           alert("로그인 되었습니다.");
           navigate("/");
