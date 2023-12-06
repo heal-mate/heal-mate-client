@@ -17,6 +17,11 @@ export type FilterStatus = {
 };
 
 export type GenderType = "MALE" | "FEMALE" | null;
+export type CheckedExercise = {
+  benchPress: boolean;
+  squat: boolean;
+  deadLift: boolean;
+};
 
 export const locations = [
   "잠실",

@@ -1,19 +1,11 @@
 import { styled } from "styled-components";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-
-const careerMarks = {
-  0: "0",
-  1: "1",
-  2: "2",
-  3: "3",
-  4: "4",
-  5: "5",
-};
+import { FITNESS_YEARS_MARKS, MAX_FITNESS_YEARS } from "@/config/constants";
 
 function parseYears(year: number): string {
-  let years = Math.floor(year);
-  let months = ((year % 1) / 0.25) * 3;
+  const years = Math.floor(year);
+  const months = ((year % 1) / 0.25) * 3;
 
   let duration = "";
 
@@ -29,16 +21,15 @@ function parseYears(year: number): string {
 }
 
 export type MatchFilterYearsProps = {
-  minYears: number;
-  maxYears: number;
   handleChangeYears: (ranges: [number, number]) => void;
+  fitnessYears: [number, number] | null;
 };
 
 export default function MatchFilterYears({
-  minYears,
-  maxYears,
+  fitnessYears,
   handleChangeYears,
 }: MatchFilterYearsProps) {
+  const [minYears, maxYears] = fitnessYears || [0, 5];
   return (
     <StyledContainer>
       <StyledInfo>
@@ -56,8 +47,8 @@ export default function MatchFilterYears({
       <StyledRange>
         <Slider
           range
-          max={5}
-          marks={careerMarks}
+          max={MAX_FITNESS_YEARS}
+          marks={FITNESS_YEARS_MARKS}
           step={0.25}
           dots={false}
           value={[minYears, maxYears]}
