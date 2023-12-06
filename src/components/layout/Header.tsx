@@ -11,9 +11,6 @@ import scrollBlock from "@/utils/scrollBlock";
 import { useGetAlertsAll } from "../Alert.hooks";
 import { AxiosResponse } from "axios";
 
-// const MOCK_USER_ID = "6564aabc5235915edc6b3510"; //제이팍
-const MOCK_USER_ID = "6564aabc5235915edc6b3510"; //로니콜먼
-
 export default function Header() {
   const { alertsList } = useGetAlertsAll();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
@@ -144,13 +141,23 @@ function AlertItem(
     readAlert,
   } = props;
 
+  const [userId, setUserId] = useState();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const loginUserId = JSON.parse(user).id;
+      setUserId(loginUserId);
+    }
+  }, []);
+
   //알람 클릭시 화면 전환
   const handleMessageClick = () => {
     if (isEdit) return;
 
     readAlert(); //알람 읽기
     handleClick(); //알람 모달 화면 사라지게 하기
-    navigate(MOCK_USER_ID === senderId._id ? path.root : path.tab1);
+    navigate(userId === senderId._id ? path.root : path.tab1);
   };
 
   return (
@@ -161,13 +168,13 @@ function AlertItem(
           {isEdit && <StyledIoClose onClick={handleRemove} />}
         </div>
         <div>
-          {MOCK_USER_ID === senderId._id && status === "REJECTED" && (
+          {userId === senderId._id && status === "REJECTED" && (
             <h4>{receiverId.nickName}님이 요청을 거절하였습니다.</h4>
           )}
-          {MOCK_USER_ID === senderId._id && status === "ACCEPTED" && (
+          {userId === senderId._id && status === "ACCEPTED" && (
             <h4>{receiverId.nickName}님이 요청을 수락하였습니다.</h4>
           )}
-          {MOCK_USER_ID === receiverId._id && status === "WAITING" && (
+          {userId === receiverId._id && status === "WAITING" && (
             <h4>{senderId.nickName}님이 메이트 요청을 보냈습니다.</h4>
           )}
         </div>
