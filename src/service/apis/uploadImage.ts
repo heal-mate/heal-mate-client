@@ -1,5 +1,7 @@
 import axios from "axios";
-
+const axiosInstance = axios.create({
+  withCredentials: false,
+});
 type ImageUploadResponse = {
   url: string;
 };
@@ -9,7 +11,7 @@ export async function uploadImage(file: File | Blob): Promise<string> {
   formData.append("file", fileToUpload);
   formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_PRESET);
 
-  const response = await axios.post<ImageUploadResponse>(
+  const response = await axiosInstance.post<ImageUploadResponse>(
     import.meta.env.VITE_CLOUDINARY_URL,
     formData,
   );
