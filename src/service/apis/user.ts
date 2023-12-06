@@ -1,7 +1,9 @@
 import axios from "axios";
 import { User } from "./user.type";
-import { FilterStatus, GenderType } from "@/components/MatchFilter.type";
+import { FilterStatus } from "@/components/MatchFilter.type";
+import { GenderType } from "@/config/constants";
 
+axios.defaults.withCredentials = true;
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/users`,
   withCredentials: true,
@@ -69,4 +71,9 @@ export const fetchLoginUser = async ({
 }) => {
   const res = await instance.post("/login", { data: { email, password } });
   return res.data;
+};
+
+export const fetchKaKaoLoginUser = async (code: string) => {
+  const res = await instance.get(`/kakaoLogin/${code}`);
+  return res;
 };
