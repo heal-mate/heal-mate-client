@@ -3,7 +3,6 @@ import { styled } from "styled-components";
 import logo from "@/assets/images/logo-removebg.png";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { fetchLoginUser, fetchKaKaoLoginUser } from "@/service/apis/user";
-import KaKaoLoginButton from "../assets/images/kakao_login_medium_narrow.png";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,19 +31,6 @@ export default function Login() {
     }
   };
 
-  // kakao login screen
-  const handleKaKaoLogin = () => {
-    location.assign(
-      "https://kauth.kakao.com/oauth/authorize?" +
-        "client_id=" +
-        import.meta.env.VITE_REST_API_KEY +
-        "&response_type=" +
-        "code" +
-        "&redirect_uri=" +
-        import.meta.env.VITE_REDIRECT_URI,
-    );
-  };
-
   useEffect(() => {
     const code = searchParams.get("code");
     if (code) {
@@ -71,9 +57,6 @@ export default function Login() {
           ref={passwordRef}
         />
         <StyledButton onClick={handleClick}>로그인</StyledButton>
-        <StyledKaKaoBtn onClick={handleKaKaoLogin}>
-          <img src={KaKaoLoginButton} alt="kakao-login-btn" />
-        </StyledKaKaoBtn>
         <StyledSpan onClick={() => navigate("/register")}>회원가입</StyledSpan>
         <StyledErrorSpan>{error}</StyledErrorSpan>
       </StyledLayout>
@@ -104,20 +87,6 @@ const StyledLayout = styled.div`
   gap: 10px;
   padding: 30px 40px;
   border-radius: 20px;
-`;
-
-const StyledKaKaoBtn = styled.button`
-  width: 100%;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  background-color: transparent;
-  img {
-    width: 100%;
-  }
-  @media (min-width: 400px) {
-    width: 50%;
-  }
 `;
 
 const StyledInput = styled.input`
