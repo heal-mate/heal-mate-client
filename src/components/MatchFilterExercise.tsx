@@ -1,57 +1,42 @@
 import { css, styled } from "styled-components";
 import { FaDumbbell } from "react-icons/fa";
-import Rangeinput from "@/components/RangeInput";
-import { ExerciseType } from "@/components/MatchFilter.type";
-
-const weightMarks = {
-  0: "0kg",
-  50: "50kg",
-  100: "100kg",
-  150: "150kg",
-  200: "200kg",
-  250: "250kg",
-  300: "300kg이상",
-};
+import { CheckedExercise } from "@/components/MatchFilter.type";
 
 export type MatchFilterExerciseProps = {
-  exerciseList: ExerciseType[];
-  showType: ExerciseType | null;
-  handleSelectType: (item: ExerciseType, index: number) => void;
-  handleChangeWeight: (ranges: [number, number], id: number) => void;
+  isChecked: CheckedExercise | null;
+  handleClick: (title: keyof CheckedExercise) => void;
 };
 
 export default function MatchFilterExercise({
-  exerciseList,
-  showType,
-  handleChangeWeight,
-  handleSelectType,
+  isChecked,
+  handleClick,
 }: MatchFilterExerciseProps) {
   return (
     <>
-      <StyledContainer>
-        {exerciseList &&
-          exerciseList.map((item, index) => {
-            return (
-              <StyledExerciseButton
-                key={item.id}
-                $isChecked={item.isChecked}
-                onClick={() => handleSelectType(item, index)}
-              >
-                <StyledDumbbellIcon />
-                {item.name}
-              </StyledExerciseButton>
-            );
-          })}
-      </StyledContainer>
-      {showType && (
-        <Rangeinput
-          type={showType.name}
-          marks={weightMarks}
-          suffix="kg"
-          handleChange={(e) => handleChangeWeight(e, showType.id)}
-          min={showType.min}
-          max={showType.max}
-        />
+      {isChecked && (
+        <StyledContainer>
+          <StyledExerciseButton
+            $isChecked={isChecked.benchPress}
+            onClick={() => handleClick("benchPress")}
+          >
+            <StyledDumbbellIcon />
+            '벤치프레스'
+          </StyledExerciseButton>
+          <StyledExerciseButton
+            $isChecked={isChecked.deadLift}
+            onClick={() => handleClick("deadLift")}
+          >
+            <StyledDumbbellIcon />
+            데드리프트
+          </StyledExerciseButton>
+          <StyledExerciseButton
+            $isChecked={isChecked.squat}
+            onClick={() => handleClick("squat")}
+          >
+            <StyledDumbbellIcon />
+            스쿼트
+          </StyledExerciseButton>
+        </StyledContainer>
       )}
     </>
   );

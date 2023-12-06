@@ -25,16 +25,19 @@ export default function MatchFilterGender({
         <RadioButton
           text="남자"
           genderType="MALE"
+          defaultValue={genderType}
           handleChange={handleChange}
         />
         <RadioButton
           text="여자"
           genderType="FEMALE"
+          defaultValue={genderType}
           handleChange={handleChange}
         />
         <RadioButton
           text="상관없음"
           genderType={null}
+          defaultValue={genderType}
           handleChange={handleChange}
         />
       </StyledSettings>

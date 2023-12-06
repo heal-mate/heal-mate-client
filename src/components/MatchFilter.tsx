@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import {
-  ExerciseType,
-  FilterStatus,
+  CheckedExercise,
   GenderType,
   Location,
 } from "@/components/MatchFilter.type";
@@ -10,115 +9,128 @@ import MatchFilterExercise from "@/components/MatchFilterExercise";
 import MatchFilterYears from "@/components/MatchFilterYears";
 import MatchFilterGender from "@/components/MatchFilterGender";
 import MatchFilterLocations from "@/components/MatchFilterLocations";
-import { EXERCISE_LIST } from "@/config/constants";
+import { MAX_WEIGHT, WEIGHT_MARKS } from "@/config/constants";
+import { fetchGetUserMine } from "@/service/apis/user";
+import { Condition } from "@/service/apis/user.type";
+import Rangeinput from "./RangeInput";
+
+function generatorTitle(
+  title: keyof CheckedExercise,
+): "벤치프레스" | "데드리프트" | "스쿼트" {
+  switch (title) {
+    case "benchPress":
+      return "벤치프레스";
+    case "deadLift":
+      return "데드리프트";
+    case "squat":
+      return "스쿼트";
+  }
+}
+
+function findSelectedExercise(
+  conditionExpect: CheckedExercise | null,
+): keyof CheckedExercise {
+  if (!conditionExpect) {
+    throw new Error("null is error");
+  }
+  return Object.keys(conditionExpect).find(
+    (key) => conditionExpect[key as keyof CheckedExercise],
+  ) as keyof CheckedExercise;
+}
 
 export type MatchFilterProps = {
-  handleChangeFilters: (filters: FilterStatus) => void;
+  handleChangeFilters: (filters: Condition<"RANGE"> | null) => void;
 };
 export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
-  // 렌더링할 타입에 배열.
-  const [exerciseList, setExerciseList] = useState(EXERCISE_LIST);
-
-  const [showType, setShowType] = useState<ExerciseType | null>(
-    EXERCISE_LIST[0],
-  );
-
-  const [filters, setFilters] = useState<FilterStatus>({
-    benchPress: null,
-    deadLift: null,
-    fitnessYears: null,
-    squat: null,
-    gender: null,
-    location: null,
-  });
+  const [filter, setFilter] = useState<Condition<"RANGE"> | null>(null);
+  const [isChecked, setIsChecked] = useState<CheckedExercise | null>(null);
+  const [current, setCurrent] = useState<keyof CheckedExercise | null>(null);
 
   useEffect(() => {
-    handleChangeFilters(filters);
-  }, [filters, handleChangeFilters]);
+    // API 에서 받아온 값으로 filter state에 set한다.
+    const fetchData = async () => {
+      const data = await fetchGetUserMine();
+      const conditionExpect = data.conditionExpect;
+      const selectedExercises = {
+        benchPress: conditionExpect.benchPress ? true : false,
+        deadLift: conditionExpect.deadLift ? true : false,
+        squat: conditionExpect.squat ? true : false,
+      };
+      setFilter(conditionExpect);
+      setIsChecked(selectedExercises);
 
-  const handleChangeWeight = (ranges: [number, number], id: number) => {
-    const [min, max] = ranges;
-
-    const changedItem = {
-      ...showType!,
-      min,
-      max,
+      const trueKey = findSelectedExercise(selectedExercises);
+      setCurrent(trueKey || null);
     };
 
-    const newExerciseList = exerciseList.map((e) => ({ ...e }));
+    fetchData();
+  }, []);
 
-    setShowType(changedItem);
+  useEffect(() => {
+    handleChangeFilters(filter || null);
+  }, [filter, handleChangeFilters]);
 
-    newExerciseList[id] = changedItem;
+  const handleClick = (title: keyof CheckedExercise) => {
+    setIsChecked((prev) => {
+      const newChecked = { ...prev! };
+      if (!prev![title]) {
+        // isChecked가 false인 경우
+        newChecked[title] = true;
+        setCurrent(title);
+      } else if (current !== title) {
+        setCurrent(title);
+      } else {
+        newChecked[title] = false;
+        const nextTrueKey = findSelectedExercise(newChecked);
+        setCurrent(nextTrueKey || null);
+        setFilter((prev) => ({ ...prev!, [title]: null }));
+      }
+      // isChecked가 true인 경우
+      return newChecked;
+    });
+  };
 
-    setExerciseList(newExerciseList);
+  const handleChangeExercise = (value: number | number[], target: string) => {
+    setFilter((prev) => {
+      if (Array.isArray(value) && value.length === 2) {
+        if (value[0] === 0 && value[1] === 300) {
+          return { ...prev!, [target]: null };
+        }
+      }
 
-    setFilters((prevFilters) => {
       return {
-        ...prevFilters,
-        [newExerciseList[id].value]: min === 0 && max === 300 ? null : ranges,
+        ...prev!,
+        [target]: value,
       };
     });
   };
 
   const handleChangeYears = (ranges: [number, number]) => {
+    if (typeof ranges === "number") return;
     const [minYears, maxYears] = ranges;
 
-    const newFilters = {
-      ...filters,
-      fitnessYears: minYears === 0 && maxYears === 5 ? null : ranges,
-    };
-    setFilters(newFilters);
-  };
-
-  // 클릭한 요소의 isChecked 속성 토글 함수.
-  const handleSelectType = (item: ExerciseType, index: number) => {
-    // 새로운 list를 만든다.
-    const newExerciseList = exerciseList.map((e) => ({ ...e }));
-    // item의 isChecked가 false 일때 토글한다.그리고 show.
-    if (!item.isChecked) {
-      newExerciseList[index].isChecked = !newExerciseList[index].isChecked;
-      // 클릭한 아이템을 보여준다.
-      setShowType({ ...item, isChecked: !item.isChecked });
-      setExerciseList(newExerciseList);
-      setFilters((prevFilters) => {
-        const { value, min, max } = newExerciseList[index];
-        return {
-          ...prevFilters,
-          [value]: [min, max],
-        };
-      });
-    } else if (showType !== item) {
-      // 만약 show 와 아이템이 다르다면.. 오직 show만
-      setShowType(item);
-    } else {
-      // 같다면 ..해당 아이템 토글하고 다른 체크된 아이템 show.
-      newExerciseList[index].isChecked = !newExerciseList[index].isChecked;
-      const findIndex = newExerciseList.findIndex((e) => e.isChecked);
-      setShowType(findIndex === -1 ? null : newExerciseList[findIndex]);
-      setExerciseList(newExerciseList);
-      setFilters((prevFilters) => {
-        return {
-          ...prevFilters,
-          [newExerciseList[index].value]: null,
-        };
-      });
-    }
+    setFilter((prev) => {
+      const newFilter = {
+        ...prev!,
+        fitnessYears: minYears === 0 && maxYears === 5 ? null : ranges,
+      };
+      return newFilter;
+    });
   };
 
   const handleChangeGender = (genderType: GenderType) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
+    setFilter((prevFilters) => ({
+      ...prevFilters!,
       gender: genderType,
     }));
   };
 
   const handleSelectLocation = (locationName: Location) => {
-    // TODO: setFilters 함수를 사용해 location에 인자로 받은 locationName을 배열에 넣어야한다.
+    // TODO: setFilter 함수를 사용해 location에 인자로 받은 locationName을 배열에 넣어야한다.
 
-    setFilters((prevFilters) => {
+    setFilter((prevFilters) => {
       // location 배열이 null이 아니라면 기존 배열을 사용, null이면 빈 배열로 시작
-      const currentLocations = prevFilters.location || [];
+      const currentLocations = prevFilters!.location || [];
 
       // locationName이 이미 존재하면 제거, 그렇지 않으면 추가
       const updatedLocations = currentLocations.includes(locationName)
@@ -132,36 +144,43 @@ export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
       }
 
       return {
-        ...prevFilters,
+        ...prevFilters!,
         location: updatedLocations.length > 0 ? updatedLocations : null,
       };
     });
   };
 
+  if (!filter) return <div>Loading...</div>;
+
   return (
     <StyledContainer>
-      <MatchFilterExercise
-        exerciseList={exerciseList}
-        showType={showType}
-        handleChangeWeight={handleChangeWeight}
-        handleSelectType={handleSelectType}
-      />
+      <MatchFilterExercise handleClick={handleClick} isChecked={isChecked} />
+      {current && (
+        <Rangeinput
+          conditionType="RANGE"
+          handleChange={handleChangeExercise}
+          isEditable={true}
+          marks={WEIGHT_MARKS}
+          suffix="kg"
+          step={5}
+          name={current!}
+          title={generatorTitle(current!)}
+          max={MAX_WEIGHT}
+          value={filter[current!] ?? null}
+        />
+      )}
       <MatchFilterYears
-        minYears={filters.fitnessYears !== null ? filters.fitnessYears[0] : 0}
-        maxYears={filters.fitnessYears !== null ? filters.fitnessYears[1] : 5}
         handleChangeYears={handleChangeYears}
+        fitnessYears={filter.fitnessYears}
       />
       <MatchFilterGender
         handleChange={handleChangeGender}
-        genderType={filters.gender}
+        genderType={filter.gender}
       />
       <MatchFilterLocations
         handleSelectLocation={handleSelectLocation}
-        locationList={filters.location}
+        locationList={filter.location}
       />
-      <pre style={{ whiteSpace: "pre-wrap" }}>
-        <code>{JSON.stringify(filters)}</code>
-      </pre>
     </StyledContainer>
   );
 }
