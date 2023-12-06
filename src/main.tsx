@@ -1,9 +1,22 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import GlobalStyle from "./styles/GlobalStyle.ts";
+import { QueryClientProvider } from "react-query";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./styles/theme.ts";
+import { queryClient } from "./service/store/reactQuery.ts";
+import { RecoilRoot } from "recoil";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <RecoilRoot>
+          <GlobalStyle />
+          <App />
+        </RecoilRoot>
+      </QueryClientProvider>
+    </ThemeProvider>
   </React.StrictMode>,
-)
+);
