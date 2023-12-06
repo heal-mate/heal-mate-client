@@ -15,7 +15,7 @@ export type Condition<T = "POINT"> = {
   squat: T extends "RANGE" ? [number, number] | null : number;
   deadLift: T extends "RANGE" ? [number, number] | null : number;
   fitnessYears: T extends "RANGE" ? [number, number] | null : number;
-  gender: T extends "RANGE" ? "MALE" | "FEMAIL" | null : "MALE" | "FEMAIL";
+  gender: T extends "RANGE" ? "MALE" | "FEMALE" | null : "MALE" | "FEMALE";
   location: T extends "RANGE" ? Location[] | null : Location;
 };
 

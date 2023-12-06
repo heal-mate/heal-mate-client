@@ -9,7 +9,11 @@ export const LOCATIONS = [
   "개포",
 ] as const;
 
+export type LOCATION_TYPE = (typeof LOCATIONS)[number];
+
 export const GENDER = ["MALE", "FEMALE"] as const;
+
+export type GenderType = "MALE" | "FEMALE" | null;
 
 export const matchStatusDict = {
   waiting: "WAITING",

@@ -6,7 +6,11 @@ import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
-import MatchFilter from "./components/MatchFilter";
+import Register from "./pages/Register";
+import PrivateRoute from "./components/PrivateRoute";
+import { LoadingSpinnerAtom } from "./recoils/loadingSpinnerAtom";
+import { useRecoilValue } from "recoil";
+import LoadingSpinnerPotal from "./potals/LoadingSpinnerPotal";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
@@ -15,30 +19,36 @@ export const path = {
   tab2: "/chat",
   tab3: "/mypage",
   login: "/login",
+  register: "/register",
   setup: "/setup",
-  matchFilter: "/filter",
 };
 
 const router = createBrowserRouter([
   {
     path: path.root,
-    element: <Layout />,
+    element: <PrivateRoute />,
     children: [
       {
-        path: path.root,
-        element: <Main />,
-      },
-      {
-        path: path.tab1,
-        element: <Received />,
-      },
-      {
-        path: path.tab2,
-        element: <Chat />,
-      },
-      {
-        path: path.tab3,
-        element: <Mypage />,
+        path: "/",
+        element: <Layout />,
+        children: [
+          {
+            path: path.root,
+            element: <Main />,
+          },
+          {
+            path: path.tab1,
+            element: <Received />,
+          },
+          {
+            path: path.tab2,
+            element: <Chat />,
+          },
+          {
+            path: path.tab3,
+            element: <Mypage />,
+          },
+        ],
       },
     ],
   },
@@ -47,15 +57,22 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: path.setup,
-    element: <UserInfoSetup />,
+    path: path.register,
+    element: <Register />,
   },
   {
-    path: path.matchFilter,
-    element: <MatchFilter />,
+    path: path.setup,
+    element: <UserInfoSetup />,
   },
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+  const loadingSpinner = useRecoilValue(LoadingSpinnerAtom);
+
+  return (
+    <>
+      <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
+      {loadingSpinner && <LoadingSpinnerPotal />}
+    </>
+  );
 }
