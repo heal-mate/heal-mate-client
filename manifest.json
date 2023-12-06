@@ -1,0 +1,13 @@
+{
+  "name": "Health Friends",
+  "start_url": "/",
+  "id": "health-friends",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/src/assets/images/logo-square.webp",
+      "type": "image/webp",
+      "sizes": "512x512"
+    }
+  ]
+}

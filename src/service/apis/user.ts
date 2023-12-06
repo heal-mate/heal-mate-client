@@ -73,6 +73,17 @@ export const fetchLoginUser = async ({
   return res.data;
 };
 
+export const fetchSendWebPushToken = (token: string) => {
+  console.log("TOKEN");
+  console.log(token);
+  return axios.post(
+    `${import.meta.env.VITE_BACKEND_URL}/api/users/webpush-token`,
+    {
+      token,
+    },
+  );
+};
+
 export const fetchKaKaoLoginUser = async (code: string) => {
   const res = await instance.get(`/kakaoLogin/${code}`);
   return res;

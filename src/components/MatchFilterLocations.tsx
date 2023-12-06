@@ -19,7 +19,7 @@ export default function MatchFilterLocations({
       <StyledLocationsContainer>
         {LOCATIONS.map((location, index) => (
           <StyledLocation
-            key={index}
+            key={"location" + index}
             onClick={() => handleSelectLocation(location)}
             $isChecked={locationList && locationList.includes(location)}
           >
