@@ -1,6 +1,7 @@
 import axios from "axios";
 import { User } from "./user.type";
 import { FilterStatus } from "@/components/MatchFilter.type";
+import { GenderType } from "@/config/constants";
 
 axios.defaults.withCredentials = true;
 const instance = axios.create({
@@ -53,7 +54,7 @@ export const fetchCheckAuthCode = async ({
 
 export const fetchRegisterUser = async (
   user: Pick<User, "nickName" | "email" | "tel"> & {
-    gender: User["condition"]["gender"];
+    gender: GenderType;
     password: string;
   },
 ) => {
