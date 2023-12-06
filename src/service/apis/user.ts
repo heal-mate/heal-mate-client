@@ -3,6 +3,7 @@ import { User } from "./user.type";
 import { FilterStatus } from "@/components/MatchFilter.type";
 import { GenderType } from "@/config/constants";
 
+axios.defaults.withCredentials = true;
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/users`,
   withCredentials: true,
