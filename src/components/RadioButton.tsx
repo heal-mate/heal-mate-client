@@ -4,12 +4,14 @@ import { GenderType } from "@/components/MatchFilter.type";
 export type RadioButtonProps = {
   text: string;
   genderType: GenderType;
+  defaultValue: GenderType;
   handleChange: (genderType: GenderType) => void;
 };
 
 export default function RadioButton({
   text,
   genderType,
+  defaultValue,
   handleChange,
 }: RadioButtonProps) {
   return (
@@ -19,7 +21,7 @@ export default function RadioButton({
         id={text}
         name="gender"
         onChange={() => handleChange(genderType)}
-        defaultChecked={!genderType ? true : false}
+        defaultChecked={defaultValue === genderType}
       />
       <p>{text}</p>
     </StyledLabel>

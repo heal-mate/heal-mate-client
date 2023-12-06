@@ -1,59 +1,84 @@
 import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
 import { styled } from "styled-components";
+import "rc-slider/assets/index.css";
+import { ReactNode } from "react";
 import { MarkObj } from "rc-slider/lib/Marks";
+import { MAX_WEIGHT } from "@/config/constants";
 
-export type RangeinputProps = {
-  type: string;
-  marks: Record<string | number, React.ReactNode | MarkObj>;
+type RangeinputProps = {
+  conditionType: "RANGE" | "POINT";
+  isEditable: boolean;
+  title: string;
+  name: string;
   suffix: string;
-  handleChange: (ranges: [number, number]) => void;
-  min: number;
+  step: number;
   max: number;
+  marks: Record<string | number, ReactNode | MarkObj>;
+  value: number | [number, number] | null;
+  handleChange: (value: number | number[], target: string) => void;
 };
-
 export default function Rangeinput({
-  type,
-  marks,
+  conditionType,
+  isEditable,
+  title,
+  name,
   suffix,
-  handleChange,
-  min,
+  step,
   max,
+  marks,
+  value,
+  handleChange,
 }: RangeinputProps) {
   return (
-    <StyledContainer>
+    <StyledRangeinputContainer>
       <StyledInfo>
-        <p>{type}</p>
+        <p>{title}</p>
         <div>
-          {min === 0 && max === 300 ? (
-            "상관없음"
-          ) : (
-            <>
-              {min}~{max}
+          {/* 
+          {typeof value === "number" ? (
+            <div>{value}</div>
+          ) : Array.isArray(value) && value.length === 2 ? (
+            <div>
+              {value[0]}
+              {value[1]}
+            </div>
+          ) : null}
+           */}
+          {conditionType === "POINT" ? (
+            <div>
+              {value ?? "300이상"}
               {suffix}
-            </>
+            </div>
+          ) : Array.isArray(value) ? (
+            <div>
+              {value[0]}~{value[1]}
+              {suffix}
+            </div>
+          ) : (
+            "상관없음"
           )}
         </div>
       </StyledInfo>
       <StyledRange>
         <Slider
-          range
+          range={conditionType === "RANGE"}
           marks={marks}
-          max={300}
-          step={5}
+          max={max}
+          step={step}
           dots={false}
-          onChange={handleChange as (ranges: number | number[]) => void}
-          value={[min, max]}
-          defaultValue={[0, 100]}
+          defaultValue={value ?? [0, MAX_WEIGHT]}
+          value={value ?? [0, MAX_WEIGHT]}
+          onChange={(range) => {
+            handleChange(range, name);
+          }}
+          disabled={!isEditable}
         />
       </StyledRange>
-    </StyledContainer>
+    </StyledRangeinputContainer>
   );
 }
-
-const StyledContainer = styled.div`
-  width: 100%;
-  height: 100px;
+const StyledRangeinputContainer = styled.div`
+  margin-bottom: 50px;
 `;
 
 const StyledInfo = styled.div`
@@ -74,6 +99,10 @@ const StyledInfo = styled.div`
 `;
 
 const StyledRange = styled.div`
+  .rc-slider-disabled {
+    background-color: transparent;
+  }
+
   .rc-slider-handle {
     width: 22px;
     height: 22px;

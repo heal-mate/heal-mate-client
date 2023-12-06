@@ -5,21 +5,14 @@ import { PiSlidersHorizontalLight } from "react-icons/pi";
 import { IoIosArrowBack } from "react-icons/io";
 import MatchFilter from "./MatchFilter";
 import scrollBlock from "@/utils/scrollBlock";
-import { FilterStatus } from "./MatchFilter.type";
 import { changeUserConditionExpect } from "@/service/apis/user";
 import Swal from "sweetalert2";
 import { queryClient, queryKeys } from "@/service/store/reactQuery";
+import { Condition } from "@/service/apis/user.type";
 
 export default function MatchFilterButton() {
   const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
-  const [filters, setFilters] = useState<FilterStatus>({
-    benchPress: null,
-    deadLift: null,
-    fitnessYears: null,
-    squat: null,
-    gender: null,
-    location: null,
-  });
+  const [filters, setFilters] = useState<Condition<"RANGE"> | null>(null);
   const handleClick = () => {
     setIsShowFilter((prev) => !prev);
   };
@@ -29,7 +22,7 @@ export default function MatchFilterButton() {
     scrollBlock(isShowFilter);
   }, [isShowFilter]);
 
-  const handleChangeFilters = (filters: FilterStatus) => {
+  const handleChangeFilters = (filters: Condition<"RANGE"> | null) => {
     setFilters(filters);
   };
 
@@ -42,7 +35,7 @@ export default function MatchFilterButton() {
       confirmButtonText: "확인",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await changeUserConditionExpect(filters);
+        await changeUserConditionExpect(filters!);
         queryClient.invalidateQueries({ queryKey: queryKeys.matchesRecommend });
         setIsShowFilter((prev) => !prev);
       }
