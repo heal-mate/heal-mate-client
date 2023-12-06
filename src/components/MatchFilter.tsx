@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import {
-  CheckedExercise,
-  GenderType,
-  Location,
-} from "@/components/MatchFilter.type";
+import { CheckedExercise, GenderType } from "@/components/MatchFilter.type";
+import { LOCATION_TYPE } from "../config/constants";
 import MatchFilterExercise from "@/components/MatchFilterExercise";
 import MatchFilterYears from "@/components/MatchFilterYears";
 import MatchFilterGender from "@/components/MatchFilterGender";
@@ -125,7 +122,7 @@ export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
     }));
   };
 
-  const handleSelectLocation = (locationName: Location) => {
+  const handleSelectLocation = (locationName: LOCATION_TYPE) => {
     // TODO: setFilter 함수를 사용해 location에 인자로 받은 locationName을 배열에 넣어야한다.
 
     setFilter((prevFilters) => {
