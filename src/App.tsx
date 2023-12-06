@@ -6,9 +6,6 @@ import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
-import { useEffect } from "react";
-import { getFirebaseToken } from "./service/store/firebase";
-import { sendToken } from "./service/apis/webpush";
 import Register from "./pages/Register";
 import PrivateRoute from "./components/PrivateRoute";
 import { LoadingSpinnerAtom } from "./recoils/loadingSpinnerAtom";
@@ -71,10 +68,6 @@ const router = createBrowserRouter([
 
 export default function App() {
   const loadingSpinner = useRecoilValue(LoadingSpinnerAtom);
-
-  useEffect(() => {
-    getFirebaseToken().then((e) => sendToken(e));
-  }, []);
 
   return (
     <>

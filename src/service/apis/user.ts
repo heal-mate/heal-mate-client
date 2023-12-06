@@ -1,6 +1,6 @@
 import axios from "axios";
 import { User } from "./user.type";
-import { FilterStatus, GenderType } from "@/components/MatchFilter.type";
+import { FilterStatus } from "@/components/MatchFilter.type";
 
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/users`,
@@ -52,7 +52,7 @@ export const fetchCheckAuthCode = async ({
 
 export const fetchRegisterUser = async (
   user: Pick<User, "nickName" | "email" | "tel"> & {
-    gender: GenderType;
+    gender: User["condition"]["gender"];
     password: string;
   },
 ) => {
@@ -69,4 +69,15 @@ export const fetchLoginUser = async ({
 }) => {
   const res = await instance.post("/login", { data: { email, password } });
   return res.data;
+};
+
+export const fetchSendWebPushToken = (token: string) => {
+  console.log("TOKEN");
+  console.log(token);
+  return axios.post(
+    `${import.meta.env.VITE_BACKEND_URL}/api/users/webpush-token`,
+    {
+      token,
+    },
+  );
 };
