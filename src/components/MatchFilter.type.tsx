@@ -1,3 +1,5 @@
+import { LOCATION_TYPE } from "@/config/constants";
+
 export type ExerciseType = {
   id: number;
   name: string;
@@ -13,7 +15,7 @@ export type FilterStatus = {
   deadLift: [number, number] | null;
   fitnessYears: [number, number] | null;
   gender: "MALE" | "FEMALE" | null;
-  location: Location[] | null;
+  location: LOCATION_TYPE[] | null;
 };
 
 export type GenderType = "MALE" | "FEMALE" | null;
