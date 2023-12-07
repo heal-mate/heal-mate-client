@@ -4,26 +4,28 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiCircleCheck } from "react-icons/ci";
 import { CiNoWaitingSign } from "react-icons/ci";
 import { TbProgress } from "react-icons/tb";
+import { MatchStatus } from "@/service/apis/match.type";
+import { matchStatusDict } from "@/config/constants";
 
 const MAIN_FILTER = [
   {
     name: "요청대기",
-    value: "DEFAULT",
+    value: null,
     icon: <AiOutlineLoading3Quarters />,
   },
   {
     name: "요청중",
-    value: "WAITING",
+    value: matchStatusDict.waiting,
     icon: <TbProgress />,
   },
   {
     name: "요청거절",
-    value: "REJECTED",
+    value: matchStatusDict.rejected,
     icon: <CiNoWaitingSign />,
   },
   {
     name: "매칭완료",
-    value: "ACCEPTED",
+    value: matchStatusDict.accepted,
     icon: <CiCircleCheck />,
   },
 ];
@@ -31,17 +33,17 @@ const MAIN_FILTER = [
 const RECEIVED_FILTER = [
   {
     name: "응답 대기중",
-    value: "WAITING",
+    value: matchStatusDict.waiting,
     icon: <AiOutlineLoading3Quarters />,
   },
   {
     name: "요청거절",
-    value: "REJECTED",
+    value: matchStatusDict.rejected,
     icon: <CiNoWaitingSign />,
   },
   {
     name: "매칭완료",
-    value: "ACCEPTED",
+    value: matchStatusDict.accepted,
     icon: <CiCircleCheck />,
   },
 ];
@@ -51,7 +53,7 @@ export default function FilterButtons({
   handleCheckeFilter,
 }: {
   type: string;
-  handleCheckeFilter: (filter: string) => void;
+  handleCheckeFilter: (filter: MatchStatus | null) => void;
 }) {
   const filters = type === "main" ? MAIN_FILTER : RECEIVED_FILTER;
   return (

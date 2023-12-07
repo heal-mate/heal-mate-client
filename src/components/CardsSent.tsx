@@ -1,15 +1,21 @@
-import { matchStatusDict } from "@/service/apis/match.type";
+import { MatchStatus, matchStatusDict } from "@/service/apis/match.type";
 import Cards from "./Cards";
 import { useMatchesSent } from "./Cards.hooks";
 
-export default function CardsSent({ matchStatus }: { matchStatus: string }) {
+export default function CardsSent({
+  currentFilter,
+}: {
+  currentFilter: MatchStatus | null;
+}) {
   const { matchesSent, cancelMatch, ...rest } = useMatchesSent();
+
+  if (!currentFilter) return null;
 
   return (
     <>
       <Cards
         matchUserInfos={matchesSent
-          ?.filter((card) => card.status === matchStatus)
+          ?.filter((card) => card.status === currentFilter)
           ?.map((e) => ({
             ...e,
             buttons:

@@ -5,9 +5,10 @@ import FilterButtons from "@/components/FilterButtons";
 import { useEffect, useState } from "react";
 import { getFirebaseToken } from "@/service/store/firebase";
 import { fetchSendWebPushToken } from "@/service/apis/user";
+import { MatchStatus } from "@/service/apis/match.type";
 
 export default function Main() {
-  const [matchStatus, setMatchStatus] = useState("DEFAULT");
+  const [currentFilter, setCurrentFilter] = useState<MatchStatus | null>(null);
 
   useEffect(() => {
     getFirebaseToken().then((e) => {
@@ -15,15 +16,15 @@ export default function Main() {
     });
   }, []);
 
-  const handleCheckeFilter = (filter: string) => {
-    setMatchStatus(filter);
+  const handleCheckeFilter = (filter: MatchStatus | null) => {
+    setCurrentFilter(filter);
   };
   return (
     <>
       <FilterButtons type="main" handleCheckeFilter={handleCheckeFilter} />
       <StyledCardsContainer>
-        {matchStatus === "DEFAULT" && <CardsRecommend />}
-        {matchStatus !== "DEFAULT" && <CardsSent matchStatus={matchStatus} />}
+        {currentFilter === null && <CardsRecommend />}
+        {currentFilter && <CardsSent currentFilter={currentFilter} />}
       </StyledCardsContainer>
     </>
   );
