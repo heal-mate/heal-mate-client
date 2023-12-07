@@ -4,6 +4,7 @@ import RadioButton from "@/components/RadioButton";
 import { fetchRegisterUser } from "@/service/apis/user";
 import { useNavigate, useLocation } from "react-router-dom";
 import { GenderType, LOCATION_TYPE, LOCATIONS } from "@/config/constants";
+import alert from "@/utils/alert";
 
 type UserInfoType = {
   nickName: string;
@@ -37,11 +38,11 @@ export default function UserInfoSetup() {
 
   const handleSubmit = () => {
     const msg = inputValueCheck();
-    if (msg) return alert("필수 입력 사항을 모두 입력해주세요.");
+    if (msg) return alert("필수 입력 사항을 모두 입력해주세요.", false, "info");
 
     fetchRegisterUser(userInfos)
       .then(() => {
-        alert("회원가입 되었습니다. 로그인 해주세요.");
+        alert("회원가입 되었습니다. 로그인 해주세요.", false, "success", 700);
         navigate("/login");
       })
       .catch((err) => setErrorMessage(err.response.data));

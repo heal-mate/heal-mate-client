@@ -8,6 +8,9 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     color: #000;
   }
+  .alert-icon {
+    margin: 2.5em auto 0.6em;
+  }
 `;
 
 export default GlobalStyle;

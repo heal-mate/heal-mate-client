@@ -4,6 +4,7 @@ import logo from "@/assets/images/logo-removebg.png";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { fetchLoginUser, fetchKaKaoLoginUser } from "@/service/apis/user";
 import { AxiosError } from "axios";
+import alert from "@/utils/alert";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function Login() {
           }
         });
     } else {
-      alert("필수 사항을 입력해주세요.");
+      alert("필수 사항을 입력해주세요.", false, "warning");
     }
   };
 
