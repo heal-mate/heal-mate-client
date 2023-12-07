@@ -41,6 +41,10 @@ const authAPI = {
   async logoutUser() {
     return instance.get("/logout");
   },
+
+  async withdrawUser() {
+    return instance.patch("/withdraw");
+  },
 };
 
 export default authAPI;

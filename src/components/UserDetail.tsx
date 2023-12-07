@@ -139,6 +139,11 @@ export default function UserDetail() {
     navigate(path.login);
   };
 
+  const handleWithdraw = async () => {
+    await authAPI.withdrawUser();
+    navigate(path.login);
+  };
+
   if (!user) return <div>loading</div>;
 
   const { nickName, introduction, profileImageSrc, condition } = user;
@@ -241,6 +246,7 @@ export default function UserDetail() {
         )}
       </StyledLocationsDiv>
       <button onClick={handleLogout}>로그아웃</button>
+      <button onClick={handleWithdraw}>회원탈퇴</button>
     </StyledContainer>
   );
 }
