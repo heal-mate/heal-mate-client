@@ -37,6 +37,10 @@ const authAPI = {
     const res = await instance.post("/login", { data: { email, password } });
     return res.data;
   },
+
+  async logoutUser() {
+    return instance.get("/logout");
+  },
 };
 
 export default authAPI;

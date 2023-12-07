@@ -16,6 +16,9 @@ import { Location, User } from "@/service/apis/user.type";
 import { uploadImage } from "@/service/apis/uploadImage";
 import { useSetRecoilState } from "recoil";
 import { LoadingSpinnerAtom } from "@/recoils/loadingSpinnerAtom";
+import authAPI from "@/service/apis/auth";
+import { path } from "@/App";
+import { useNavigate } from "react-router-dom";
 
 export default function UserDetail() {
   const setLoadingSpinner = useSetRecoilState(LoadingSpinnerAtom);
@@ -23,6 +26,7 @@ export default function UserDetail() {
   const initialUser = useRef<User | null>(null);
   const [editMode, setEditMode] = useState(false);
   const profileImgRef = useRef<HTMLInputElement | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     userAPI
@@ -130,6 +134,11 @@ export default function UserDetail() {
     handleToggleEditMode();
   };
 
+  const handleLogout = async () => {
+    await authAPI.logoutUser();
+    navigate(path.login);
+  };
+
   if (!user) return <div>loading</div>;
 
   const { nickName, introduction, profileImageSrc, condition } = user;
@@ -231,6 +240,7 @@ export default function UserDetail() {
           <div>{location}</div>
         )}
       </StyledLocationsDiv>
+      <button onClick={handleLogout}>로그아웃</button>
     </StyledContainer>
   );
 }
