@@ -1,16 +1,12 @@
 import { useMutation, useQuery } from "react-query";
 import { Alert } from "@/service/apis/alert.type";
 import { queryClient, queryKeys } from "@/service/store/reactQuery";
-import {
-  fetchGetAlerts,
-  fetchReadAlert,
-  fetchRemoveAlert,
-} from "@/service/apis/alert";
+import alertAPI from "@/service/apis/alert";
 
 export const useGetAlertsAll = () => {
   const { data: alertsList, ...rest } = useQuery<Alert[], Error>({
     queryKey: [queryKeys.alerts],
-    queryFn: fetchGetAlerts,
+    queryFn: alertAPI.getAlerts,
   });
 
   const invalidateMatchQuery = () =>
@@ -19,12 +15,12 @@ export const useGetAlertsAll = () => {
     });
 
   const readAlert = useMutation({
-    mutationFn: fetchReadAlert,
+    mutationFn: alertAPI.readAlert,
     onSuccess: invalidateMatchQuery,
   }).mutateAsync;
 
   const removeAlert = useMutation({
-    mutationFn: fetchRemoveAlert,
+    mutationFn: alertAPI.removeAlert,
     onSuccess: invalidateMatchQuery,
   }).mutateAsync;
 

@@ -11,7 +11,7 @@ import {
   WEIGHT_MARKS,
 } from "@/config/constants";
 import { MarkObj } from "rc-slider/lib/Marks";
-import { fetchGetUserMine, fetchUpdateMe } from "@/service/apis/user";
+import userAPI from "@/service/apis/user";
 import { Location, User } from "@/service/apis/user.type";
 import { uploadImage } from "@/service/apis/uploadImage";
 import { useSetRecoilState } from "recoil";
@@ -25,7 +25,8 @@ export default function UserDetail() {
   const profileImgRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    fetchGetUserMine()
+    userAPI
+      .getUserMine()
       .then((userData) => {
         setUser(userData);
         initialUser.current = userData;
@@ -110,7 +111,7 @@ export default function UserDetail() {
       const blob = await res.blob();
       imgUrl = await uploadImage(blob);
     }
-    await fetchUpdateMe({
+    await userAPI.updateMe({
       ...user,
       profileImageSrc: imgUrl,
     });

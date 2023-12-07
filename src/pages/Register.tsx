@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { styled } from "styled-components";
 import logo from "@/assets/images/logo-removebg.png";
 import { useNavigate } from "react-router-dom";
-import { fetchGetAuthCode, fetchCheckAuthCode } from "@/service/apis/user";
+import authAPI from "@/service/apis/auth";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -16,7 +16,8 @@ export default function Register() {
 
   const handleClickAuth = () => {
     if (emailRef.current) {
-      fetchGetAuthCode(emailRef.current.value)
+      authAPI
+        .sendAuthCodeMail(emailRef.current.value)
         .then(() => alert("이메일이 발송되었습니다. 5분안에 인증해주세요."))
         .catch((err) => setError(err.response.data));
     }
@@ -24,10 +25,11 @@ export default function Register() {
 
   const handleCheckAuth = () => {
     if (authCodeRef.current && emailRef.current) {
-      fetchCheckAuthCode({
-        email: emailRef.current.value,
-        authCode: authCodeRef.current.value,
-      })
+      authAPI
+        .checkAuthCode({
+          email: emailRef.current.value,
+          authCode: authCodeRef.current.value,
+        })
         .then(() => {
           alert("인증되었습니다.");
           nextStep();

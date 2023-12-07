@@ -7,26 +7,34 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-export const fetchGetMatchesReceived = async () => {
-  const res = await instance.get<Match[]>(`/received`);
+const matchAPI = {
+  async getMatchesReceived() {
+    const res = await instance.get<Match[]>(`/received`);
 
-  return res.data;
+    return res.data;
+  },
+
+  async getMatchesSent() {
+    const res = await instance.get<Match[]>(`/sent`);
+
+    return res.data;
+  },
+
+  async requestMatch({ userId }: { userId: string }) {
+    return instance.post(`/request`, { userId });
+  },
+
+  async cancelMatch({ matchId }: { matchId: string }) {
+    return instance.delete(`/cancel/${matchId}`);
+  },
+
+  async acceptMatch({ matchId }: { matchId: string }) {
+    return instance.patch(`/accept/${matchId}`);
+  },
+
+  async rejectMatch({ matchId }: { matchId: string }) {
+    return instance.patch(`/reject/${matchId}`);
+  },
 };
 
-export const fetchGetMatchesSent = async () => {
-  const res = await instance.get<Match[]>(`/sent`);
-
-  return res.data;
-};
-
-export const fetchRequestMatch = async ({ userId }: { userId: string }) =>
-  instance.post(`/request`, { userId });
-
-export const fetchCancelMatch = async ({ matchId }: { matchId: string }) =>
-  instance.delete(`/cancel/${matchId}`);
-
-export const fetchAcceptMatch = async ({ matchId }: { matchId: string }) =>
-  instance.patch(`/accept/${matchId}`);
-
-export const fetchRejectMatch = async ({ matchId }: { matchId: string }) =>
-  instance.patch(`/reject/${matchId}`);
+export default matchAPI;

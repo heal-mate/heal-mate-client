@@ -7,7 +7,7 @@ import MatchFilterYears from "@/components/MatchFilterYears";
 import MatchFilterGender from "@/components/MatchFilterGender";
 import MatchFilterLocations from "@/components/MatchFilterLocations";
 import { MAX_WEIGHT, WEIGHT_MARKS } from "@/config/constants";
-import { fetchGetUserMine } from "@/service/apis/user";
+import userAPI from "@/service/apis/user";
 import { Condition } from "@/service/apis/user.type";
 import Rangeinput from "./RangeInput";
 
@@ -46,7 +46,7 @@ export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
   useEffect(() => {
     // API 에서 받아온 값으로 filter state에 set한다.
     const fetchData = async () => {
-      const data = await fetchGetUserMine();
+      const data = await userAPI.getUserMine();
       const conditionExpect = data.conditionExpect;
       const selectedExercises = {
         benchPress: conditionExpect.benchPress ? true : false,

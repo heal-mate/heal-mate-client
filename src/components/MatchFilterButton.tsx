@@ -5,7 +5,7 @@ import { PiSlidersHorizontalLight } from "react-icons/pi";
 import { IoIosArrowBack } from "react-icons/io";
 import MatchFilter from "./MatchFilter";
 import scrollBlock from "@/utils/scrollBlock";
-import { changeUserConditionExpect } from "@/service/apis/user";
+import userAPI from "@/service/apis/user";
 import Swal from "sweetalert2";
 import { queryClient, queryKeys } from "@/service/store/reactQuery";
 import { Condition } from "@/service/apis/user.type";
@@ -35,7 +35,7 @@ export default function MatchFilterButton() {
       confirmButtonText: "확인",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await changeUserConditionExpect(filters!);
+        await userAPI.changeUserConditionExpect(filters!);
         queryClient.invalidateQueries({ queryKey: queryKeys.matchesRecommend });
         setIsShowFilter((prev) => !prev);
       }

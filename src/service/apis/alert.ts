@@ -7,14 +7,20 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-export const fetchGetAlerts = async () => {
-  const res = await instance.get<Alert[]>("/");
+const alertAPI = {
+  async getAlerts() {
+    const res = await instance.get<Alert[]>("/");
 
-  return res.data;
+    return res.data;
+  },
+
+  async readAlert({ alertId }: { alertId: string }) {
+    return instance.patch(`/read/${alertId}`);
+  },
+
+  async removeAlert({ alertIds }: { alertIds: string[] }) {
+    return instance.delete(`/remove`, { data: { alertIds } });
+  },
 };
 
-export const fetchReadAlert = async ({ alertId }: { alertId: string }) =>
-  instance.patch(`/read/${alertId}`);
-
-export const fetchRemoveAlert = async ({ alertIds }: { alertIds: string[] }) =>
-  instance.delete(`/remove`, { data: { alertIds } });
+export default alertAPI;
