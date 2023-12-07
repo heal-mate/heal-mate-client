@@ -10,13 +10,14 @@ export default function CardsReceived({
   const { matchesReceived, acceptMatch, rejectMatch, ...rest } =
     useMatchesReceived();
 
-  if (!currentFilter) return null;
-
   return (
     <>
       <Cards
         matchUserInfos={matchesReceived
-          ?.filter((card) => card.status === currentFilter)
+          ?.filter((card) => {
+            if (currentFilter === null) return true;
+            if (card.status === currentFilter) return true;
+          })
           ?.map((e) => ({
             ...e,
             buttons:

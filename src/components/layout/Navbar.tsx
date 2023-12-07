@@ -25,7 +25,7 @@ export default function Navbar() {
         <StyledList>
           <NavLink to={path.tab2}>
             <StyledIoChatboxEllipsesOutline />
-            <span>헬프톡</span>
+            <span>보낸 요청</span>
           </NavLink>
         </StyledList>
         <StyledList>
