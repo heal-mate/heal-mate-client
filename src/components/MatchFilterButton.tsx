@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { styled, css } from "styled-components";
-import { StyledButton } from "@/components/FilterButtons.styles";
+import {
+  StyledButton,
+  StyledButtonBox,
+  StyledButtonContainer,
+} from "@/components/FilterButtons.styles";
 import { PiSlidersHorizontalLight } from "react-icons/pi";
 import { IoIosArrowBack } from "react-icons/io";
 import MatchFilter from "./MatchFilter";
@@ -44,22 +48,26 @@ export default function MatchFilterButton() {
 
   return (
     <>
-      <StyledButton onClick={handleClick}>
-        <PiSlidersHorizontalLight />
-        메이트찾기
-      </StyledButton>
-      <StyledMatchFilter $isShowFilter={isShowFilter}>
-        <StyledMatchFilterHeader>
-          <StyledMatchFilterInner>
-            <div>
-              <StyledIoIosArrowBack onClick={handleClick} />
-              <StyledTitle>메이트 조건 설정</StyledTitle>
-            </div>
-            <span onClick={changeMatchFilter}>완료</span>
-          </StyledMatchFilterInner>
-        </StyledMatchFilterHeader>
-        <MatchFilter handleChangeFilters={handleChangeFilters} />
-      </StyledMatchFilter>
+      <StyledButtonContainer>
+        <StyledButtonBox>
+          <StyledButton onClick={handleClick}>
+            <PiSlidersHorizontalLight />
+            메이트찾기
+          </StyledButton>
+          <StyledMatchFilter $isShowFilter={isShowFilter}>
+            <StyledMatchFilterHeader>
+              <StyledMatchFilterInner>
+                <div>
+                  <StyledIoIosArrowBack onClick={handleClick} />
+                  <StyledTitle>메이트 조건 설정</StyledTitle>
+                </div>
+                <span onClick={changeMatchFilter}>완료</span>
+              </StyledMatchFilterInner>
+            </StyledMatchFilterHeader>
+            <MatchFilter handleChangeFilters={handleChangeFilters} />
+          </StyledMatchFilter>
+        </StyledButtonBox>
+      </StyledButtonContainer>
     </>
   );
 }

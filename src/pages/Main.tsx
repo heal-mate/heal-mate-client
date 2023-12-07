@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { getFirebaseToken } from "@/service/store/firebase";
 import { fetchSendWebPushToken } from "@/service/apis/user";
 import MatchFilterButton from "@/components/MatchFilterButton";
-import { StyledButtonBox } from "@/components/FilterButtons.styles";
 
 export default function Main() {
   useEffect(() => {
@@ -15,10 +14,8 @@ export default function Main() {
 
   return (
     <>
-      <StyledButtonBox>
-        <MatchFilterButton />
-      </StyledButtonBox>
       <StyledCardsContainer>
+        <MatchFilterButton />
         <CardsRecommend />
       </StyledCardsContainer>
     </>

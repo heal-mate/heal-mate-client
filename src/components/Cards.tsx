@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import styled, { css } from "styled-components";
 import { User } from "@/service/apis/user.type";
+import { StyledCardsContainer } from "./Cards.styles";
 
 type ButtonProps = {
   text: string;
@@ -37,7 +38,7 @@ export default function Cards(props: CardProps) {
           </Fragment>
         ))
       ) : (
-        "메시지가 없습니다..."
+        <StyledCardsContainer>메시지가 없습니다...</StyledCardsContainer>
       )}
     </>
   );

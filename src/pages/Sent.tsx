@@ -12,8 +12,8 @@ export default function Sent() {
   };
   return (
     <>
-      <FilterButtons type="sent" handleCheckeFilter={handleCheckeFilter} />
       <StyledCardsContainer>
+        <FilterButtons type="sent" handleCheckeFilter={handleCheckeFilter} />
         <CardsSent currentFilter={currentFilter} />
       </StyledCardsContainer>
     </>

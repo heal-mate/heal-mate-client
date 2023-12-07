@@ -1,4 +1,8 @@
-import { StyledButtonBox, StyledButton } from "./FilterButtons.styles";
+import {
+  StyledButtonBox,
+  StyledButton,
+  StyledButtonContainer,
+} from "./FilterButtons.styles";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiCircleCheck } from "react-icons/ci";
 import { CiNoWaitingSign } from "react-icons/ci";
@@ -62,17 +66,19 @@ export default function FilterButtons({
   const filters = type === "sent" ? SENT_FILTER : RECEIVED_FILTER;
   return (
     <>
-      <StyledButtonBox>
-        {filters!.map((filter, index) => (
-          <StyledButton
-            key={"filter" + index}
-            onClick={() => handleCheckeFilter(filter.value)}
-          >
-            {filter.icon}
-            {filter.name}
-          </StyledButton>
-        ))}
-      </StyledButtonBox>
+      <StyledButtonContainer>
+        <StyledButtonBox>
+          {filters!.map((filter, index) => (
+            <StyledButton
+              key={"filter" + index}
+              onClick={() => handleCheckeFilter(filter.value)}
+            >
+              {filter.icon}
+              {filter.name}
+            </StyledButton>
+          ))}
+        </StyledButtonBox>
+      </StyledButtonContainer>
     </>
   );
 }

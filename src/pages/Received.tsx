@@ -12,8 +12,11 @@ export default function Received() {
   };
   return (
     <>
-      <FilterButtons type="received" handleCheckeFilter={handleCheckeFilter} />
       <StyledCardsContainer>
+        <FilterButtons
+          type="received"
+          handleCheckeFilter={handleCheckeFilter}
+        />
         <CardsReceived currentFilter={currentFilter} />
       </StyledCardsContainer>
     </>
