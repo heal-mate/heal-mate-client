@@ -30,12 +30,14 @@ export default function Cards(props: CardProps) {
         <p>loading...</p>
       ) : isError ? (
         <p>Error: {error!.message}</p>
-      ) : (
+      ) : matchUserInfos?.length ? (
         matchUserInfos!.map((matchUserInfo, i) => (
           <Fragment key={"CardItem" + i}>
             <CardItem {...matchUserInfo} />
           </Fragment>
         ))
+      ) : (
+        "메시지가 없습니다..."
       )}
     </>
   );
