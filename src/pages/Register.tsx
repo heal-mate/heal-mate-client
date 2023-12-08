@@ -3,6 +3,7 @@ import { styled } from "styled-components";
 import logo from "@/assets/images/logo-removebg.png";
 import { useNavigate } from "react-router-dom";
 import authAPI from "@/service/apis/auth";
+import customAlert from "@/utils/alert";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -18,7 +19,13 @@ export default function Register() {
     if (emailRef.current) {
       authAPI
         .sendAuthCodeMail(emailRef.current.value)
-        .then(() => alert("이메일이 발송되었습니다. 5분안에 인증해주세요."))
+        .then(() =>
+          customAlert(
+            "이메일이 발송되었습니다.\n5분안에 인증해주세요.",
+            true,
+            "info",
+          ),
+        )
         .catch((err) => setError(err.response.data));
     }
   };
@@ -31,7 +38,7 @@ export default function Register() {
           authCode: authCodeRef.current.value,
         })
         .then(() => {
-          alert("인증되었습니다.");
+          customAlert("인증되었습니다.", false, "success", 700);
           nextStep();
         })
         .catch((err) => setError(err.response.data));
@@ -49,12 +56,6 @@ export default function Register() {
           ref={emailRef}
         />
         <StyledButton onClick={handleClickAuth}>인증메일 받기</StyledButton>
-        {/* <StyledInput
-          type="text"
-          id="phone-number"
-          placeholder="휴대폰 번호를 입력해주세요(- 없이)"
-        />
-        <StyledButton>인증문자 받기</StyledButton> */}
         <StyledInput
           type="text"
           id="authCode"
