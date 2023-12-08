@@ -78,10 +78,10 @@ const StyledMatchFilter = styled.div<{ $isShowFilter: boolean }>`
   right: -100%;
   width: 100%;
   height: 100%;
-  z-index: 888;
   background-color: #fff;
   transition: right 0.2s ease-in-out;
   overflow-y: auto;
+  padding: 54px 20px;
   ${(props) =>
     props.$isShowFilter &&
     css`
@@ -95,14 +95,15 @@ const StyledMatchFilterHeader = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.size.headerHeight}px;
   background-color: #fff;
-  position: sticky;
+  /* position: sticky;
   z-index: 1000;
   top: 0;
-  left: 0;
+  left: 0; */
+  z-index: 2;
 `;
 
 const StyledMatchFilterInner = styled.div`
-  width: 85%;
+  width: 100%;
   height: 100%;
   margin: 0 auto;
   padding: 0.75rem 0;

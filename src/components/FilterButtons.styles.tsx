@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const StyledButtonContainer = styled.article`
   position: sticky;
   top: 55px;
-  z-index: 20;
+  z-index: 1;
   width: 100%;
   background-color: white;
   border-bottom: 0.0625rem solid #f2f2f2;

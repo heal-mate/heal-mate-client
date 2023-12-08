@@ -1,4 +1,4 @@
-import { styled, css } from "styled-components";
+import { styled, css, keyframes } from "styled-components";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { path } from "@/App";
@@ -11,9 +11,16 @@ import scrollBlock from "@/utils/scrollBlock";
 import { useGetAlertsAll } from "../Alert.hooks";
 import { AxiosResponse } from "axios";
 
+const user = {
+  profileImageSrc:
+    "http://res.cloudinary.com/djq2j6rkq/image/upload/v1701864855/qp6bcep6guvesmf2ywhg.jpg",
+};
+
 export default function Header() {
   const { alertsList } = useGetAlertsAll();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
+  // 프로필 클릭 토글
+  const [menuToggle, setMenuToggle] = useState(true);
 
   const handleClick = () => {
     setIsShowAlert((prev) => !prev);
@@ -37,12 +44,25 @@ export default function Header() {
               <img src={logo} alt="logo" />
             </a>
           </StyledLogo>
-          <StyledBell
-            onClick={handleClick}
-            $isOn={hasUnreadAlerts > 0 ? true : false}
-          >
-            <StyledGoBell />
-          </StyledBell>
+          <StyledIcons>
+            <StyledBell
+              onClick={handleClick}
+              $isOn={hasUnreadAlerts > 0 ? true : false}
+            >
+              <StyledGoBell />
+            </StyledBell>
+            {user && (
+              <StyledProfile onClick={() => setMenuToggle((prev) => !prev)}>
+                <img src={user.profileImageSrc} alt="프로필 이미지" />
+              </StyledProfile>
+            )}
+            {menuToggle && (
+              <StyledMenuList>
+                <div className="menu">로그아웃</div>
+                <div className="menu warning">회원탈퇴</div>
+              </StyledMenuList>
+            )}
+          </StyledIcons>
         </StyledInner>
       </StyledHeader>
       {/* Alert Component */}
@@ -237,8 +257,14 @@ const StyledLogo = styled.h1`
     }
   }
 `;
-
-const StyledBell = styled.section<{ $isOn: boolean }>`
+const StyledIcons = styled.section`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+`;
+const StyledBell = styled.div<{ $isOn: boolean }>`
   position: relative;
   cursor: pointer;
   height: 1.625rem;
@@ -259,6 +285,56 @@ const StyledBell = styled.section<{ $isOn: boolean }>`
       css`
         display: block;
       `}
+  }
+`;
+
+const StyledProfile = styled.div`
+  width: 30px;
+  height: 30px;
+  border: 1px solid black;
+  border-radius: 50%;
+  margin-left: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  & > img {
+    width: inherit;
+    height: inherit;
+    object-fit: contain;
+  }
+`;
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+const StyledMenuList = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
+  color: #232323;
+  border-radius: 4px;
+  top: 43px;
+  right: -30px;
+  z-index: 30;
+  box-shadow: 2px 10px 10px 0px rgba(0, 0, 0, 0.1);
+  animation: ${fadeIn} 0.25s ease-out forwards;
+  opacity: 0;
+
+  & > .menu {
+    padding: 6px 16px;
+  }
+  & > .menu:hover {
+    background-color: #f6f6f6;
+    cursor: pointer;
+  }
+  & > .menu.warning {
+    color: red;
   }
 `;
 

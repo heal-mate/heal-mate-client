@@ -152,7 +152,11 @@ export default function UserDetail() {
   return (
     <StyledContainer>
       <StyledHeader>
-        <StyledArrowBackIcon onClick={() => {}} />
+        <StyledArrowBackIcon
+          onClick={() => {
+            navigate(-1);
+          }}
+        />
         <h2>마이페이지</h2>
         {editMode ? (
           <button onClick={handleSave}>저장</button>
@@ -310,7 +314,7 @@ function Rangeinput({
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 8px;
+  padding: 0 30px;
 `;
 
 const StyledHeader = styled.div`
