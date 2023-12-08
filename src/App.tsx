@@ -4,19 +4,19 @@ import Received from "./pages/Received";
 import Mypage from "./pages/Mypage";
 import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
-import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
 import Register from "./pages/Register";
 import PrivateRoute from "./components/PrivateRoute";
 import { LoadingSpinnerAtom } from "./recoils/loadingSpinnerAtom";
 import { useRecoilValue } from "recoil";
 import LoadingSpinnerPotal from "./potals/LoadingSpinnerPotal";
+import Sent from "./pages/Sent";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
   root: "/",
   tab1: "/recieved",
-  tab2: "/chat",
+  tab2: "/sent",
   tab3: "/mypage",
   login: "/login",
   register: "/register",
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
           },
           {
             path: path.tab2,
-            element: <Chat />,
+            element: <Sent />,
           },
           {
             path: path.tab3,

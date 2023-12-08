@@ -1,10 +1,10 @@
 import { StyledCardsContainer } from "@/components/Cards.styles";
-import CardsReceived from "@/components/CardsReceived";
+import CardsSent from "@/components/CardsSent";
 import FilterButtons from "@/components/FilterButtons";
 import { MatchStatus } from "@/service/apis/match.type";
 import { useState } from "react";
 
-export default function Received() {
+export default function Sent() {
   const [currentFilter, setCurrentFilter] = useState<MatchStatus | null>(null);
 
   const handleCheckeFilter = (filter: MatchStatus | null) => {
@@ -13,11 +13,8 @@ export default function Received() {
   return (
     <>
       <StyledCardsContainer>
-        <FilterButtons
-          type="received"
-          handleCheckeFilter={handleCheckeFilter}
-        />
-        <CardsReceived currentFilter={currentFilter} />
+        <FilterButtons type="sent" handleCheckeFilter={handleCheckeFilter} />
+        <CardsSent currentFilter={currentFilter} />
       </StyledCardsContainer>
     </>
   );

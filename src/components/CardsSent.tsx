@@ -8,14 +8,16 @@ export default function CardsSent({
   currentFilter: MatchStatus | null;
 }) {
   const { matchesSent, cancelMatch, ...rest } = useMatchesSent();
-
-  if (!currentFilter) return null;
+  console.log(matchesSent);
 
   return (
     <>
       <Cards
         matchUserInfos={matchesSent
-          ?.filter((card) => card.status === currentFilter)
+          ?.filter((card) => {
+            if (currentFilter === null) return true;
+            if (card.status === currentFilter) return true;
+          })
           ?.map((e) => ({
             ...e,
             buttons:
