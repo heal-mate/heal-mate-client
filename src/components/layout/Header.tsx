@@ -10,6 +10,7 @@ import { Alert } from "@/service/apis/alert.type";
 import scrollBlock from "@/utils/scrollBlock";
 import { useGetAlertsAll } from "../Alert.hooks";
 import { AxiosResponse } from "axios";
+import authAPI from "@/service/apis/auth";
 
 const user = {
   profileImageSrc:
@@ -20,7 +21,8 @@ export default function Header() {
   const { alertsList } = useGetAlertsAll();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
   // 프로필 클릭 토글
-  const [menuToggle, setMenuToggle] = useState(true);
+  const [menuToggle, setMenuToggle] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setIsShowAlert((prev) => !prev);
@@ -34,6 +36,16 @@ export default function Header() {
   useEffect(() => {
     scrollBlock(isShowAlert);
   }, [isShowAlert]);
+
+  const handleLogout = async () => {
+    await authAPI.logoutUser();
+    navigate(path.login);
+  };
+
+  const handleWithdraw = async () => {
+    await authAPI.withdrawUser();
+    navigate(path.login);
+  };
 
   return (
     <>
@@ -58,8 +70,12 @@ export default function Header() {
             )}
             {menuToggle && (
               <StyledMenuList>
-                <div className="menu">로그아웃</div>
-                <div className="menu warning">회원탈퇴</div>
+                <div onClick={handleLogout} className="menu">
+                  로그아웃
+                </div>
+                <div onClick={handleWithdraw} className="menu warning">
+                  회원탈퇴
+                </div>
               </StyledMenuList>
             )}
           </StyledIcons>

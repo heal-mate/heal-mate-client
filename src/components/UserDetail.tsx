@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 import { MdArrowBack } from "react-icons/md";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Slider from "rc-slider";
@@ -249,8 +249,10 @@ export default function UserDetail() {
           <div>{location}</div>
         )}
       </StyledLocationsDiv>
-      <button onClick={handleLogout}>로그아웃</button>
-      <button onClick={handleWithdraw}>회원탈퇴</button>
+      <StyledButton onClick={handleLogout}>로그아웃</StyledButton>
+      <StyledButton $warning onClick={handleWithdraw}>
+        회원탈퇴
+      </StyledButton>
     </StyledContainer>
   );
 }
@@ -373,6 +375,43 @@ const StyledProfile = styled.div`
     border: none;
     border-bottom: 1px solid #333;
     margin-bottom: 20px;
+  }
+`;
+
+const StyledButton = styled.button<{ $warning?: boolean }>`
+  outline: none;
+  border: none;
+
+  background-color: ${({ $warning }) => ($warning ? css`#ff4d4d` : css`#fff`)};
+  border: 1px solid
+    ${({ $warning }) =>
+      $warning
+        ? css`#ff4d4d`
+        : css`
+            ${({ theme }) => theme.colors.point}
+          `};
+  color: ${({ $warning }) =>
+    $warning
+      ? css`white`
+      : css`
+          ${({ theme }) => theme.colors.point}
+        `};
+  padding: 10px 20px;
+
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+
+  &:hover {
+    color: white;
+    background-color: ${({ $warning }) =>
+      $warning
+        ? css`#ff4d4d`
+        : css`
+            ${({ theme }) => theme.colors.point}
+          `};
   }
 `;
 
