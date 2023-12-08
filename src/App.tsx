@@ -11,6 +11,8 @@ import { LoadingSpinnerAtom } from "./recoils/loadingSpinnerAtom";
 import { useRecoilValue } from "recoil";
 import LoadingSpinnerPotal from "./potals/LoadingSpinnerPotal";
 import Sent from "./pages/Sent";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "./components/ErrorFallback";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
@@ -26,7 +28,11 @@ export const path = {
 const router = createBrowserRouter([
   {
     path: path.root,
-    element: <PrivateRoute />,
+    element: (
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <PrivateRoute />
+      </ErrorBoundary>
+    ),
     children: [
       {
         path: "/",
