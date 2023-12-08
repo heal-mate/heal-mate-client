@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import logo from "@/assets/images/logo-removebg.png";
 import { useNavigate } from "react-router-dom";
 import { fetchGetAuthCode, fetchCheckAuthCode } from "@/service/apis/user";
-import alert from "@/utils/alert";
+import customAlert from "@/utils/alert";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function Register() {
     if (emailRef.current) {
       fetchGetAuthCode(emailRef.current.value)
         .then(() =>
-          alert(
+          customAlert(
             "이메일이 발송되었습니다.\n5분안에 인증해주세요.",
             true,
             "info",
@@ -36,7 +36,7 @@ export default function Register() {
         authCode: authCodeRef.current.value,
       })
         .then(() => {
-          alert("인증되었습니다.", false, "success", 700);
+          customAlert("인증되었습니다.", false, "success", 700);
           nextStep();
         })
         .catch((err) => setError(err.response.data));

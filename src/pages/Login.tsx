@@ -4,7 +4,7 @@ import logo from "@/assets/images/logo-removebg.png";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { fetchLoginUser, fetchKaKaoLoginUser } from "@/service/apis/user";
 import { AxiosError } from "axios";
-import alert from "@/utils/alert";
+import customAlert from "@/utils/alert";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function Login() {
       fetchLoginUser({ email, password })
         .then((res) => {
           localStorage.setItem("user", JSON.stringify(res));
-          alert("로그인 되었습니다.");
+          customAlert("로그인 되었습니다.");
           navigate("/");
         })
         .catch((err) => {
@@ -33,7 +33,7 @@ export default function Login() {
           }
         });
     } else {
-      alert("필수 사항을 입력해주세요.", false, "warning");
+      customAlert("필수 사항을 입력해주세요.", false, "warning");
     }
   };
 

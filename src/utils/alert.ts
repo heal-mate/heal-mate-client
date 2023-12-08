@@ -1,6 +1,6 @@
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
-export default function alert(
+export default function customAlert(
   title: string,
   showConfirmButton: boolean = false,
   icon: SweetAlertIcon = "success",
