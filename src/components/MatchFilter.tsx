@@ -10,6 +10,7 @@ import { MAX_WEIGHT, WEIGHT_MARKS } from "@/config/constants";
 import { fetchGetUserMine } from "@/service/apis/user";
 import { Condition } from "@/service/apis/user.type";
 import Rangeinput from "./RangeInput";
+import customAlert from "@/utils/alert";
 
 function generatorTitle(
   title: keyof CheckedExercise,
@@ -136,7 +137,7 @@ export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
 
       // location 배열의 길이가 3이상 이면 추가하지 않는다.
       if (updatedLocations.length > 3) {
-        alert("지역은 3곳 이상 선택 할 수 없습니다.");
+        customAlert("지역은 3곳 이상 선택 할 수 없습니다.", false, "info");
         return prevFilters;
       }
 
