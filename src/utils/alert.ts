@@ -1,3 +1,4 @@
+import { theme } from "@/styles/theme";
 import Swal, { SweetAlertIcon } from "sweetalert2";
 
 export default function customAlert(
@@ -15,5 +16,21 @@ export default function customAlert(
     title,
     showConfirmButton,
     timer,
+  });
+}
+
+export function customConfirmAlert(title: string) {
+  return Swal.fire({
+    title,
+    icon: "warning",
+    customClass: {
+      icon: "alert-icon",
+      popup: "alert-popup",
+    },
+    showCancelButton: true,
+    confirmButtonColor: theme.colors.point,
+    cancelButtonColor: "#d33",
+    confirmButtonText: "확인",
+    cancelButtonText: "취소",
   });
 }

@@ -11,6 +11,7 @@ import scrollBlock from "@/utils/scrollBlock";
 import { useGetAlertsAll } from "../Alert.hooks";
 import { AxiosResponse } from "axios";
 import authAPI from "@/service/apis/auth";
+import { customConfirmAlert } from "@/utils/alert";
 
 const user = {
   profileImageSrc:
@@ -43,8 +44,16 @@ export default function Header() {
   };
 
   const handleWithdraw = async () => {
-    await authAPI.withdrawUser();
-    navigate(path.login);
+    customConfirmAlert("정말 탈퇴하시겠습니까?")
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await authAPI.withdrawUser();
+          navigate(path.login);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

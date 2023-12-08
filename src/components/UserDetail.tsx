@@ -19,6 +19,7 @@ import { LoadingSpinnerAtom } from "@/recoils/loadingSpinnerAtom";
 import authAPI from "@/service/apis/auth";
 import { path } from "@/App";
 import { useNavigate } from "react-router-dom";
+import { customConfirmAlert } from "@/utils/alert";
 
 export default function UserDetail() {
   const setLoadingSpinner = useSetRecoilState(LoadingSpinnerAtom);
@@ -140,8 +141,16 @@ export default function UserDetail() {
   };
 
   const handleWithdraw = async () => {
-    await authAPI.withdrawUser();
-    navigate(path.login);
+    customConfirmAlert("정말 탈퇴하시겠습니까?")
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await authAPI.withdrawUser();
+          navigate(path.login);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   if (!user) return <div>loading</div>;
