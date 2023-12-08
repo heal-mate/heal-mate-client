@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import RadioButton from "@/components/RadioButton";
-import { fetchRegisterUser } from "@/service/apis/user";
 import { useNavigate, useLocation } from "react-router-dom";
 import { GenderType, LOCATION_TYPE, LOCATIONS } from "@/config/constants";
+import authAPI from "@/service/apis/auth";
 import customAlert from "@/utils/alert";
 
 type UserInfoType = {
@@ -41,7 +41,8 @@ export default function UserInfoSetup() {
     if (msg)
       return customAlert("필수 입력 사항을 모두 입력해주세요.", false, "info");
 
-    fetchRegisterUser(userInfos)
+    authAPI
+      .registerUser(userInfos)
       .then(() => {
         customAlert(
           "회원가입 되었습니다. 로그인 해주세요.",

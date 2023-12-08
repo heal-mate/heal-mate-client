@@ -1,14 +1,13 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { styled } from "styled-components";
 import logo from "@/assets/images/logo-removebg.png";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { fetchLoginUser, fetchKaKaoLoginUser } from "@/service/apis/user";
+import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import authAPI from "@/service/apis/auth";
 import customAlert from "@/utils/alert";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>("");
@@ -18,7 +17,8 @@ export default function Login() {
     const password = passwordRef.current?.value;
 
     if (email && password) {
-      fetchLoginUser({ email, password })
+      authAPI
+        .loginUser({ email, password })
         .then((res) => {
           localStorage.setItem("user", JSON.stringify(res));
           customAlert("로그인 되었습니다.");
@@ -36,15 +36,6 @@ export default function Login() {
       customAlert("필수 사항을 입력해주세요.", false, "warning");
     }
   };
-
-  useEffect(() => {
-    const code = searchParams.get("code");
-    if (code) {
-      fetchKaKaoLoginUser(code)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-    }
-  }, [searchParams]);
 
   return (
     <StyledContainer>

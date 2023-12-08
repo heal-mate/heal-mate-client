@@ -11,11 +11,14 @@ import {
   WEIGHT_MARKS,
 } from "@/config/constants";
 import { MarkObj } from "rc-slider/lib/Marks";
-import { fetchGetUserMine, fetchUpdateMe } from "@/service/apis/user";
+import userAPI from "@/service/apis/user";
 import { Location, User } from "@/service/apis/user.type";
 import { uploadImage } from "@/service/apis/uploadImage";
 import { useSetRecoilState } from "recoil";
 import { LoadingSpinnerAtom } from "@/recoils/loadingSpinnerAtom";
+import authAPI from "@/service/apis/auth";
+import { path } from "@/App";
+import { useNavigate } from "react-router-dom";
 
 export default function UserDetail() {
   const setLoadingSpinner = useSetRecoilState(LoadingSpinnerAtom);
@@ -23,9 +26,11 @@ export default function UserDetail() {
   const initialUser = useRef<User | null>(null);
   const [editMode, setEditMode] = useState(false);
   const profileImgRef = useRef<HTMLInputElement | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchGetUserMine()
+    userAPI
+      .getUserMine()
       .then((userData) => {
         setUser(userData);
         initialUser.current = userData;
@@ -110,7 +115,7 @@ export default function UserDetail() {
       const blob = await res.blob();
       imgUrl = await uploadImage(blob);
     }
-    await fetchUpdateMe({
+    await userAPI.updateMe({
       ...user,
       profileImageSrc: imgUrl,
     });
@@ -127,6 +132,16 @@ export default function UserDetail() {
   };
   const handleEdit = () => {
     handleToggleEditMode();
+  };
+
+  const handleLogout = async () => {
+    await authAPI.logoutUser();
+    navigate(path.login);
+  };
+
+  const handleWithdraw = async () => {
+    await authAPI.withdrawUser();
+    navigate(path.login);
   };
 
   if (!user) return <div>loading</div>;
@@ -230,6 +245,8 @@ export default function UserDetail() {
           <div>{location}</div>
         )}
       </StyledLocationsDiv>
+      <button onClick={handleLogout}>로그아웃</button>
+      <button onClick={handleWithdraw}>회원탈퇴</button>
     </StyledContainer>
   );
 }

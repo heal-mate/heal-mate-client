@@ -1,15 +1,8 @@
 import { useMutation, useQuery } from "react-query";
 import { User } from "@/service/apis/user.type";
 import { queryClient, queryKeys } from "@/service/store/reactQuery";
-import {
-  fetchAcceptMatch,
-  fetchCancelMatch,
-  fetchGetMatchesReceived,
-  fetchGetMatchesSent,
-  fetchRejectMatch,
-  fetchRequestMatch,
-} from "@/service/apis/match";
-import { fetchGetUser, fetchGetUsersRecommend } from "@/service/apis/user";
+import matchAPI from "@/service/apis/match";
+import userAPI from "@/service/apis/user";
 import { Match } from "@/service/apis/match.type";
 
 type MatchCardProps = (User & Match & { userId: string; matchId: string })[];
@@ -17,7 +10,7 @@ type MatchCardProps = (User & Match & { userId: string; matchId: string })[];
 export const useMatchesRecommend = () => {
   const { data: matchesRecommend, ...rest } = useQuery<User[], Error>({
     queryKey: [queryKeys.matchesRecommend],
-    queryFn: fetchGetUsersRecommend,
+    queryFn: userAPI.getUsersRecommend,
   });
 
   const invalidateMatchQuery = () => {
@@ -29,7 +22,7 @@ export const useMatchesRecommend = () => {
     });
   };
   const requestMatch = useMutation({
-    mutationFn: fetchRequestMatch,
+    mutationFn: matchAPI.requestMatch,
     onSuccess: invalidateMatchQuery,
   }).mutateAsync;
 
@@ -40,11 +33,11 @@ export const useMatchesSent = () => {
   const { data: matchesSent, ...rest } = useQuery<MatchCardProps, Error>({
     queryKey: [queryKeys.matchesSent],
     queryFn: async () => {
-      const matches = await fetchGetMatchesSent();
+      const matches = await matchAPI.getMatchesSent();
 
       const results = await Promise.all(
         matches.map(async (match) => {
-          const user = await fetchGetUser({ userId: match.receiverId });
+          const user = await userAPI.getUser({ userId: match.receiverId });
           return { ...user, userId: user._id, ...match, matchId: match._id };
         }),
       );
@@ -63,7 +56,7 @@ export const useMatchesSent = () => {
   };
 
   const cancelMatch = useMutation({
-    mutationFn: fetchCancelMatch,
+    mutationFn: matchAPI.cancelMatch,
     onSuccess: invalidateMatchQuery,
   }).mutateAsync;
 
@@ -74,11 +67,11 @@ export const useMatchesReceived = () => {
   const { data: matchesReceived, ...rest } = useQuery<MatchCardProps, Error>({
     queryKey: [queryKeys.matchesReceived],
     queryFn: async () => {
-      const matches = await fetchGetMatchesReceived();
+      const matches = await matchAPI.getMatchesReceived();
 
       const results = await Promise.all(
         matches.map(async (match) => {
-          const user = await fetchGetUser({ userId: match.senderId });
+          const user = await userAPI.getUser({ userId: match.senderId });
           return { ...user, userId: user._id, ...match, matchId: match._id };
         }),
       );
@@ -93,12 +86,12 @@ export const useMatchesReceived = () => {
     });
 
   const acceptMatch = useMutation({
-    mutationFn: fetchAcceptMatch,
+    mutationFn: matchAPI.acceptMatch,
     onSuccess: invalidateMatchQuery,
   }).mutateAsync;
 
   const rejectMatch = useMutation({
-    mutationFn: fetchRejectMatch,
+    mutationFn: matchAPI.rejectMatch,
     onSuccess: invalidateMatchQuery,
   }).mutateAsync;
 
