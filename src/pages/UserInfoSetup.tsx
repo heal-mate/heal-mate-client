@@ -12,6 +12,7 @@ type UserInfoType = {
   gender: GenderType;
   tel: string;
   password: string;
+  kakaoID: string;
   location: LOCATION_TYPE;
 };
 
@@ -22,6 +23,7 @@ export default function UserInfoSetup() {
     gender: "MALE",
     tel: "",
     password: "",
+    kakaoID: "",
     location: LOCATIONS[0],
   });
 
@@ -79,7 +81,7 @@ export default function UserInfoSetup() {
     }
   }, [state]);
 
-  const { nickName, email, tel, password, location } = userInfos;
+  const { nickName, email, tel, password, location, kakaoID } = userInfos;
 
   return (
     <StyledContainer>
@@ -94,6 +96,16 @@ export default function UserInfoSetup() {
             type="password"
             name="password"
             value={password}
+            onChange={handleChangeInput}
+            required
+          />
+        </StyledSection>
+        <StyledSection>
+          <p>*카카오아이디 설정</p>
+          <input
+            type="text"
+            name="kakaoID"
+            value={kakaoID}
             onChange={handleChangeInput}
             required
           />
@@ -177,7 +189,7 @@ const SectionsWrapper = styled.div`
   max-width: 430px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   padding: 30px 40px;
 
   & > button {
@@ -202,7 +214,6 @@ const SectionsWrapper = styled.div`
 `;
 
 const StyledSection = styled.div`
-  margin-bottom: 20px;
   & > p {
     font-size: 16px;
     margin-bottom: 10px;
