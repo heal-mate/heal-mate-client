@@ -238,7 +238,9 @@ export default function UserDetail() {
           <div>{location}</div>
         )}
       </StyledLocationsDiv>
-      <Link to={path.account}>회원탈퇴를 원하십니까?</Link>
+      <StyledAccount>
+        <Link to={path.account}>회원탈퇴를 원하십니까?</Link>
+      </StyledAccount>
     </StyledContainer>
   );
 }
@@ -398,6 +400,18 @@ const StyledLocationsDiv = styled.div`
   & > div {
     font-size: 15px;
     color: ${({ theme }) => theme.colors.point};
+  }
+`;
+
+const StyledAccount = styled.div`
+  margin-top: 40px;
+  font-size: 12px;
+  height: 100%;
+  & > a {
+    color: #333;
+  }
+  & > a:hover {
+    text-decoration: underline;
   }
 `;
 

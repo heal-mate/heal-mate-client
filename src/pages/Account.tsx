@@ -2,7 +2,7 @@ import { path } from "@/App";
 import authAPI from "@/service/apis/auth";
 import { customConfirmAlert } from "@/utils/alert";
 import { useNavigate } from "react-router-dom";
-import { css, styled } from "styled-components";
+import { styled } from "styled-components";
 
 export default function Account() {
   const navigate = useNavigate();
@@ -25,48 +25,37 @@ export default function Account() {
   };
 
   return (
-    <div>
-      <StyledButton onClick={handleLogout}>로그아웃</StyledButton>
-      <StyledButton $warning onClick={handleWithdraw}>
-        회원탈퇴
-      </StyledButton>
-    </div>
+    <StyledContainer>
+      <StyledButtonGroup>
+        <StyledButtonList onClick={handleLogout}>로그아웃</StyledButtonList>
+        <StyledButtonList $warning onClick={handleWithdraw}>
+          회원탈퇴
+        </StyledButtonList>
+      </StyledButtonGroup>
+    </StyledContainer>
   );
 }
 
-const StyledButton = styled.button<{ $warning?: boolean }>`
-  outline: none;
-  border: none;
+const StyledContainer = styled.section`
+  width: 100%;
+`;
 
-  background-color: ${({ $warning }) => ($warning ? css`#ff4d4d` : css`#fff`)};
-  border: 1px solid
-    ${({ $warning }) =>
-      $warning
-        ? css`#ff4d4d`
-        : css`
-            ${({ theme }) => theme.colors.point}
-          `};
-  color: ${({ $warning }) =>
-    $warning
-      ? css`white`
-      : css`
-          ${({ theme }) => theme.colors.point}
-        `};
+const StyledButtonGroup = styled.ul`
+  display: flex;
+  flex-direction: column;
+
+  & > li {
+    border-bottom: 0.0625rem solid #f2f2f2;
+  }
+`;
+
+const StyledButtonList = styled.li<{ $warning?: boolean }>`
+  font-size: 14px;
   padding: 10px 20px;
+  color: ${({ $warning }) => ($warning ? "#ff4d4d" : "black")};
 
-  border-radius: 5px;
-  font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 8px;
-
   &:hover {
-    color: white;
-    background-color: ${({ $warning }) =>
-      $warning
-        ? css`#ff4d4d`
-        : css`
-            ${({ theme }) => theme.colors.point}
-          `};
+    background-color: #f6f6f6;
   }
 `;
