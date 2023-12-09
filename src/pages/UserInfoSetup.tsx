@@ -52,7 +52,7 @@ export default function UserInfoSetup() {
         );
         navigate("/login");
       })
-      .catch((err) => setErrorMessage(err.response.data));
+      .catch((err) => setErrorMessage(err.response.data?.error));
   };
 
   const handleChangeInput = (
