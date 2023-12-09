@@ -159,7 +159,7 @@ function AlertItem(
 
     readAlert(); //알람 읽기
     handleClick(); //알람 모달 화면 사라지게 하기
-    navigate(userId === senderId._id ? path.root : path.recieved);
+    navigate(userId === senderId._id ? path.sent : path.recieved);
   };
 
   return (
