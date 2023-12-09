@@ -1,37 +1,36 @@
-import { useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { styled } from "styled-components";
-import logo from "@/assets/images/logo-removebg.png";
 import { useNavigate } from "react-router-dom";
 import authAPI from "@/service/apis/auth";
-import customAlert from "@/utils/alert";
+import { FormStyle } from "@/components/common/Form.styles";
+import toast from "react-hot-toast";
+import { FunnelStyle } from "@/components/common/Funnel.styles";
 import { path } from "@/App";
 
 export default function Register() {
   const navigate = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
   const authCodeRef = useRef<HTMLInputElement>(null);
-  const [error, setError] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const nextStep = () => {
     navigate(path.setup, { state: emailRef.current!.value });
   };
 
-  const handleClickAuth = () => {
+  const handleSendAuthMail = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (emailRef.current) {
       authAPI
         .sendAuthCodeMail(emailRef.current.value)
         .then(() =>
-          customAlert(
-            "이메일이 발송되었습니다.\n5분안에 인증해주세요.",
-            true,
-            "info",
-          ),
+          toast.success("이메일이 발송되었습니다.\n5분안에 인증해주세요."),
         )
-        .catch((err) => setError(err.response.data?.error));
+        .catch((err) => setErrorMessage(err.response.data?.error));
     }
   };
 
-  const handleCheckAuth = () => {
+  const handleCheckAuth = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (authCodeRef.current && emailRef.current) {
       authAPI
         .checkAuthCode({
@@ -39,45 +38,59 @@ export default function Register() {
           authCode: authCodeRef.current.value,
         })
         .then(() => {
-          customAlert("인증되었습니다.", false, "success", 700);
+          toast.success("인증되었습니다.");
           nextStep();
         })
-        .catch((err) => setError(err.response.data?.error));
+        .catch((err) => setErrorMessage(err.response.data?.error));
     }
   };
 
   return (
-    <StyledContainer>
-      <img src={logo} alt="main logo" />
-      <StyledLayout>
-        <StyledInput
-          type="text"
-          id="email"
-          placeholder="이메일 주소를 입력해주세요"
-          ref={emailRef}
-        />
-        <StyledButton onClick={handleClickAuth}>인증메일 받기</StyledButton>
-        <StyledInput
-          type="text"
-          id="authCode"
-          placeholder="인증문자를 입력해주세요"
-          ref={authCodeRef}
-        />
-        <StyledButton onClick={handleCheckAuth}>인증하기</StyledButton>
+    <FunnelStyle.Container>
+      <FunnelStyle.StageHeaderWrapper>
+        <FunnelStyle.StageHeader>
+          <FunnelStyle.ArrowBackIcon onClick={() => navigate(-1)} />
+          회원가입
+        </FunnelStyle.StageHeader>
+      </FunnelStyle.StageHeaderWrapper>
+      <StyledContainer>
+        <FormStyle.Form onSubmit={handleSendAuthMail}>
+          <FormStyle.Label htmlFor="email">본인 인증(이메일)</FormStyle.Label>
+          <FormStyle.Input
+            type="email"
+            id="email"
+            placeholder="이메일 주소를 입력해주세요"
+            ref={emailRef}
+          />
+          <FormStyle.Button type="submit" $buttonTheme="contain">
+            인증메일 전송하기
+          </FormStyle.Button>
+        </FormStyle.Form>
+        <FormStyle.Form onSubmit={handleCheckAuth}>
+          <FormStyle.Label htmlFor="authCode">인증 문자 입력</FormStyle.Label>
+          <FormStyle.Input
+            type="text"
+            id="authCode"
+            placeholder="인증문자를 입력해주세요"
+            ref={authCodeRef}
+          />
+          <FormStyle.Button type="submit" $buttonTheme="contain">
+            인증하기
+          </FormStyle.Button>
 
-        <StyledErrorSpan>{error}</StyledErrorSpan>
-      </StyledLayout>
-    </StyledContainer>
+          {errorMessage && <StyledErrorSpan>{errorMessage}</StyledErrorSpan>}
+        </FormStyle.Form>
+      </StyledContainer>
+    </FunnelStyle.Container>
   );
 }
 
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 40px;
+  justify-content: center;
+  height: calc(100vh - ${({ theme }) => theme.size.headerHeight}px);
   & > img {
     margin: 0 auto;
     width: 150px;
@@ -85,53 +98,9 @@ const StyledContainer = styled.div`
   }
 `;
 
-const StyledLayout = styled.div`
-  width: 100%;
-  max-width: 430px;
-  display: flex;
-  flex-direction: column;
-
-  gap: 10px;
-  padding: 30px 40px;
-  border-radius: 20px;
-`;
-
-const StyledInput = styled.input`
-  padding: 20px 40px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 400;
-  border: 1px solid ${({ theme }) => theme.colors.point};
-  outline: none;
-  &::placeholder {
-    text-align: center;
-    font-size: 10px;
-  }
-`;
-
-const StyledButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.point};
-  color: white;
-  padding: 20px 40px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 400;
-  border: none;
-  outline: none;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #26403f;
-  }
-
-  &:not(:last-child) {
-    margin-bottom: 20px;
-  }
-`;
-
 const StyledErrorSpan = styled.span`
+  margin-top: 1rem;
   color: red;
-  font-size: 12px;
+  font-size: 1rem;
   text-align: center;
-  font-weight: bold;
 `;

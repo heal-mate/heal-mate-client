@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import RadioButton from "@/components/RadioButton";
 import { useNavigate, useLocation } from "react-router-dom";
 import { GenderType, LOCATION_TYPE, LOCATIONS } from "@/config/constants";
 import authAPI from "@/service/apis/auth";
-import customAlert from "@/utils/alert";
+import { FormStyle } from "@/components/common/Form.styles";
+import { FunnelStyle } from "@/components/common/Funnel.styles";
+import toast from "react-hot-toast";
 import { path } from "@/App";
 
 type UserInfoType = {
@@ -28,8 +30,10 @@ export default function UserInfoSetup() {
     location: LOCATIONS[0],
   });
 
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+
   //TODO : setErrorMessage 임시로 삭제함
-  const [errorMessage, setErrorMessage] = useState<string>();
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -39,20 +43,17 @@ export default function UserInfoSetup() {
     return items.length !== 0 ? true : false;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const msg = inputValueCheck();
-    if (msg)
-      return customAlert("필수 입력 사항을 모두 입력해주세요.", false, "info");
+    if (msg) return toast.error("필수 입력 사항을 모두 입력해주세요.");
+    if (userInfos.password !== passwordConfirm)
+      return toast.error("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 
     authAPI
       .registerUser(userInfos)
       .then(() => {
-        customAlert(
-          "회원가입 되었습니다. 로그인 해주세요.",
-          false,
-          "success",
-          700,
-        );
+        toast.success("회원가입에 성공했습니다.\n로그인 화면으로 이동합니다.");
         navigate(path.login);
       })
       .catch((err) => setErrorMessage(err.response.data?.error));
@@ -87,73 +88,82 @@ export default function UserInfoSetup() {
   return (
     <StyledContainer>
       <SectionsWrapper>
-        <StyledSection>
-          <p>이메일</p>
-          <input type="text" name="email" value={email} disabled />
-        </StyledSection>
-        <StyledSection>
-          <p>*비밀번호 설정</p>
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={handleChangeInput}
-            required
-          />
-        </StyledSection>
-        <StyledSection>
-          <p>*카카오아이디 설정</p>
-          <input
-            type="text"
-            name="kakaoID"
-            value={kakaoID}
-            onChange={handleChangeInput}
-            required
-          />
-        </StyledSection>
-        <StyledSection>
-          <p>*닉네임 설정</p>
-          <input
-            type="text"
-            name="nickName"
-            value={nickName}
-            onChange={handleChangeInput}
-            required
-          />
-        </StyledSection>
-
-        <StyledSection>
-          <p>*전화번호 설정</p>
-          <input
-            type="text"
-            name="tel"
-            value={tel}
-            onChange={handleChangeInput}
-          />
-        </StyledSection>
-
-        <StyledSection>
-          <p>*성별 설정</p>
-          <StyledButtonGroup>
-            <RadioButton
-              text="남자"
-              genderType="MALE"
-              defaultValue={userInfos.gender}
-              handleChange={handleChangeGender}
+        <FunnelStyle.Container>
+          <FunnelStyle.StageHeaderWrapper>
+            <FunnelStyle.StageHeader>
+              <FunnelStyle.ArrowBackIcon onClick={() => navigate(-1)} />
+              회원가입
+            </FunnelStyle.StageHeader>
+          </FunnelStyle.StageHeaderWrapper>
+          <FormStyle.Form onSubmit={handleSubmit}>
+            <FormStyle.Label htmlFor="email">이메일</FormStyle.Label>
+            <FormStyle.Input type="text" name="email" value={email} disabled />
+            <FormStyle.Label htmlFor="password">비밀번호</FormStyle.Label>
+            <FormStyle.Input
+              type="password"
+              name="password"
+              value={password}
+              onChange={handleChangeInput}
+              placeholder="영문, 숫자, 특수문자를 포함한 8자 이상"
+              required
             />
-            <RadioButton
-              text="여자"
-              genderType="FEMALE"
-              defaultValue={userInfos.gender}
-              handleChange={handleChangeGender}
-            />
-          </StyledButtonGroup>
-        </StyledSection>
 
-        <StyledSection>
-          <p>*지역 설정</p>
-          <StyledButtonGroup>
-            <StyledSelect
+            <FormStyle.Label htmlFor="passwordConfirm">
+              비밀번호 확인
+            </FormStyle.Label>
+            <FormStyle.Input
+              type="password"
+              name="passwordConfirm"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+              placeholder="비밀번호 확인"
+              required
+            />
+            <FormStyle.Label htmlFor="nickName">닉네임</FormStyle.Label>
+            <FormStyle.Input
+              type="text"
+              name="nickName"
+              value={nickName}
+              onChange={handleChangeInput}
+              placeholder="헬스프랜즈"
+              required
+            />
+            <FormStyle.Label htmlFor="kakaoID">카카오 아이디</FormStyle.Label>
+            <FormStyle.Input
+              type="text"
+              name="kakaoID"
+              value={kakaoID}
+              onChange={handleChangeInput}
+              placeholder="healthfriends9594"
+              required
+            />
+            <FormStyle.Label htmlFor="tel">전화번호</FormStyle.Label>
+            <FormStyle.Input
+              type="text"
+              name="tel"
+              value={tel}
+              onChange={handleChangeInput}
+              placeholder="01012341234"
+            />
+
+            <FormStyle.Label>성별</FormStyle.Label>
+            <StyledButtonGroup>
+              <RadioButton
+                text="남자"
+                genderType="MALE"
+                defaultValue={userInfos.gender}
+                handleChange={handleChangeGender}
+              />
+              <RadioButton
+                text="여자"
+                genderType="FEMALE"
+                defaultValue={userInfos.gender}
+                handleChange={handleChangeGender}
+              />
+            </StyledButtonGroup>
+
+            <FormStyle.Label>거주 지역</FormStyle.Label>
+            <FormStyle.Select
               id="select"
               name="location"
               value={location}
@@ -164,13 +174,15 @@ export default function UserInfoSetup() {
                   {place}
                 </option>
               ))}
-            </StyledSelect>
-          </StyledButtonGroup>
-        </StyledSection>
+            </FormStyle.Select>
 
-        {/* <button onClick={handleSubmit}>설정 저장</button> */}
-        <button onClick={handleSubmit}>회원가입</button>
-        {errorMessage && <StyledErrorSpan>{errorMessage}</StyledErrorSpan>}
+            {errorMessage && <StyledErrorSpan>{errorMessage}</StyledErrorSpan>}
+
+            <FormStyle.Button type="submit" $buttonTheme="contain">
+              회원가입
+            </FormStyle.Button>
+          </FormStyle.Form>
+        </FunnelStyle.Container>
       </SectionsWrapper>
     </StyledContainer>
   );
@@ -181,8 +193,7 @@ const StyledContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 40px;
+  min-height: 100vh;
 `;
 
 const SectionsWrapper = styled.div`
@@ -190,72 +201,15 @@ const SectionsWrapper = styled.div`
   max-width: 430px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 30px 40px;
-
-  & > button {
-    background-color: ${({ theme }) => theme.colors.point};
-    color: white;
-    padding: 20px 40px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 400;
-    border: none;
-    outline: none;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #26403f;
-    }
-
-    &:not(:last-child) {
-      margin-bottom: 20px;
-    }
-  }
-`;
-
-const StyledSection = styled.div`
-  & > p {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-
-  & > input {
-    width: 100%;
-    padding: 10px 20px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 400;
-    border: 1px solid ${({ theme }) => theme.colors.point};
-    outline: none;
-  }
 `;
 
 const StyledButtonGroup = styled.div`
   display: flex;
-  width: 100%;
 `;
 
 const StyledErrorSpan = styled.span`
+  margin-top: 1rem;
   color: red;
-  font-size: 12px;
+  font-size: 1rem;
   text-align: center;
-  font-weight: bold;
-`;
-
-const StyledSelect = styled.select`
-  width: 100%;
-  padding: 20px 40px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 400;
-  border: 1px solid ${({ theme }) => theme.colors.point};
-  outline: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background: transparent;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-  background-repeat: no-repeat;
-  background-position-x: 90%;
-  background-position-y: 15px;
 `;

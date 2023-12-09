@@ -16,7 +16,7 @@ export default function RadioButton({
 }: RadioButtonProps) {
   return (
     <StyledLabel htmlFor={text}>
-      <StyledInput
+      <input
         type="radio"
         id={text}
         name="gender"
@@ -32,36 +32,8 @@ const StyledLabel = styled.label`
   flex: 1;
   display: flex;
   align-items: center;
-
+  margin-top: 0 !important;
   & > p {
     margin-left: 4px;
   }
-`;
-
-const StyledInput = styled.input`
-  /* position: relative;
-  appearance: none;
-  border: 2px solid black;
-  border-radius: 10px;
-  width: 20px;
-  height: 20px;
-
-  &:checked {
-    border: 2px solid ${({ theme }) => theme.colors.point};
-    background-color: ${({ theme }) => theme.colors.point};
-  }
-  &::after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    content: "";
-    display: block;
-    width: 15px;
-    height: 15px;
-    border: 2px solid black;
-    border-radius: 10px;
-    border: 2px solid white;
-    background-color: ${({ theme }) => theme.colors.point};
-  } */
 `;
