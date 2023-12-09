@@ -45,25 +45,9 @@ export default function Cards(props: CardProps) {
 }
 
 export function CardItem(props: MatchUserInfoProps) {
-  const {
-    nickName,
-    profileImageSrc,
-    introduction,
-    condition,
-    buttons,
-    kakaoID,
-  } = props;
+  const { nickName, profileImageSrc, introduction, condition, buttons } = props;
   const { location, benchPress, squat, deadLift, gender, fitnessYears } =
     condition;
-
-  const handleCopyClipBoard = async () => {
-    try {
-      await navigator.clipboard.writeText(kakaoID);
-      alert("클립보드에 링크가 복사되었습니다.");
-    } catch (e) {
-      alert("복사에 실패하였습니다");
-    }
-  };
 
   return (
     <StyledCardItemContainer>
@@ -80,23 +64,14 @@ export function CardItem(props: MatchUserInfoProps) {
         <StyledTag>S {squat}</StyledTag>
         <StyledTag>D {deadLift}</StyledTag>
       </StyledTagContainer>
-      <CardButtons
-        buttons={buttons}
-        handleCopyClipBoard={handleCopyClipBoard}
-      />
+      <CardButtons buttons={buttons} />
     </StyledCardItemContainer>
   );
 }
 
-type ButtonTheme = "outlined" | "contained";
+type ButtonTheme = "outlined" | "contained" | "kakao";
 
-function CardButtons({
-  buttons,
-  handleCopyClipBoard,
-}: {
-  buttons: ButtonProps[];
-  handleCopyClipBoard: () => void;
-}) {
+function CardButtons({ buttons }: { buttons: ButtonProps[] }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = async (callback: ButtonProps["onClickCallback"]) => {
@@ -122,11 +97,6 @@ function CardButtons({
               >
                 {text}
               </StyledButton>
-              {text === "성사된 요청" && (
-                <StyledKaKaoIDButton onClick={handleCopyClipBoard}>
-                  카카오 아이디 복사하기
-                </StyledKaKaoIDButton>
-              )}
             </>
           )}
         </Fragment>
@@ -191,16 +161,22 @@ const StyledTag = styled.p`
 `;
 
 const StyledButton = styled.button<{ $variant: ButtonTheme }>`
-  ${(props) =>
-    props.$variant === "outlined"
-      ? css`
+  ${({ $variant }) => {
+    switch ($variant) {
+      case "outlined":
+        return css`
           background-color: #ffffff;
           border: 1px solid #2b2b2b;
-        `
-      : css`
+        `;
+      case "contained":
+        return css`
           background-color: #2b2b2b;
           color: #ffffff;
-        `}
+        `;
+      default:
+        return "";
+    }
+  }}
 
   border-radius: 3px;
   width: 100%;
@@ -217,22 +193,4 @@ const StyledButton = styled.button<{ $variant: ButtonTheme }>`
 const StyledHorizenContainer = styled.div`
   display: flex;
   gap: 8px;
-`;
-
-const StyledKaKaoIDButton = styled.button`
-  width: 100%;
-  border: 1px solid #fee500;
-  background-color: #fee500;
-  outline: none;
-  color: #000000 85%;
-  border-radius: 3px;
-  width: 100%;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 8px;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: default;
-  }
 `;

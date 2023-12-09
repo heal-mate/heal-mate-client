@@ -1,6 +1,7 @@
 import { MatchStatus, matchStatusDict } from "@/service/apis/match.type";
 import Cards from "./Cards";
 import { useMatchesReceived } from "./Cards.hooks";
+import toast from "react-hot-toast";
 
 export default function CardsReceived({
   currentFilter,
@@ -46,6 +47,21 @@ export default function CardsReceived({
                         disabled: true,
                         onClickCallback: () => null,
                       },
+                      {
+                        text: "연락하기",
+                        theme: "contained",
+                        disabled: true,
+                        onClickCallback: async () => {
+                          try {
+                            await navigator.clipboard.writeText(e.kakaoID);
+                            toast.success(
+                              "상대방의 카카오톡 아이디가\n클립보드에 복사되었습니다.",
+                            );
+                          } catch (e) {
+                            toast.error("복사에 실패하였습니다");
+                          }
+                        },
+                      },
                     ]
                   : e.status === matchStatusDict.rejected
                     ? [
@@ -53,7 +69,7 @@ export default function CardsReceived({
                           text: "거절된 요청",
                           theme: "contained",
                           disabled: true,
-                          onClickCallback: () => null,
+                          onClickCallback: async () => null,
                         },
                       ]
                     : [],
