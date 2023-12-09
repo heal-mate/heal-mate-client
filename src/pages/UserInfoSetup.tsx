@@ -43,13 +43,24 @@ export default function UserInfoSetup() {
     return items.length !== 0 ? true : false;
   };
 
+  // 비밀번호 유효성 검사
+  const passwordValueCheck = () => {
+    const pwRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return pwRegex.test(userInfos.password);
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const msg = inputValueCheck();
     if (msg) return toast.error("필수 입력 사항을 모두 입력해주세요.");
     if (userInfos.password !== passwordConfirm)
       return toast.error("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-
+    const passwordCheckResult = passwordValueCheck();
+    if (!passwordCheckResult)
+      return toast.error(
+        "비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.",
+      );
     authAPI
       .registerUser(userInfos)
       .then(() => {
