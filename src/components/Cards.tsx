@@ -7,7 +7,7 @@ type ButtonProps = {
   text: string;
   theme: ButtonTheme;
   disabled?: true;
-  onClickCallback: () => Promise<void> | null;
+  onClickCallback: () => Promise<unknown> | null;
 };
 
 type MatchUserInfoProps = Pick<
@@ -110,7 +110,9 @@ function CardButtons({
       {buttons.map(({ text, theme, disabled, onClickCallback }, i) => (
         <Fragment key={"CardButton" + i}>
           {isLoading ? (
-            "loading..."
+            <StyledButton $variant={theme} disabled>
+              loading...
+            </StyledButton>
           ) : (
             <>
               <StyledButton
