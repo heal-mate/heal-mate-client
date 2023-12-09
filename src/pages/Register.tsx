@@ -46,10 +46,12 @@ export default function Register() {
 
   return (
     <FunnelStyle.Container>
-      <FunnelStyle.StageHeader>
-        <FunnelStyle.ArrowBackIcon onClick={() => navigate(-1)} />
-        회원가입
-      </FunnelStyle.StageHeader>
+      <FunnelStyle.StageHeaderWrapper>
+        <FunnelStyle.StageHeader>
+          <FunnelStyle.ArrowBackIcon onClick={() => navigate(-1)} />
+          회원가입
+        </FunnelStyle.StageHeader>
+      </FunnelStyle.StageHeaderWrapper>
       <StyledContainer>
         <FormStyle.Form onSubmit={handleSendAuthMail}>
           <FormStyle.Label htmlFor="email">본인 인증(이메일)</FormStyle.Label>

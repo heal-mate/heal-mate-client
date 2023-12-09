@@ -47,12 +47,12 @@ export default function UserInfoSetup() {
     const msg = inputValueCheck();
     if (msg) return toast.error("필수 입력 사항을 모두 입력해주세요.");
     if (userInfos.password !== passwordConfirm)
-      return toast.error("비밀번호와 비밀번화 확인이 일치하지 않습니다.");
+      return toast.error("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 
     authAPI
       .registerUser(userInfos)
       .then(() => {
-        toast.success("회원가입에 성공했습니다. 로그인 화면으로 이동합니다.");
+        toast.success("회원가입에 성공했습니다.\n로그인 화면으로 이동합니다.");
         navigate("/login");
       })
       .catch((err) => setErrorMessage(err.response.data?.error));
@@ -88,12 +88,12 @@ export default function UserInfoSetup() {
     <StyledContainer>
       <SectionsWrapper>
         <FunnelStyle.Container>
-          <SectionsWrapper>
+          <FunnelStyle.StageHeaderWrapper>
             <FunnelStyle.StageHeader>
               <FunnelStyle.ArrowBackIcon onClick={() => navigate(-1)} />
               회원가입
             </FunnelStyle.StageHeader>
-          </SectionsWrapper>
+          </FunnelStyle.StageHeaderWrapper>
           <FormStyle.Form onSubmit={handleSubmit}>
             <FormStyle.Label htmlFor="email">이메일</FormStyle.Label>
             <FormStyle.Input type="text" name="email" value={email} disabled />
