@@ -6,11 +6,11 @@ import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
 import UserInfoSetup from "./pages/UserInfoSetup";
 import Register from "./pages/Register";
-import PrivateRoute from "./components/PrivateRoute";
 import { LoadingSpinnerAtom } from "./recoils/loadingSpinnerAtom";
 import { useRecoilValue } from "recoil";
 import LoadingSpinnerPotal from "./potals/LoadingSpinnerPotal";
 import Sent from "./pages/Sent";
+import authAPI from "./service/apis/auth";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
@@ -26,7 +26,11 @@ export const path = {
 const router = createBrowserRouter([
   {
     path: path.root,
-    element: <PrivateRoute />,
+    element: "",
+    loader: async () => {
+      return authAPI.checkUserAuth();
+    },
+    errorElement: <Login />,
     children: [
       {
         path: "/",
