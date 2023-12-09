@@ -7,6 +7,7 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme.ts";
 import { queryClient } from "./service/store/reactQuery.ts";
 import { RecoilRoot } from "recoil";
+import { Toaster } from "react-hot-toast";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -14,6 +15,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
           <GlobalStyle />
+          <Toaster />
           <App />
         </RecoilRoot>
       </QueryClientProvider>
