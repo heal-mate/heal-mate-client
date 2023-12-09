@@ -13,13 +13,15 @@ import Sent from "./pages/Sent";
 import authAPI from "./service/apis/auth";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./components/ErrorFallback";
+import Account from "./pages/Account";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
   root: "/",
-  tab1: "/recieved",
-  tab2: "/sent",
-  tab3: "/mypage",
+  recieved: "/recieved",
+  sent: "/sent",
+  mypage: "/mypage",
+  account: "/mypage/account",
   login: "/login",
   register: "/register",
   setup: "/setup",
@@ -43,15 +45,15 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        path: path.tab1,
+        path: path.recieved,
         element: <Received />,
       },
       {
-        path: path.tab2,
+        path: path.sent,
         element: <Sent />,
       },
       {
-        path: path.tab3,
+        path: path.mypage,
         element: <Mypage />,
       },
     ],
@@ -67,6 +69,10 @@ const router = createBrowserRouter([
   {
     path: path.setup,
     element: <UserInfoSetup />,
+  },
+  {
+    path: path.account,
+    element: <Account />,
   },
 ]);
 

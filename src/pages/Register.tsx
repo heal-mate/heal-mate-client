@@ -4,6 +4,7 @@ import logo from "@/assets/images/logo-removebg.png";
 import { useNavigate } from "react-router-dom";
 import authAPI from "@/service/apis/auth";
 import customAlert from "@/utils/alert";
+import { path } from "@/App";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function Register() {
   const [error, setError] = useState<string>("");
 
   const nextStep = () => {
-    navigate("/setup", { state: emailRef.current!.value });
+    navigate(path.setup, { state: emailRef.current!.value });
   };
 
   const handleClickAuth = () => {

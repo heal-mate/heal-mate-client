@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import authAPI from "@/service/apis/auth";
 import customAlert from "@/utils/alert";
+import { path } from "@/App";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function Login() {
         .then((res) => {
           localStorage.setItem("user", JSON.stringify(res));
           customAlert("로그인 되었습니다.");
-          navigate("/");
+          navigate(path.root);
         })
         .catch((err) => {
           if (err instanceof AxiosError && err.response) {
@@ -54,7 +55,9 @@ export default function Login() {
           ref={passwordRef}
         />
         <StyledButton onClick={handleClick}>로그인</StyledButton>
-        <StyledSpan onClick={() => navigate("/register")}>회원가입</StyledSpan>
+        <StyledSpan onClick={() => navigate(path.register)}>
+          회원가입
+        </StyledSpan>
         <StyledErrorSpan>{error}</StyledErrorSpan>
       </StyledLayout>
     </StyledContainer>
