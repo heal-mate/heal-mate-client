@@ -12,7 +12,7 @@ type ButtonProps = {
 
 type MatchUserInfoProps = Pick<
   User,
-  "nickName" | "profileImageSrc" | "condition" | "introduction"
+  "nickName" | "profileImageSrc" | "condition" | "introduction" | "kakaoID"
 > & { buttons: ButtonProps[] };
 
 export type CardProps = {
