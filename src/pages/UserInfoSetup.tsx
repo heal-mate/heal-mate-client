@@ -7,6 +7,7 @@ import authAPI from "@/service/apis/auth";
 import { FormStyle } from "@/components/common/Form.styles";
 import { FunnelStyle } from "@/components/common/Funnel.styles";
 import toast from "react-hot-toast";
+import { path } from "@/App";
 
 type UserInfoType = {
   nickName: string;
@@ -53,7 +54,7 @@ export default function UserInfoSetup() {
       .registerUser(userInfos)
       .then(() => {
         toast.success("회원가입에 성공했습니다.\n로그인 화면으로 이동합니다.");
-        navigate("/login");
+        navigate(path.login);
       })
       .catch((err) => setErrorMessage(err.response.data?.error));
   };

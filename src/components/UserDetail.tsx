@@ -1,4 +1,4 @@
-import { css, styled } from "styled-components";
+import { styled } from "styled-components";
 import { MdArrowBack } from "react-icons/md";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Slider from "rc-slider";
@@ -16,10 +16,8 @@ import { Location, User } from "@/service/apis/user.type";
 import { uploadImage } from "@/service/apis/uploadImage";
 import { useSetRecoilState } from "recoil";
 import { LoadingSpinnerAtom } from "@/recoils/loadingSpinnerAtom";
-import authAPI from "@/service/apis/auth";
+import { Link, useNavigate } from "react-router-dom";
 import { path } from "@/App";
-import { useNavigate } from "react-router-dom";
-import { customConfirmAlert } from "@/utils/alert";
 
 export default function UserDetail() {
   const setLoadingSpinner = useSetRecoilState(LoadingSpinnerAtom);
@@ -135,24 +133,6 @@ export default function UserDetail() {
     handleToggleEditMode();
   };
 
-  const handleLogout = async () => {
-    await authAPI.logoutUser();
-    navigate(path.login);
-  };
-
-  const handleWithdraw = async () => {
-    customConfirmAlert("정말 탈퇴하시겠습니까?")
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          await authAPI.withdrawUser();
-          navigate(path.login);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   if (!user) return <div>loading</div>;
 
   const { nickName, introduction, profileImageSrc, condition } = user;
@@ -258,10 +238,9 @@ export default function UserDetail() {
           <div>{location}</div>
         )}
       </StyledLocationsDiv>
-      <StyledButton onClick={handleLogout}>로그아웃</StyledButton>
-      <StyledButton $warning onClick={handleWithdraw}>
-        회원탈퇴
-      </StyledButton>
+      <StyledAccount>
+        <Link to={path.account}>회원탈퇴를 원하십니까?</Link>
+      </StyledAccount>
     </StyledContainer>
   );
 }
@@ -387,43 +366,6 @@ const StyledProfile = styled.div`
   }
 `;
 
-const StyledButton = styled.button<{ $warning?: boolean }>`
-  outline: none;
-  border: none;
-
-  background-color: ${({ $warning }) => ($warning ? css`#ff4d4d` : css`#fff`)};
-  border: 1px solid
-    ${({ $warning }) =>
-      $warning
-        ? css`#ff4d4d`
-        : css`
-            ${({ theme }) => theme.colors.point}
-          `};
-  color: ${({ $warning }) =>
-    $warning
-      ? css`white`
-      : css`
-          ${({ theme }) => theme.colors.point}
-        `};
-  padding: 10px 20px;
-
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 8px;
-
-  &:hover {
-    color: white;
-    background-color: ${({ $warning }) =>
-      $warning
-        ? css`#ff4d4d`
-        : css`
-            ${({ theme }) => theme.colors.point}
-          `};
-  }
-`;
-
 const StyledFileInput = styled.div`
   color: black;
 `;
@@ -458,6 +400,18 @@ const StyledLocationsDiv = styled.div`
   & > div {
     font-size: 15px;
     color: ${({ theme }) => theme.colors.point};
+  }
+`;
+
+const StyledAccount = styled.div`
+  margin-top: 40px;
+  font-size: 12px;
+  height: 100%;
+  & > a {
+    color: #333;
+  }
+  & > a:hover {
+    text-decoration: underline;
   }
 `;
 

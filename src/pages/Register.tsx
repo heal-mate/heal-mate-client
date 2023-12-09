@@ -5,6 +5,7 @@ import authAPI from "@/service/apis/auth";
 import { FormStyle } from "@/components/common/Form.styles";
 import toast from "react-hot-toast";
 import { FunnelStyle } from "@/components/common/Funnel.styles";
+import { path } from "@/App";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Register() {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const nextStep = () => {
-    navigate("/setup", { state: emailRef.current!.value });
+    navigate(path.setup, { state: emailRef.current!.value });
   };
 
   const handleSendAuthMail = (e: FormEvent<HTMLFormElement>) => {

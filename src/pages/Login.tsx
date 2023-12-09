@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { useSetRecoilState } from "recoil";
 import { LoadingSpinnerAtom } from "@/recoils/loadingSpinnerAtom";
 import { FormStyle } from "@/components/common/Form.styles";
-// import customAlert from "@/utils/alert";
+import { path } from "@/App";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -29,8 +29,7 @@ export default function Login() {
         .then((res) => {
           localStorage.setItem("user", JSON.stringify(res));
           toast.success("로그인 되었습니다.");
-          // customAlert("로그인 되었습니다.");
-          navigate("/");
+          navigate(path.root);
         })
         .catch((err) => {
           if (err instanceof AxiosError && err.response) {
@@ -45,7 +44,6 @@ export default function Login() {
         });
     } else {
       toast.error("필수 사항을 입력해주세요.");
-      // customAlert("필수 사항을 입력해주세요.", false, "warning");
     }
   };
 
@@ -73,7 +71,7 @@ export default function Login() {
         </FormStyle.Button>
         <StyledSpan>
           회원이 아니신가요?
-          <span onClick={() => navigate("/register")}>회원가입하기</span>
+          <span onClick={() => navigate(path.register)}>회원가입하기</span>
         </StyledSpan>
         <StyledErrorSpan>{error}</StyledErrorSpan>
       </FormStyle.Form>

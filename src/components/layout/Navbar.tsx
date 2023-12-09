@@ -17,19 +17,19 @@ export default function Navbar() {
           </NavLink>
         </StyledList>
         <StyledList>
-          <NavLink to={path.tab1}>
+          <NavLink to={path.recieved}>
             <StyledMdMailOutline />
             <span>받은 요청</span>
           </NavLink>
         </StyledList>
         <StyledList>
-          <NavLink to={path.tab2}>
+          <NavLink to={path.sent}>
             <StyledIoChatboxEllipsesOutline />
             <span>보낸 요청</span>
           </NavLink>
         </StyledList>
         <StyledList>
-          <NavLink to={path.tab3}>
+          <NavLink to={path.mypage}>
             <StyledLuUser />
             <span>마이페이지</span>
           </NavLink>
