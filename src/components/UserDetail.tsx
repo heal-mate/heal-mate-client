@@ -20,6 +20,7 @@ import authAPI from "@/service/apis/auth";
 import { path } from "@/App";
 import { useNavigate } from "react-router-dom";
 import { customConfirmAlert } from "@/utils/alert";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function UserDetail() {
   const setLoadingSpinner = useSetRecoilState(LoadingSpinnerAtom);
@@ -153,7 +154,7 @@ export default function UserDetail() {
       });
   };
 
-  if (!user) return <div>loading</div>;
+  if (!user) return <LoadingSpinner />;
 
   const { nickName, introduction, profileImageSrc, condition } = user;
   const { benchPress, deadLift, fitnessYears, location, squat } = condition;
