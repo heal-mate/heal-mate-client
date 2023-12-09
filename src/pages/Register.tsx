@@ -1,6 +1,6 @@
 import { FormEvent, useRef, useState } from "react";
 import { styled } from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import authAPI from "@/service/apis/auth";
 import { FormStyle } from "@/components/common/Form.styles";
 import toast from "react-hot-toast";
@@ -8,20 +8,26 @@ import { FunnelStyle } from "@/components/common/Funnel.styles";
 import { path } from "@/App";
 
 export default function Register() {
+  const { state: isUpdatePassword } = useLocation();
+
   const navigate = useNavigate();
   const emailRef = useRef<HTMLInputElement>(null);
   const authCodeRef = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const nextStep = () => {
-    navigate(path.setup, { state: emailRef.current!.value });
+    isUpdatePassword
+      ? navigate(path.updatePassword, {
+          state: { email: emailRef.current!.value, isUpdatePassword },
+        })
+      : navigate(path.setup, { state: emailRef.current!.value });
   };
 
   const handleSendAuthMail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (emailRef.current) {
       authAPI
-        .sendAuthCodeMail(emailRef.current.value)
+        .sendAuthCodeMail(emailRef.current.value, isUpdatePassword)
         .then(() =>
           toast.success("이메일이 발송되었습니다.\n5분안에 인증해주세요."),
         )
@@ -50,7 +56,7 @@ export default function Register() {
       <FunnelStyle.StageHeaderWrapper>
         <FunnelStyle.StageHeader>
           <FunnelStyle.ArrowBackIcon onClick={() => navigate(-1)} />
-          회원가입
+          {isUpdatePassword ? "비밀번호 변경하기" : "회원가입"}
         </FunnelStyle.StageHeader>
       </FunnelStyle.StageHeaderWrapper>
       <StyledContainer>
