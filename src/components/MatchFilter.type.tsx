@@ -1,3 +1,5 @@
+import { LOCATION_TYPE } from "@/config/constants";
+
 export type ExerciseType = {
   id: number;
   name: string;
@@ -13,7 +15,7 @@ export type FilterStatus = {
   deadLift: [number, number] | null;
   fitnessYears: [number, number] | null;
   gender: "MALE" | "FEMALE" | null;
-  location: Location[] | null;
+  location: LOCATION_TYPE[] | null;
 };
 
 export type GenderType = "MALE" | "FEMALE" | null;
@@ -22,16 +24,3 @@ export type CheckedExercise = {
   squat: boolean;
   deadLift: boolean;
 };
-
-export const locations = [
-  "잠실",
-  "송파",
-  "성수",
-  "삼성",
-  "청담",
-  "역삼",
-  "대치",
-  "개포",
-] as const;
-
-export type Location = (typeof locations)[number];

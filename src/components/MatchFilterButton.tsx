@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { styled, css } from "styled-components";
-import { StyledButton } from "@/components/FilterButtons.styles";
+import {
+  StyledButton,
+  StyledButtonBox,
+  StyledButtonContainer,
+} from "@/components/FilterButtons.styles";
 import { PiSlidersHorizontalLight } from "react-icons/pi";
 import { IoIosArrowBack } from "react-icons/io";
 import MatchFilter from "./MatchFilter";
 import scrollBlock from "@/utils/scrollBlock";
-import { changeUserConditionExpect } from "@/service/apis/user";
+import userAPI from "@/service/apis/user";
 import Swal from "sweetalert2";
 import { queryClient, queryKeys } from "@/service/store/reactQuery";
 import { Condition } from "@/service/apis/user.type";
@@ -35,7 +39,7 @@ export default function MatchFilterButton() {
       confirmButtonText: "확인",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await changeUserConditionExpect(filters!);
+        await userAPI.changeUserConditionExpect(filters!);
         queryClient.invalidateQueries({ queryKey: queryKeys.matchesRecommend });
         setIsShowFilter((prev) => !prev);
       }
@@ -44,22 +48,26 @@ export default function MatchFilterButton() {
 
   return (
     <>
-      <StyledButton onClick={handleClick}>
-        <PiSlidersHorizontalLight />
-        메이트찾기
-      </StyledButton>
-      <StyledMatchFilter $isShowFilter={isShowFilter}>
-        <StyledMatchFilterHeader>
-          <StyledMatchFilterInner>
-            <div>
-              <StyledIoIosArrowBack onClick={handleClick} />
-              <StyledTitle>메이트 조건 설정</StyledTitle>
-            </div>
-            <span onClick={changeMatchFilter}>완료</span>
-          </StyledMatchFilterInner>
-        </StyledMatchFilterHeader>
-        <MatchFilter handleChangeFilters={handleChangeFilters} />
-      </StyledMatchFilter>
+      <StyledButtonContainer>
+        <StyledButtonBox>
+          <StyledButton onClick={handleClick}>
+            <PiSlidersHorizontalLight />
+            메이트찾기
+          </StyledButton>
+          <StyledMatchFilter $isShowFilter={isShowFilter}>
+            <StyledMatchFilterHeader>
+              <StyledMatchFilterInner>
+                <div>
+                  <StyledIoIosArrowBack onClick={handleClick} />
+                  <StyledTitle>메이트 조건 설정</StyledTitle>
+                </div>
+                <span onClick={changeMatchFilter}>완료</span>
+              </StyledMatchFilterInner>
+            </StyledMatchFilterHeader>
+            <MatchFilter handleChangeFilters={handleChangeFilters} />
+          </StyledMatchFilter>
+        </StyledButtonBox>
+      </StyledButtonContainer>
     </>
   );
 }
@@ -70,10 +78,10 @@ const StyledMatchFilter = styled.div<{ $isShowFilter: boolean }>`
   right: -100%;
   width: 100%;
   height: 100%;
-  z-index: 888;
   background-color: #fff;
   transition: right 0.2s ease-in-out;
   overflow-y: auto;
+  padding: 54px 20px;
   ${(props) =>
     props.$isShowFilter &&
     css`
@@ -87,14 +95,15 @@ const StyledMatchFilterHeader = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.size.headerHeight}px;
   background-color: #fff;
-  position: sticky;
+  /* position: sticky;
   z-index: 1000;
   top: 0;
-  left: 0;
+  left: 0; */
+  z-index: 2;
 `;
 
 const StyledMatchFilterInner = styled.div`
-  width: 85%;
+  width: 100%;
   height: 100%;
   margin: 0 auto;
   padding: 0.75rem 0;

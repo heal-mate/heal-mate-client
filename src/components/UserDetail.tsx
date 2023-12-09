@@ -11,11 +11,13 @@ import {
   WEIGHT_MARKS,
 } from "@/config/constants";
 import { MarkObj } from "rc-slider/lib/Marks";
-import { fetchGetUserMine, fetchUpdateMe } from "@/service/apis/user";
+import userAPI from "@/service/apis/user";
 import { Location, User } from "@/service/apis/user.type";
 import { uploadImage } from "@/service/apis/uploadImage";
 import { useSetRecoilState } from "recoil";
 import { LoadingSpinnerAtom } from "@/recoils/loadingSpinnerAtom";
+import { Link, useNavigate } from "react-router-dom";
+import { path } from "@/App";
 
 export default function UserDetail() {
   const setLoadingSpinner = useSetRecoilState(LoadingSpinnerAtom);
@@ -23,9 +25,11 @@ export default function UserDetail() {
   const initialUser = useRef<User | null>(null);
   const [editMode, setEditMode] = useState(false);
   const profileImgRef = useRef<HTMLInputElement | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchGetUserMine()
+    userAPI
+      .getUserMine()
       .then((userData) => {
         setUser(userData);
         initialUser.current = userData;
@@ -110,7 +114,7 @@ export default function UserDetail() {
       const blob = await res.blob();
       imgUrl = await uploadImage(blob);
     }
-    await fetchUpdateMe({
+    await userAPI.updateMe({
       ...user,
       profileImageSrc: imgUrl,
     });
@@ -137,7 +141,11 @@ export default function UserDetail() {
   return (
     <StyledContainer>
       <StyledHeader>
-        <StyledArrowBackIcon onClick={() => {}} />
+        <StyledArrowBackIcon
+          onClick={() => {
+            navigate(-1);
+          }}
+        />
         <h2>마이페이지</h2>
         {editMode ? (
           <button onClick={handleSave}>저장</button>
@@ -230,6 +238,9 @@ export default function UserDetail() {
           <div>{location}</div>
         )}
       </StyledLocationsDiv>
+      <StyledAccount>
+        <Link to={path.account}>회원탈퇴를 원하십니까?</Link>
+      </StyledAccount>
     </StyledContainer>
   );
 }
@@ -293,7 +304,7 @@ function Rangeinput({
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 8px;
+  padding: 0 30px;
 `;
 
 const StyledHeader = styled.div`
@@ -389,6 +400,18 @@ const StyledLocationsDiv = styled.div`
   & > div {
     font-size: 15px;
     color: ${({ theme }) => theme.colors.point};
+  }
+`;
+
+const StyledAccount = styled.div`
+  margin-top: 40px;
+  font-size: 12px;
+  height: 100%;
+  & > a {
+    color: #333;
+  }
+  & > a:hover {
+    text-decoration: underline;
   }
 `;
 

@@ -4,51 +4,63 @@ import Received from "./pages/Received";
 import Mypage from "./pages/Mypage";
 import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
-import Chat from "./pages/Chat";
 import UserInfoSetup from "./pages/UserInfoSetup";
 import Register from "./pages/Register";
-import PrivateRoute from "./components/PrivateRoute";
 import { LoadingSpinnerAtom } from "./recoils/loadingSpinnerAtom";
 import { useRecoilValue } from "recoil";
 import LoadingSpinnerPotal from "./potals/LoadingSpinnerPotal";
+import Sent from "./pages/Sent";
+import authAPI from "./service/apis/auth";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "./components/ErrorFallback";
+import Account from "./pages/Account";
+import UpdatePassword from "./pages/UpdatePassword";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
   root: "/",
-  tab1: "/recieved",
-  tab2: "/chat",
-  tab3: "/mypage",
+  recieved: "/recieved",
+  sent: "/sent",
+  mypage: "/mypage",
+  account: "/mypage/account",
   login: "/login",
   register: "/register",
   setup: "/setup",
+  updatePassword: "/update/password",
 };
 
 const router = createBrowserRouter([
   {
     path: path.root,
-    element: <PrivateRoute />,
+    element: (
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <Layout />
+      </ErrorBoundary>
+    ),
+    loader: async () => {
+      return authAPI.checkUserAuth();
+    },
+    errorElement: <Login />,
     children: [
       {
-        path: "/",
-        element: <Layout />,
-        children: [
-          {
-            path: path.root,
-            element: <Main />,
-          },
-          {
-            path: path.tab1,
-            element: <Received />,
-          },
-          {
-            path: path.tab2,
-            element: <Chat />,
-          },
-          {
-            path: path.tab3,
-            element: <Mypage />,
-          },
-        ],
+        path: path.root,
+        element: <Main />,
+      },
+      {
+        path: path.recieved,
+        element: <Received />,
+      },
+      {
+        path: path.sent,
+        element: <Sent />,
+      },
+      {
+        path: path.mypage,
+        element: <Mypage />,
+      },
+      {
+        path: path.account,
+        element: <Account />,
       },
     ],
   },
@@ -63,6 +75,10 @@ const router = createBrowserRouter([
   {
     path: path.setup,
     element: <UserInfoSetup />,
+  },
+  {
+    path: path.updatePassword,
+    element: <UpdatePassword />,
   },
 ]);
 

@@ -37,12 +37,14 @@ export default function Header() {
               <img src={logo} alt="logo" />
             </a>
           </StyledLogo>
-          <StyledBell
-            onClick={handleClick}
-            $isOn={hasUnreadAlerts > 0 ? true : false}
-          >
-            <StyledGoBell />
-          </StyledBell>
+          <StyledIcons>
+            <StyledBell
+              onClick={handleClick}
+              $isOn={hasUnreadAlerts > 0 ? true : false}
+            >
+              <StyledGoBell />
+            </StyledBell>
+          </StyledIcons>
         </StyledInner>
       </StyledHeader>
       {/* Alert Component */}
@@ -157,7 +159,7 @@ function AlertItem(
 
     readAlert(); //알람 읽기
     handleClick(); //알람 모달 화면 사라지게 하기
-    navigate(userId === senderId._id ? path.root : path.tab1);
+    navigate(userId === senderId._id ? path.sent : path.recieved);
   };
 
   return (
@@ -237,8 +239,14 @@ const StyledLogo = styled.h1`
     }
   }
 `;
-
-const StyledBell = styled.section<{ $isOn: boolean }>`
+const StyledIcons = styled.section`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+`;
+const StyledBell = styled.div<{ $isOn: boolean }>`
   position: relative;
   cursor: pointer;
   height: 1.625rem;

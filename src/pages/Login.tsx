@@ -1,65 +1,86 @@
-import { useRef, useState, useEffect } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { styled } from "styled-components";
 import logo from "@/assets/images/logo-removebg.png";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { fetchLoginUser, fetchKaKaoLoginUser } from "@/service/apis/user";
+import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
+import authAPI from "@/service/apis/auth";
+import toast from "react-hot-toast";
+import { useSetRecoilState } from "recoil";
+import { LoadingSpinnerAtom } from "@/recoils/loadingSpinnerAtom";
+import { FormStyle } from "@/components/common/Form.styles";
+import { path } from "@/App";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>("");
+  const setIsLoading = useSetRecoilState(LoadingSpinnerAtom);
 
-  const handleClick = () => {
+  const handleLogin = (e: FormEvent) => {
+    e.preventDefault();
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
 
     if (email && password) {
-      fetchLoginUser({ email, password })
+      setIsLoading(true);
+      authAPI
+        .loginUser({ email, password })
         .then((res) => {
           localStorage.setItem("user", JSON.stringify(res));
-          alert("로그인 되었습니다.");
-          navigate("/");
+          toast.success("로그인 되었습니다.");
+          navigate(path.root);
         })
         .catch((err) => {
-          console.log("err: ", err);
-          setError(err.response.data);
+          if (err instanceof AxiosError && err.response) {
+            console.log("err: ", err);
+            setError(err.response.data?.error);
+          } else {
+            console.error(err);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     } else {
-      alert("필수 사항을 입력해주세요.");
+      toast.error("필수 사항을 입력해주세요.");
     }
   };
-
-  useEffect(() => {
-    const code = searchParams.get("code");
-    if (code) {
-      fetchKaKaoLoginUser(code)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-    }
-  }, [searchParams]);
 
   return (
     <StyledContainer>
       <img src={logo} alt="main logo" />
-      <StyledLayout>
-        <StyledInput
-          type="text"
+      <FormStyle.Form onSubmit={handleLogin}>
+        <FormStyle.Label htmlFor="email">이메일</FormStyle.Label>
+        <FormStyle.Input
+          type="email"
           id="email"
-          placeholder="이메일 주소를 입력해주세요"
+          name="email"
+          placeholder="helf9594@heathfriends.com"
           ref={emailRef}
         />
-        <StyledInput
+        <FormStyle.Label htmlFor="email">비밀번호</FormStyle.Label>
+        <FormStyle.Input
           type="password"
           id="password"
-          placeholder="비밀번호를 입력해주세요"
+          placeholder="영문, 숫자, 특수문자를 포함한 8자 이상"
           ref={passwordRef}
         />
-        <StyledButton onClick={handleClick}>로그인</StyledButton>
-        <StyledSpan onClick={() => navigate("/register")}>회원가입</StyledSpan>
+        <FormStyle.Button $buttonTheme="contain" onClick={handleLogin}>
+          로그인
+        </FormStyle.Button>
+        <StyledSpan>
+          회원이 아니신가요?
+          <span onClick={() => navigate(path.register)}>회원가입하기</span>
+        </StyledSpan>
+        <StyledSpan>
+          비밀번호를 잊으셨나요?
+          <span onClick={() => navigate(path.register, { state: true })}>
+            비밀번호 변경하기
+          </span>
+        </StyledSpan>
         <StyledErrorSpan>{error}</StyledErrorSpan>
-      </StyledLayout>
+      </FormStyle.Form>
     </StyledContainer>
   );
 }
@@ -69,69 +90,28 @@ const StyledContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 0.875rem;
   height: 100vh;
-  padding: 40px;
   & > img {
     margin: 0 auto;
     width: 150px;
-    margin-bottom: 20px;
-  }
-`;
-
-const StyledLayout = styled.div`
-  width: 100%;
-  max-width: 430px;
-  display: flex;
-  flex-direction: column;
-
-  gap: 10px;
-  padding: 30px 40px;
-  border-radius: 20px;
-`;
-
-const StyledInput = styled.input`
-  padding: 20px 40px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 400;
-  border: 1px solid ${({ theme }) => theme.colors.point};
-  outline: none;
-  &::placeholder {
-    text-align: center;
-    font-size: 10px;
-  }
-`;
-
-const StyledButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.point};
-  color: white;
-  padding: 20px 40px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 400;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  &:hover {
-    background-color: #26403f;
   }
 `;
 
 const StyledErrorSpan = styled.span`
   color: red;
-  font-size: 12px;
   text-align: center;
   font-weight: bold;
 `;
 
-const StyledSpan = styled.span`
-  color: #35a29f;
-  font-size: 10px;
-  display: inline-block;
-  width: fit-content;
-  border-radius: 50px;
-  padding: 7px 10px;
-  cursor: pointer;
-  margin-left: 4px;
-  border-bottom: 1px solid #35a29f;
+const StyledSpan = styled.div`
+  padding: 1rem 0px;
+  text-align: center;
+  width: 100%;
+  & > span {
+    margin-left: 4px;
+    color: ${({ theme }) => theme.colors.point};
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;

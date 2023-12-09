@@ -1,13 +1,24 @@
 import styled from "styled-components";
 
-export const StyledButtonBox = styled.section`
+export const StyledButtonContainer = styled.article`
+  position: sticky;
+  top: 55px;
+  z-index: 1;
   width: 100%;
+  background-color: white;
+  border-bottom: 0.0625rem solid #f2f2f2;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+`;
+
+export const StyledButtonBox = styled.section`
+  margin: 0 auto;
+  width: 100%;
+  max-width: ${({ theme }) => theme.size.maxWidth}px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 8px;
   padding: 8px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   overflow-x: auto;
   &::-webkit-scrollbar {
     display: none;

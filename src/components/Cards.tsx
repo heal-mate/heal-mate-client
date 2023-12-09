@@ -1,17 +1,18 @@
 import { Fragment, useState } from "react";
 import styled, { css } from "styled-components";
 import { User } from "@/service/apis/user.type";
+import { StyledCardsContainer } from "./Cards.styles";
 
 type ButtonProps = {
   text: string;
   theme: ButtonTheme;
   disabled?: true;
-  onClickCallback: () => Promise<void> | null;
+  onClickCallback: () => Promise<unknown> | null;
 };
 
 type MatchUserInfoProps = Pick<
   User,
-  "nickName" | "profileImageSrc" | "condition" | "introduction"
+  "nickName" | "profileImageSrc" | "condition" | "introduction" | "kakaoID"
 > & { buttons: ButtonProps[] };
 
 export type CardProps = {
@@ -30,12 +31,14 @@ export default function Cards(props: CardProps) {
         <p>loading...</p>
       ) : isError ? (
         <p>Error: {error!.message}</p>
-      ) : (
+      ) : matchUserInfos?.length ? (
         matchUserInfos!.map((matchUserInfo, i) => (
           <Fragment key={"CardItem" + i}>
             <CardItem {...matchUserInfo} />
           </Fragment>
         ))
+      ) : (
+        <StyledCardsContainer>메시지가 없습니다...</StyledCardsContainer>
       )}
     </>
   );
@@ -66,7 +69,7 @@ export function CardItem(props: MatchUserInfoProps) {
   );
 }
 
-type ButtonTheme = "outlined" | "contained";
+type ButtonTheme = "outlined" | "contained" | "kakao";
 
 function CardButtons({ buttons }: { buttons: ButtonProps[] }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -82,15 +85,19 @@ function CardButtons({ buttons }: { buttons: ButtonProps[] }) {
       {buttons.map(({ text, theme, disabled, onClickCallback }, i) => (
         <Fragment key={"CardButton" + i}>
           {isLoading ? (
-            "loading..."
-          ) : (
-            <StyledButton
-              $variant={theme}
-              onClick={() => handleClick(onClickCallback)}
-              disabled={disabled}
-            >
-              {text}
+            <StyledButton $variant={theme} disabled>
+              loading...
             </StyledButton>
+          ) : (
+            <>
+              <StyledButton
+                $variant={theme}
+                onClick={() => handleClick(onClickCallback)}
+                disabled={disabled}
+              >
+                {text}
+              </StyledButton>
+            </>
           )}
         </Fragment>
       ))}
@@ -154,16 +161,22 @@ const StyledTag = styled.p`
 `;
 
 const StyledButton = styled.button<{ $variant: ButtonTheme }>`
-  ${(props) =>
-    props.$variant === "outlined"
-      ? css`
+  ${({ $variant }) => {
+    switch ($variant) {
+      case "outlined":
+        return css`
           background-color: #ffffff;
           border: 1px solid #2b2b2b;
-        `
-      : css`
+        `;
+      case "contained":
+        return css`
           background-color: #2b2b2b;
           color: #ffffff;
-        `}
+        `;
+      default:
+        return "";
+    }
+  }}
 
   border-radius: 3px;
   width: 100%;

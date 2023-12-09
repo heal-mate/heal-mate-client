@@ -3,7 +3,6 @@ import { useMatchesRecommend } from "./Cards.hooks";
 
 export default function CardsRecommend() {
   const { matchesRecommend, requestMatch, ...rest } = useMatchesRecommend();
-
   return (
     <>
       <Cards
@@ -14,7 +13,7 @@ export default function CardsRecommend() {
               text: "요청하기",
               theme: "outlined",
               onClickCallback: async () => {
-                requestMatch({ userId: e._id });
+                return requestMatch({ userId: e._id });
               },
             },
           ],

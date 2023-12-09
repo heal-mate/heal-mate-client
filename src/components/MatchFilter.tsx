@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import {
-  CheckedExercise,
-  GenderType,
-  Location,
-} from "@/components/MatchFilter.type";
+import { CheckedExercise, GenderType } from "@/components/MatchFilter.type";
+import { LOCATION_TYPE } from "../config/constants";
 import MatchFilterExercise from "@/components/MatchFilterExercise";
 import MatchFilterYears from "@/components/MatchFilterYears";
 import MatchFilterGender from "@/components/MatchFilterGender";
 import MatchFilterLocations from "@/components/MatchFilterLocations";
 import { MAX_WEIGHT, WEIGHT_MARKS } from "@/config/constants";
-import { fetchGetUserMine } from "@/service/apis/user";
+import userAPI from "@/service/apis/user";
 import { Condition } from "@/service/apis/user.type";
 import Rangeinput from "./RangeInput";
+import customAlert from "@/utils/alert";
 
 function generatorTitle(
   title: keyof CheckedExercise,
@@ -49,7 +47,7 @@ export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
   useEffect(() => {
     // API 에서 받아온 값으로 filter state에 set한다.
     const fetchData = async () => {
-      const data = await fetchGetUserMine();
+      const data = await userAPI.getUserMine();
       const conditionExpect = data.conditionExpect;
       const selectedExercises = {
         benchPress: conditionExpect.benchPress ? true : false,
@@ -125,7 +123,7 @@ export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
     }));
   };
 
-  const handleSelectLocation = (locationName: Location) => {
+  const handleSelectLocation = (locationName: LOCATION_TYPE) => {
     // TODO: setFilter 함수를 사용해 location에 인자로 받은 locationName을 배열에 넣어야한다.
 
     setFilter((prevFilters) => {
@@ -139,7 +137,7 @@ export default function MatchFilter({ handleChangeFilters }: MatchFilterProps) {
 
       // location 배열의 길이가 3이상 이면 추가하지 않는다.
       if (updatedLocations.length > 3) {
-        alert("지역은 3곳 이상 선택 할 수 없습니다.");
+        customAlert("지역은 3곳 이상 선택 할 수 없습니다.", false, "info");
         return prevFilters;
       }
 
