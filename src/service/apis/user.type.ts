@@ -5,6 +5,7 @@ export type User = {
   nickName: string;
   profileImageSrc: string;
   introduction: string;
+  kakaoID: string;
   condition: Condition<"POINT">;
   conditionExpect: Condition<"RANGE">;
   matchIds: Array<string>;
