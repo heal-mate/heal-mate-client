@@ -1,4 +1,4 @@
-import { styled, css, keyframes } from "styled-components";
+import { styled, css } from "styled-components";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { path } from "@/App";
@@ -10,20 +10,10 @@ import { Alert } from "@/service/apis/alert.type";
 import scrollBlock from "@/utils/scrollBlock";
 import { useGetAlertsAll } from "../Alert.hooks";
 import { AxiosResponse } from "axios";
-import authAPI from "@/service/apis/auth";
-import { customConfirmAlert } from "@/utils/alert";
-
-const user = {
-  profileImageSrc:
-    "http://res.cloudinary.com/djq2j6rkq/image/upload/v1701864855/qp6bcep6guvesmf2ywhg.jpg",
-};
 
 export default function Header() {
   const { alertsList } = useGetAlertsAll();
   const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
-  // 프로필 클릭 토글
-  const [menuToggle, setMenuToggle] = useState(false);
-  const navigate = useNavigate();
 
   const handleClick = () => {
     setIsShowAlert((prev) => !prev);
@@ -37,24 +27,6 @@ export default function Header() {
   useEffect(() => {
     scrollBlock(isShowAlert);
   }, [isShowAlert]);
-
-  const handleLogout = async () => {
-    await authAPI.logoutUser();
-    navigate(path.login);
-  };
-
-  const handleWithdraw = async () => {
-    customConfirmAlert("정말 탈퇴하시겠습니까?")
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          await authAPI.withdrawUser();
-          navigate(path.login);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   return (
     <>
@@ -72,21 +44,6 @@ export default function Header() {
             >
               <StyledGoBell />
             </StyledBell>
-            {user && (
-              <StyledProfile onClick={() => setMenuToggle((prev) => !prev)}>
-                <img src={user.profileImageSrc} alt="프로필 이미지" />
-              </StyledProfile>
-            )}
-            {menuToggle && (
-              <StyledMenuList>
-                <div onClick={handleLogout} className="menu">
-                  로그아웃
-                </div>
-                <div onClick={handleWithdraw} className="menu warning">
-                  회원탈퇴
-                </div>
-              </StyledMenuList>
-            )}
           </StyledIcons>
         </StyledInner>
       </StyledHeader>
@@ -310,56 +267,6 @@ const StyledBell = styled.div<{ $isOn: boolean }>`
       css`
         display: block;
       `}
-  }
-`;
-
-const StyledProfile = styled.div`
-  width: 30px;
-  height: 30px;
-  border: 1px solid black;
-  border-radius: 50%;
-  margin-left: 10px;
-  overflow: hidden;
-  cursor: pointer;
-  & > img {
-    width: inherit;
-    height: inherit;
-    object-fit: contain;
-  }
-`;
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-const StyledMenuList = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  padding: 8px 0;
-  background-color: #ffffff;
-  border: 1px solid #ffffff;
-  color: #232323;
-  border-radius: 4px;
-  top: 43px;
-  right: -30px;
-  z-index: 30;
-  box-shadow: 2px 10px 10px 0px rgba(0, 0, 0, 0.1);
-  animation: ${fadeIn} 0.25s ease-out forwards;
-  opacity: 0;
-
-  & > .menu {
-    padding: 6px 16px;
-  }
-  & > .menu:hover {
-    background-color: #f6f6f6;
-    cursor: pointer;
-  }
-  & > .menu.warning {
-    color: red;
   }
 `;
 
