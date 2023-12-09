@@ -1,8 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import styled from "styled-components";
-import RadioButton from "@/components/RadioButton";
 import { useNavigate, useLocation } from "react-router-dom";
-import { GenderType, LOCATION_TYPE, LOCATIONS } from "@/config/constants";
 import authAPI from "@/service/apis/auth";
 import { FormStyle } from "@/components/common/Form.styles";
 import { FunnelStyle } from "@/components/common/Funnel.styles";
@@ -11,29 +9,18 @@ import { path } from "@/App";
 import passwordValidate from "@/utils/passwordValidate";
 
 type UserInfoType = {
-  nickName: string;
   email: string;
-  gender: GenderType;
-  tel: string;
   password: string;
-  kakaoID: string;
-  location: LOCATION_TYPE;
 };
 
-export default function UserInfoSetup() {
+export default function UpdatePassword() {
   const [userInfos, setUserInfors] = useState<UserInfoType>({
-    nickName: "",
     email: "",
-    gender: "MALE",
-    tel: "",
     password: "",
-    kakaoID: "",
-    location: LOCATIONS[0],
   });
 
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  //TODO : setErrorMessage 임시로 삭제함
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -56,9 +43,11 @@ export default function UserInfoSetup() {
         "비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.",
       );
     authAPI
-      .registerUser(userInfos)
+      .updatePassword(userInfos)
       .then(() => {
-        toast.success("회원가입에 성공했습니다.\n로그인 화면으로 이동합니다.");
+        toast.success(
+          "비밀번호 변경에 성공했습니다.\n로그인 화면으로 이동합니다.",
+        );
         navigate(path.login);
       })
       .catch((err) => setErrorMessage(err.response.data?.error));
@@ -74,21 +63,14 @@ export default function UserInfoSetup() {
     }));
   };
 
-  const handleChangeGender = (genderType: GenderType) => {
-    setUserInfors((prevuserInfos) => ({
-      ...prevuserInfos,
-      gender: genderType,
-    }));
-  };
-
   useEffect(() => {
     if (state) {
-      const email = state;
+      const email = state.email;
       setUserInfors((prev) => ({ ...prev, email }));
     }
   }, [state]);
 
-  const { nickName, email, tel, password, location, kakaoID } = userInfos;
+  const { email, password } = userInfos;
 
   return (
     <StyledContainer>
@@ -97,7 +79,7 @@ export default function UserInfoSetup() {
           <FunnelStyle.StageHeaderWrapper>
             <FunnelStyle.StageHeader>
               <FunnelStyle.ArrowBackIcon onClick={() => navigate(-1)} />
-              회원가입
+              비밀번호 변경하기
             </FunnelStyle.StageHeader>
           </FunnelStyle.StageHeaderWrapper>
           <FormStyle.Form onSubmit={handleSubmit}>
@@ -124,67 +106,11 @@ export default function UserInfoSetup() {
               placeholder="비밀번호 확인"
               required
             />
-            <FormStyle.Label htmlFor="nickName">닉네임</FormStyle.Label>
-            <FormStyle.Input
-              type="text"
-              name="nickName"
-              value={nickName}
-              onChange={handleChangeInput}
-              placeholder="헬스프랜즈"
-              required
-            />
-            <FormStyle.Label htmlFor="kakaoID">카카오 아이디</FormStyle.Label>
-            <FormStyle.Input
-              type="text"
-              name="kakaoID"
-              value={kakaoID}
-              onChange={handleChangeInput}
-              placeholder="healthfriends9594"
-              required
-            />
-            <FormStyle.Label htmlFor="tel">전화번호</FormStyle.Label>
-            <FormStyle.Input
-              type="text"
-              name="tel"
-              value={tel}
-              onChange={handleChangeInput}
-              placeholder="01012341234"
-            />
-
-            <FormStyle.Label>성별</FormStyle.Label>
-            <StyledButtonGroup>
-              <RadioButton
-                text="남자"
-                genderType="MALE"
-                defaultValue={userInfos.gender}
-                handleChange={handleChangeGender}
-              />
-              <RadioButton
-                text="여자"
-                genderType="FEMALE"
-                defaultValue={userInfos.gender}
-                handleChange={handleChangeGender}
-              />
-            </StyledButtonGroup>
-
-            <FormStyle.Label>거주 지역</FormStyle.Label>
-            <FormStyle.Select
-              id="select"
-              name="location"
-              value={location}
-              onChange={handleChangeInput}
-            >
-              {LOCATIONS.map((place) => (
-                <option key={place} value={place}>
-                  {place}
-                </option>
-              ))}
-            </FormStyle.Select>
 
             {errorMessage && <StyledErrorSpan>{errorMessage}</StyledErrorSpan>}
 
             <FormStyle.Button type="submit" $buttonTheme="contain">
-              회원가입
+              비밀번호 변경하기
             </FormStyle.Button>
           </FormStyle.Form>
         </FunnelStyle.Container>
@@ -206,10 +132,6 @@ const SectionsWrapper = styled.div`
   max-width: 430px;
   display: flex;
   flex-direction: column;
-`;
-
-const StyledButtonGroup = styled.div`
-  display: flex;
 `;
 
 const StyledErrorSpan = styled.span`

@@ -73,6 +73,12 @@ export default function Login() {
           회원이 아니신가요?
           <span onClick={() => navigate(path.register)}>회원가입하기</span>
         </StyledSpan>
+        <StyledSpan>
+          비밀번호를 잊으셨나요?
+          <span onClick={() => navigate(path.register, { state: true })}>
+            비밀번호 변경하기
+          </span>
+        </StyledSpan>
         <StyledErrorSpan>{error}</StyledErrorSpan>
       </FormStyle.Form>
     </StyledContainer>

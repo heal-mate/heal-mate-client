@@ -14,6 +14,7 @@ import authAPI from "./service/apis/auth";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./components/ErrorFallback";
 import Account from "./pages/Account";
+import UpdatePassword from "./pages/UpdatePassword";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
@@ -25,6 +26,7 @@ export const path = {
   login: "/login",
   register: "/register",
   setup: "/setup",
+  updatePassword: "/update/password",
 };
 
 const router = createBrowserRouter([
@@ -73,6 +75,10 @@ const router = createBrowserRouter([
   {
     path: path.setup,
     element: <UserInfoSetup />,
+  },
+  {
+    path: path.updatePassword,
+    element: <UpdatePassword />,
   },
 ]);
 

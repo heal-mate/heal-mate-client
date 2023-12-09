@@ -9,8 +9,8 @@ const instance = axios.create({
 });
 
 const authAPI = {
-  async sendAuthCodeMail(email: string) {
-    return instance.post("/auth-mail", { email });
+  async sendAuthCodeMail(email: string, isUpdatePassword: boolean) {
+    return instance.post("/auth-mail", { email, isUpdatePassword });
   },
 
   async checkAuthCode({
@@ -30,6 +30,19 @@ const authAPI = {
     },
   ) {
     const res = await instance.post("/register", user);
+    return res.data;
+  },
+
+  async updatePassword({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) {
+    const res = await instance.post("/update-password", {
+      data: { email, password },
+    });
     return res.data;
   },
 
