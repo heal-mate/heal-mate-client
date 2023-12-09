@@ -18,7 +18,8 @@ export default function ErrorFallback({
 
   return (
     <>
-      <div>에러가 발생했습니다. {error?.message ?? ""}</div>
+      {/* <div>에러가 발생했습니다. {error?.message ?? ""}</div> */}
+      <div>에러가 발생했습니다. </div>
       <button onClick={resetErrorBoundary}>다시 시도하기</button>
     </>
   );

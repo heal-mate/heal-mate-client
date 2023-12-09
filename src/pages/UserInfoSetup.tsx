@@ -14,6 +14,7 @@ type UserInfoType = {
   gender: GenderType;
   tel: string;
   password: string;
+  kakaoID: string;
   location: LOCATION_TYPE;
 };
 
@@ -24,6 +25,7 @@ export default function UserInfoSetup() {
     gender: "MALE",
     tel: "",
     password: "",
+    kakaoID: "",
     location: LOCATIONS[0],
   });
 
@@ -53,7 +55,7 @@ export default function UserInfoSetup() {
         toast.success("회원가입에 성공했습니다. 로그인 화면으로 이동합니다.");
         navigate("/login");
       })
-      .catch((err) => setErrorMessage(err.response.data));
+      .catch((err) => setErrorMessage(err.response.data?.error));
   };
 
   const handleChangeInput = (
@@ -80,7 +82,7 @@ export default function UserInfoSetup() {
     }
   }, [state]);
 
-  const { nickName, email, tel, password, location } = userInfos;
+  const { nickName, email, tel, password, location, kakaoID } = userInfos;
 
   return (
     <StyledContainer>
@@ -104,8 +106,9 @@ export default function UserInfoSetup() {
               placeholder="영문, 숫자, 특수문자를 포함한 8자 이상"
               required
             />
+
             <FormStyle.Label htmlFor="passwordConfirm">
-              비밀번호확인
+              비밀번호 확인
             </FormStyle.Label>
             <FormStyle.Input
               type="password"
@@ -121,10 +124,18 @@ export default function UserInfoSetup() {
               name="nickName"
               value={nickName}
               onChange={handleChangeInput}
-              placeholder="닉네임 입력"
+              placeholder="헬스프랜즈"
               required
             />
-
+            <FormStyle.Label htmlFor="kakaoID">카카오 아이디</FormStyle.Label>
+            <FormStyle.Input
+              type="text"
+              name="kakaoID"
+              value={kakaoID}
+              onChange={handleChangeInput}
+              placeholder="healthfriends9594"
+              required
+            />
             <FormStyle.Label htmlFor="tel">전화번호</FormStyle.Label>
             <FormStyle.Input
               type="text"

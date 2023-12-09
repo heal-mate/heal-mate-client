@@ -6,11 +6,11 @@ import Layout from "./components/layout/Layout";
 import Login from "./pages/Login";
 import UserInfoSetup from "./pages/UserInfoSetup";
 import Register from "./pages/Register";
-import PrivateRoute from "./components/PrivateRoute";
 import { LoadingSpinnerAtom } from "./recoils/loadingSpinnerAtom";
 import { useRecoilValue } from "recoil";
 import LoadingSpinnerPotal from "./potals/LoadingSpinnerPotal";
 import Sent from "./pages/Sent";
+import authAPI from "./service/apis/auth";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./components/ErrorFallback";
 
@@ -30,31 +30,29 @@ const router = createBrowserRouter([
     path: path.root,
     element: (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <PrivateRoute />
+        <Layout />
       </ErrorBoundary>
     ),
+    loader: async () => {
+      return authAPI.checkUserAuth();
+    },
+    errorElement: <Login />,
     children: [
       {
-        path: "/",
-        element: <Layout />,
-        children: [
-          {
-            path: path.root,
-            element: <Main />,
-          },
-          {
-            path: path.tab1,
-            element: <Received />,
-          },
-          {
-            path: path.tab2,
-            element: <Sent />,
-          },
-          {
-            path: path.tab3,
-            element: <Mypage />,
-          },
-        ],
+        path: path.root,
+        element: <Main />,
+      },
+      {
+        path: path.tab1,
+        element: <Received />,
+      },
+      {
+        path: path.tab2,
+        element: <Sent />,
+      },
+      {
+        path: path.tab3,
+        element: <Mypage />,
       },
     ],
   },

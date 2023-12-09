@@ -23,7 +23,7 @@ export default function Register() {
         .then(() =>
           toast.success("이메일이 발송되었습니다.\n5분안에 인증해주세요."),
         )
-        .catch((err) => setError(err.response.data));
+        .catch((err) => setError(err.response.data?.error));
     }
   };
 
@@ -38,7 +38,7 @@ export default function Register() {
           toast.success("인증되었습니다.");
           nextStep();
         })
-        .catch((err) => setError(err.response.data));
+        .catch((err) => setError(err.response.data?.error));
     }
   };
 

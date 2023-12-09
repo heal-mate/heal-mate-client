@@ -45,6 +45,10 @@ const authAPI = {
   async withdrawUser() {
     return instance.patch("/withdraw");
   },
+
+  async checkUserAuth() {
+    return instance.get("/is-valid-user");
+  },
 };
 
 export default authAPI;
