@@ -11,6 +11,8 @@ import { useRecoilValue } from "recoil";
 import LoadingSpinnerPotal from "./potals/LoadingSpinnerPotal";
 import Sent from "./pages/Sent";
 import authAPI from "./service/apis/auth";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "./components/ErrorFallback";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const path = {
@@ -26,33 +28,31 @@ export const path = {
 const router = createBrowserRouter([
   {
     path: path.root,
-    element: "",
+    element: (
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <Layout />
+      </ErrorBoundary>
+    ),
     loader: async () => {
       return authAPI.checkUserAuth();
     },
     errorElement: <Login />,
     children: [
       {
-        path: "/",
-        element: <Layout />,
-        children: [
-          {
-            path: path.root,
-            element: <Main />,
-          },
-          {
-            path: path.tab1,
-            element: <Received />,
-          },
-          {
-            path: path.tab2,
-            element: <Sent />,
-          },
-          {
-            path: path.tab3,
-            element: <Mypage />,
-          },
-        ],
+        path: path.root,
+        element: <Main />,
+      },
+      {
+        path: path.tab1,
+        element: <Received />,
+      },
+      {
+        path: path.tab2,
+        element: <Sent />,
+      },
+      {
+        path: path.tab3,
+        element: <Mypage />,
       },
     ],
   },

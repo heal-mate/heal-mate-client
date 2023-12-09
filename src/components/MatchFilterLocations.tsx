@@ -33,7 +33,6 @@ export default function MatchFilterLocations({
 
 const StyledContainer = styled.div`
   width: 100%;
-  height: 100px;
 `;
 
 const StyledInfo = styled.div`

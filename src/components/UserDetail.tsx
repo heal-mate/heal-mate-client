@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 import { MdArrowBack } from "react-icons/md";
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Slider from "rc-slider";
@@ -19,6 +19,7 @@ import { LoadingSpinnerAtom } from "@/recoils/loadingSpinnerAtom";
 import authAPI from "@/service/apis/auth";
 import { path } from "@/App";
 import { useNavigate } from "react-router-dom";
+import { customConfirmAlert } from "@/utils/alert";
 
 export default function UserDetail() {
   const setLoadingSpinner = useSetRecoilState(LoadingSpinnerAtom);
@@ -140,8 +141,16 @@ export default function UserDetail() {
   };
 
   const handleWithdraw = async () => {
-    await authAPI.withdrawUser();
-    navigate(path.login);
+    customConfirmAlert("정말 탈퇴하시겠습니까?")
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await authAPI.withdrawUser();
+          navigate(path.login);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   if (!user) return <div>loading</div>;
@@ -152,7 +161,11 @@ export default function UserDetail() {
   return (
     <StyledContainer>
       <StyledHeader>
-        <StyledArrowBackIcon onClick={() => {}} />
+        <StyledArrowBackIcon
+          onClick={() => {
+            navigate(-1);
+          }}
+        />
         <h2>마이페이지</h2>
         {editMode ? (
           <button onClick={handleSave}>저장</button>
@@ -245,8 +258,10 @@ export default function UserDetail() {
           <div>{location}</div>
         )}
       </StyledLocationsDiv>
-      <button onClick={handleLogout}>로그아웃</button>
-      <button onClick={handleWithdraw}>회원탈퇴</button>
+      <StyledButton onClick={handleLogout}>로그아웃</StyledButton>
+      <StyledButton $warning onClick={handleWithdraw}>
+        회원탈퇴
+      </StyledButton>
     </StyledContainer>
   );
 }
@@ -310,7 +325,7 @@ function Rangeinput({
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 8px;
+  padding: 0 30px;
 `;
 
 const StyledHeader = styled.div`
@@ -369,6 +384,43 @@ const StyledProfile = styled.div`
     border: none;
     border-bottom: 1px solid #333;
     margin-bottom: 20px;
+  }
+`;
+
+const StyledButton = styled.button<{ $warning?: boolean }>`
+  outline: none;
+  border: none;
+
+  background-color: ${({ $warning }) => ($warning ? css`#ff4d4d` : css`#fff`)};
+  border: 1px solid
+    ${({ $warning }) =>
+      $warning
+        ? css`#ff4d4d`
+        : css`
+            ${({ theme }) => theme.colors.point}
+          `};
+  color: ${({ $warning }) =>
+    $warning
+      ? css`white`
+      : css`
+          ${({ theme }) => theme.colors.point}
+        `};
+  padding: 10px 20px;
+
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+
+  &:hover {
+    color: white;
+    background-color: ${({ $warning }) =>
+      $warning
+        ? css`#ff4d4d`
+        : css`
+            ${({ theme }) => theme.colors.point}
+          `};
   }
 `;
 

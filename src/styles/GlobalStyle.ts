@@ -11,6 +11,9 @@ const GlobalStyle = createGlobalStyle`
   .alert-icon {
     margin: 2.5em auto 0.6em;
   }
+  .alert-popup {
+    max-width: 22em;
+  }
 `;
 
 export default GlobalStyle;

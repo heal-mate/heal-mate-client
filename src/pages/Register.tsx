@@ -26,7 +26,7 @@ export default function Register() {
             "info",
           ),
         )
-        .catch((err) => setError(err.response.data));
+        .catch((err) => setError(err.response.data?.error));
     }
   };
 
@@ -41,7 +41,7 @@ export default function Register() {
           customAlert("인증되었습니다.", false, "success", 700);
           nextStep();
         })
-        .catch((err) => setError(err.response.data));
+        .catch((err) => setError(err.response.data?.error));
     }
   };
 
