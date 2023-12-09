@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { GenderType, LOCATION_TYPE, LOCATIONS } from "@/config/constants";
 import authAPI from "@/service/apis/auth";
 import customAlert from "@/utils/alert";
+import { path } from "@/App";
 
 type UserInfoType = {
   nickName: string;
@@ -52,7 +53,7 @@ export default function UserInfoSetup() {
           "success",
           700,
         );
-        navigate("/login");
+        navigate(path.login);
       })
       .catch((err) => setErrorMessage(err.response.data?.error));
   };
