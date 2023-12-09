@@ -2,6 +2,7 @@ import { Fragment, useState } from "react";
 import styled, { css } from "styled-components";
 import { User } from "@/service/apis/user.type";
 import { StyledCardsContainer } from "./Cards.styles";
+import LoadingSpinner from "./LoadingSpinner";
 
 type ButtonProps = {
   text: string;
@@ -28,7 +29,7 @@ export default function Cards(props: CardProps) {
   return (
     <>
       {isLoading ? (
-        <p>loading...</p>
+        <LoadingSpinner />
       ) : isError ? (
         <p>Error: {error!.message}</p>
       ) : matchUserInfos?.length ? (
