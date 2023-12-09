@@ -32,7 +32,7 @@ export default function UserInfoSetup() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
   //TODO : setErrorMessage 임시로 삭제함
-  const [errorMessage, setErrorMessage] = useState<string>();
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -175,11 +175,11 @@ export default function UserInfoSetup() {
               ))}
             </FormStyle.Select>
 
-            {/* <button onClick={handleSubmit}>설정 저장</button> */}
+            {errorMessage && <StyledErrorSpan>{errorMessage}</StyledErrorSpan>}
+
             <FormStyle.Button type="submit" $buttonTheme="contain">
               회원가입
             </FormStyle.Button>
-            {errorMessage && <StyledErrorSpan>{errorMessage}</StyledErrorSpan>}
           </FormStyle.Form>
         </FunnelStyle.Container>
       </SectionsWrapper>
@@ -207,8 +207,8 @@ const StyledButtonGroup = styled.div`
 `;
 
 const StyledErrorSpan = styled.span`
+  margin-top: 1rem;
   color: red;
-  font-size: 12px;
+  font-size: 1rem;
   text-align: center;
-  font-weight: bold;
 `;
